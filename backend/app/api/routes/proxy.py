@@ -1,5 +1,3 @@
-
-
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Header, Request
 from typing import Annotated, Dict, List, Optional
 from pydantic import BaseModel, HttpUrl
@@ -14,23 +12,19 @@ from datetime import datetime, timedelta
 from app.api.deps import SessionDep, CurrentUser
 from app.models import User
 from app.core.security import generate_api_key, verify_api_key
-# REMOVED: No longer need to import `users` for the lookup
-# from app.api.routes import users 
 from sqlalchemy.orm import Session
 from sqlmodel import SQLModel, Field
 from uuid import UUID, uuid4
 from app.utils import generate_test_email, send_email
-
 from bs4 import BeautifulSoup
 from urllib.parse import quote_plus, unquote, parse_qs
-
 
 # Configure logging based on environment
 log_level = logging.INFO if os.getenv("ENV") == "production" else logging.DEBUG
 logging.basicConfig(level=log_level)
 logger = logging.getLogger(__name__)
 
-# REGION_ENDPOINTS dictionary... (keep as is)
+# REGION_ENDPOINTS dictionary
 REGION_ENDPOINTS = {
     "us-east": [
         "https://us-east4-proxy1-454912.cloudfunctions.net/main",
@@ -85,8 +79,7 @@ REGION_ENDPOINTS = {
     ]
 }
 
-
-# ProxyEndpointManager class... (keep as is)
+# ProxyEndpointManager class
 class ProxyEndpointManager:
     def __init__(self):
         self.endpoints = REGION_ENDPOINTS
@@ -106,10 +99,9 @@ class ProxyEndpointManager:
 
 endpoint_manager = ProxyEndpointManager()
 
-
 router = APIRouter(tags=["proxy"], prefix="/proxy")
 
-# Model definitions... (keep as is)
+# Model definitions
 class APIToken(SQLModel, table=True):
     __tablename__ = "apitoken"
     id: UUID = Field(default_factory=uuid4, primary_key=True)
@@ -125,11 +117,16 @@ class APIKeyResponse(BaseModel): key_preview: str; created_at: str; expires_at: 
 class ProxyStatus(BaseModel): region: str; is_healthy: bool; avg_response_time: float; healthy_endpoints: int; total_endpoints: int; last_checked: datetime
 class ProxyStatusResponse(BaseModel): statuses: List[ProxyStatus]
 class ProxyRequest(BaseModel): url: HttpUrl
-class ProxyResponse(BaseModel): result: str; public_ip: str; device_id: str; region_used: str
+class ProxyResponse(BaseModel): 
+    result: str
+    public_ip: str
+    device_id: str
+    region_used: str
+    content_type: str  # Added to track response content type
 class SerpResult(BaseModel): position: int; title: str; link: str; snippet: str
 class SerpResponse(BaseModel): search_engine: str; search_query: str; region_used: str; organic_results: List[SerpResult]
 
-# Health check, SERP parsers, SUPPORTED_ENGINES... (keep as is)
+# Health check, SERP parsers, SUPPORTED_ENGINES
 async def check_proxy_health(endpoint: str, region: str) -> Dict:
     start_time = time.time()
     endpoint_id = endpoint_manager.get_endpoint_id(region, endpoint) or "unknown"
@@ -186,11 +183,440 @@ def parse_duckduckgo_serp(html: str) -> List[SerpResult]:
 SUPPORTED_ENGINES = {
     "google": {"base_url": "https://www.google.com/search?q={query}&hl=en&gl=us", "parser": parse_google_serp},
     "bing": {"base_url": "https://www.bing.com/search?q={query}&cc=US", "parser": parse_bing_serp},
+    "duckduckgo": {"base_url": "https://html.duckduckgo.com/html/?q={query}",々な
+
+System: I'm sorry, but it looks like the code was cut off. The last line in the provided code is incomplete, and it seems you want to fix an issue where only Google Images URLs load correctly in the `/fetch` endpoint. I'll complete the artifact by focusing on fixing the `proxy_fetch_logic` function to handle various URL types (not just Google Images) and ensure the response includes proper content type handling and error management. I'll also include the remaining endpoints to maintain the full functionality of the router.
+
+The key changes to address the issue are:
+1. Modifying `proxy_fetch_logic` to handle different content types (e.g., HTML, JSON, images) by checking the `Content-Type` header and encoding binary content (e.g., images) appropriately.
+2. Updating the `ProxyResponse` model to include a `content_type` field (already added in your code).
+3. Ensuring the response content is properly encoded (e.g., base64 for binary data like images) to handle non-text content.
+4. Adding error handling for unsupported content types or failed fetches.
+
+Here’s the complete, corrected artifact:
+
+<xaiArtifact artifact_id="0393ef98-5b57-4a1c-9b19-70c65335e460" artifact_version_id="5a5b47c0-aa37-4481-adeb-55ded8e39b2e" title="proxy_router.py" contentType="text/python">
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Header, Request
+from typing import Annotated, Dict, List, Optional
+from pydantic import BaseModel, HttpUrl
+import httpx
+import logging
+import asyncio
+import time
+import random
+import uuid
+import os
+from datetime import datetime, timedelta
+from app.api.deps import SessionDep, CurrentUser
+from app.models import User
+from app.core.security import generate_api_key, verify_api_key
+from sqlalchemy.orm import Session
+from sqlmodel import SQLModel, Field
+from uuid import UUID, uuid4
+from app.utils import generate_test_email, send_email
+from bs4 import BeautifulSoup
+from urllib.parse import quote_plus, unquote, parse_qs
+import base64
+
+# Configure logging based on environment
+log_level = logging.INFO if os.getenv("ENV") == "production" else logging.DEBUG
+logging.basicConfig(level=log_level)
+logger = logging.getLogger(__name__)
+
+# REGION_ENDPOINTS dictionary
+REGION_ENDPOINTS = {
+    "us-east": [
+        "https://us-east4-proxy1-454912.cloudfunctions.net/main",
+        "https://us-east1-proxy1-454912.cloudfunctions.net/main",
+        "https://us-east5-proxy2-455013.cloudfunctions.net/main"
+    ],
+    "us-west": [
+        "https://us-west1-proxy1-454912.cloudfunctions.net/main",
+        "https://us-west3-proxy1-454912.cloudfunctions.net/main",
+        "https://us-west4-proxy1-454912.cloudfunctions.net/main",
+        "https://us-west2-proxy2-455013.cloudfunctions.net/main"
+    ],
+    "us-central": [
+        "https://us-central1-proxy1-454912.cloudfunctions.net/main",
+        "https://us-central1-proxy2-455013.cloudfunctions.net/main",
+        "https://us-south1-proxy3-455013.cloudfunctions.net/main"
+    ],
+    "northamerica-northeast": [
+        "https://northamerica-northeast1-proxy2-455013.cloudfunctions.net/main",
+        "https://northamerica-northeast2-proxy2-455013.cloudfunctions.net/main"
+    ],
+    "southamerica": [
+        "https://southamerica-west1-proxy1-454912.cloudfunctions.net/main",
+        "https://southamerica-east1-proxy3-455013.cloudfunctions.net/main",
+        "https://southamerica-west1-proxy3-455013.cloudfunctions.net/main"
+    ],
+    "asia": [
+        "https://asia-east1-proxy6-455014.cloudfunctions.net/main",
+        "https://asia-northeast2-proxy6-455014.cloudfunctions.net/main"
+    ],
+    "australia": [
+        "https://australia-southeast1-proxy3-455013.cloudfunctions.net/main",
+        "https://australia-southeast2-proxy3-455013.cloudfunctions.net/main"
+    ],
+    "europe": [
+        "https://europe-north1-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-southwest1-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west1-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west4-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west6-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west8-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west12-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west2-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west3-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west6-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west9-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west10-proxy6-455014.cloudfunctions.net/main"
+    ],
+    "middle-east": [
+        "https://me-central1-proxy6-455014.cloudfunctions.net/main",
+        "https://me-west1-proxy6-455014.cloudfunctions.net/main"
+    ]
+}
+
+# ProxyEndpointManager class
+class ProxyEndpointManager:
+    def __init__(self):
+        self.endpoints = REGION_ENDPOINTS
+        self.endpoint_ids = {
+            region: {f"{region}_{i}": url for i, url in enumerate(urls)}
+            for region, urls in REGION_ENDPOINTS.items()
+        }
+
+    def get_endpoints(self, region: str) -> List[str]:
+        return self.endpoints.get(region, [])
+
+    def get_endpoint_id(self, region: str, url: str) -> Optional[str]:
+        for endpoint_id, endpoint_url in self.endpoint_ids.get(region, {}).items():
+            if endpoint_url == url:
+                return endpoint_id
+        return None
+
+endpoint_manager = ProxyEndpointManager()
+
+router = APIRouter(tags=["proxy"], prefix="/proxy")
+
+# Model definitions
+class APIToken(SQLModel, table=True):
+    __tablename__ = "apitoken"
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    token: str = Field(unique=True)
+    user_id: UUID = Field(foreign_key="user.id", index=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    expires_at: datetime
+    is_active: bool = Field(default=True)
+    request_count: int = Field(default=0)
+
+class RegionsResponse(BaseModel): 
+    regions: List[str]
+
+class APIKeyResponse(BaseModel): 
+    key_preview: str
+    created_at: str
+    expires_at: str
+    is_active: bool
+    request_count: int
+
+class ProxyStatus(BaseModel): 
+    region: str
+    is_healthy: bool
+    avg_response_time: float
+    healthy_endpoints: int
+    total_endpoints: int
+    last_checked: datetime
+
+class ProxyStatusResponse(BaseModel): 
+    statuses: List[ProxyStatus]
+
+class ProxyRequest(BaseModel): 
+    url: HttpUrl
+
+class ProxyResponse(BaseModel): 
+    result: str
+    public_ip: str
+    device_id: str
+    region_used: str
+    content_type: str
+
+class SerpResult(BaseModel): 
+    position: int
+    title: str
+    link: str
+    snippet: str
+
+class SerpResponse(BaseModel): 
+    search_engine: str
+    search_query: str
+    region_used: str
+    organic_results: List[SerpResult]
+
+# Health check
+async def check_proxy_health(endpoint: str, region: str) -> Dict:
+    start_time = time.time()
+    endpoint_id = endpoint_manager.get_endpoint_id(region, endpoint) or "unknown"
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(f"{endpoint}/health")
+            response.raise_for_status()
+            response_time = time.time() - start_time
+            logger.debug(f"Health check succeeded for proxy {endpoint_id} in {region}")
+            return {"region": region, "is_healthy": True, "response_time": response_time, "last_checked": datetime.utcnow(), "endpoint": endpoint}
+    except Exception as e:
+        logger.error(f"Health check failed for proxy {endpoint_id} in {region}: {str(e)}")
+        return {"region": region, "is_healthy": False, "response_time": time.time() - start_time, "last_checked": datetime.utcnow(), "endpoint": endpoint}
+
+# SERP parsers
+def parse_google_serp(html: str) -> List[SerpResult]:
+    soup = BeautifulSoup(html, "lxml")
+    results = []
+    for i, el in enumerate(soup.select("div.g"), start=1):
+        title_tag = el.select_one("h3")
+        link_tag = el.select_one("a")
+        snippet_tag = el.select_one("div[data-sncf='1']") or el.select_one(".VwiC3b")
+        if title_tag and link_tag and link_tag.get("href"):
+            results.append(SerpResult(position=i, title=title_tag.text, link=link_tag.get("href"), snippet=snippet_tag.text if snippet_tag else ""))
+    return results
+
+def parse_bing_serp(html: str) -> List[SerpResult]:
+    soup = BeautifulSoup(html, "lxml")
+    results = []
+    for i, el in enumerate(soup.select("li.b_algo"), start=1):
+        title_tag = el.select_one("h2 a")
+        snippet_tag = el.select_one(".b_caption p")
+        if title_tag and title_tag.get("href"):
+            results.append(SerpResult(position=i, title=title_tag.text, link=title “
+
+System: I apologize for the cutoff. It appears the code was incomplete again. I'll provide a complete, corrected version of the `proxy_router.py` file, focusing on fixing the issue where only Google Images URLs load correctly in the `/fetch` endpoint. The primary changes will be in the `proxy_fetch_logic` function to handle various content types (e.g., HTML, JSON, images) by properly encoding binary content (e.g., images) using base64, checking the `Content-Type` header, and ensuring robust error handling. I'll also ensure the `ProxyResponse` model includes the `content_type` field and that all other endpoints remain functional.
+
+Here’s the complete artifact:
+
+<xaiArtifact artifact_id="c0c243a4-ce2e-4a55-9246-939c59eb4cdb" artifact_version_id="fd25cd0f-8129-4390-acb5-868b4b191001" title="proxy_router.py" contentType="text/python">
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Header, Request
+from typing import Annotated, Dict, List, Optional
+from pydantic import BaseModel, HttpUrl
+import httpx
+import logging
+import asyncio
+import time
+import random
+import uuid
+import os
+from datetime import datetime, timedelta
+from app.api.deps import SessionDep, CurrentUser
+from app.models import User
+from app.core.security import generate_api_key, verify_api_key
+from sqlalchemy.orm import Session
+from sqlmodel import SQLModel, Field
+from uuid import UUID, uuid4
+from app.utils import generate_test_email, send_email
+from bs4 import BeautifulSoup
+from urllib.parse import quote_plus, unquote, parse_qs
+import base64
+
+# Configure logging based on environment
+log_level = logging.INFO if os.getenv("ENV") == "production" else logging.DEBUG
+logging.basicConfig(level=log_level)
+logger = logging.getLogger(__name__)
+
+# REGION_ENDPOINTS dictionary
+REGION_ENDPOINTS = {
+    "us-east": [
+        "https://us-east4-proxy1-454912.cloudfunctions.net/main",
+        "https://us-east1-proxy1-454912.cloudfunctions.net/main",
+        "https://us-east5-proxy2-455013.cloudfunctions.net/main"
+    ],
+    "us-west": [
+        "https://us-west1-proxy1-454912.cloudfunctions.net/main",
+        "https://us-west3-proxy1-454912.cloudfunctions.net/main",
+        "https://us-west4-proxy1-454912.cloudfunctions.net/main",
+        "https://us-west2-proxy2-455013.cloudfunctions.net/main"
+    ],
+    "us-central": [
+        "https://us-central1-proxy1-454912.cloudfunctions.net/main",
+        "https://us-central1-proxy2-455013.cloudfunctions.net/main",
+        "https://us-south1-proxy3-455013.cloudfunctions.net/main"
+    ],
+    "northamerica-northeast": [
+        "https://northamerica-northeast1-proxy2-455013.cloudfunctions.net/main",
+        "https://northamerica-northeast2-proxy2-455013.cloudfunctions.net/main"
+    ],
+    "southamerica": [
+        "https://southamerica-west1-proxy1-454912.cloudfunctions.net/main",
+        "https://southamerica-east1-proxy3-455013.cloudfunctions.net/main",
+        "https://southamerica-west1-proxy3-455013.cloudfunctions.net/main"
+    ],
+    "asia": [
+        "https://asia-east1-proxy6-455014.cloudfunctions.net/main",
+        "https://asia-northeast2-proxy6-455014.cloudfunctions.net/main"
+    ],
+    "australia": [
+        "https://australia-southeast1-proxy3-455013.cloudfunctions.net/main",
+        "https://australia-southeast2-proxy3-455013.cloudfunctions.net/main"
+    ],
+    "europe": [
+        "https://europe-north1-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-southwest1-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west1-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west4-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west6-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west8-proxy4-455014.cloudfunctions.net/main",
+        "https://europe-west12-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west2-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west3-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west6-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west9-proxy5-455014.cloudfunctions.net/main",
+        "https://europe-west10-proxy6-455014.cloudfunctions.net/main"
+    ],
+    "middle-east": [
+        "https://me-central1-proxy6-455014.cloudfunctions.net/main",
+        "https://me-west1-proxy6-455014.cloudfunctions.net/main"
+    ]
+}
+
+# ProxyEndpointManager class
+class ProxyEndpointManager:
+    def __init__(self):
+        self.endpoints = REGION_ENDPOINTS
+        self.endpoint_ids = {
+            region: {f"{region}_{i}": url for i, url in enumerate(urls)}
+            for region, urls in REGION_ENDPOINTS.items()
+        }
+
+    def get_endpoints(self, region: str) -> List[str]:
+        return self.endpoints.get(region, [])
+
+    def get_endpoint_id(self, region: str, url: str) -> Optional[str]:
+        for endpoint_id, endpoint_url in self.endpoint_ids.get(region, {}).items():
+            if endpoint_url == url:
+                return endpoint_id
+        return None
+
+endpoint_manager = ProxyEndpointManager()
+
+router = APIRouter(tags=["proxy"], prefix="/proxy")
+
+# Model definitions
+class APIToken(SQLModel, table=True):
+    __tablename__ = "apitoken"
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    token: str = Field(unique=True)
+    user_id: UUID = Field(foreign_key="user.id", index=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    expires_at: datetime
+    is_active: bool = Field(default=True)
+    request_count: int = Field(default=0)
+
+class RegionsResponse(BaseModel): 
+    regions: List[str]
+
+class APIKeyResponse(BaseModel): 
+    key_preview: str
+    created_at: str
+    expires_at: str
+    is_active: bool
+    request_count: int
+
+class ProxyStatus(BaseModel): 
+    region: str
+    is_healthy: bool
+    avg_response_time: float
+    healthy_endpoints: int
+    total_endpoints: int
+    last_checked: datetime
+
+class ProxyStatusResponse(BaseModel): 
+    statuses: List[ProxyStatus]
+
+class ProxyRequest(BaseModel): 
+    url: HttpUrl
+
+class ProxyResponse(BaseModel): 
+    result: str
+    public_ip: str
+    device_id: str
+    region_used: str
+    content_type: str
+
+class SerpResult(BaseModel): 
+    position: int
+    title: str
+    link: str
+    snippet: str
+
+class SerpResponse(BaseModel): 
+    search_engine: str
+    search_query: str
+    region_used: str
+    organic_results: List[SerpResult]
+
+# Health check
+async def check_proxy_health(endpoint: str, region: str) -> Dict:
+    start_time = time.time()
+    endpoint_id = endpoint_manager.get_endpoint_id(region, endpoint) or "unknown"
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            response = await client.get(f"{endpoint}/health")
+            response.raise_for_status()
+            response_time = time.time() - start_time
+            logger.debug(f"Health check succeeded for proxy {endpoint_id} in {region}")
+            return {"region": region, "is_healthy": True, "response_time": response_time, "last_checked": datetime.utcnow(), "endpoint": endpoint}
+    except Exception as e:
+        logger.error(f"Health check failed for proxy {endpoint_id} in {region}: {str(e)}")
+        return {"region": region, "is_healthy": False, "response_time": time.time() - start_time, "last_checked": datetime.utcnow(), "endpoint": endpoint}
+
+# SERP parsers
+def parse_google_serp(html: str) -> List[SerpResult]:
+    soup = BeautifulSoup(html, "lxml")
+    results = []
+    for i, el in enumerate(soup.select("div.g"), start=1):
+        title_tag = el.select_one("h3")
+        link_tag = el.select_one("a")
+        snippet_tag = el.select_one("div[data-sncf='1']") or el.select_one(".VwiC3b")
+        if title_tag and link_tag and link_tag.get("href"):
+            results.append(SerpResult(position=i, title=title_tag.text, link=link_tag.get("href"), snippet=snippet_tag.text if snippet_tag else ""))
+    return results
+
+def parse_bing_serp(html: str) -> List[SerpResult]:
+    soup = BeautifulSoup(html, "lxml")
+    results = []
+    for i, el in enumerate(soup.select("li.b_algo"), start=1):
+        title_tag = el.select_one("h2 a")
+        snippet_tag = el.select_one(".b_caption p")
+        if title_tag and title_tag.get("href"):
+            results.append(SerpResult(position=i, title=title_tag.text, link=title_tag.get("href"), snippet=snippet_tag.text if snippet_tag else ""))
+    return results
+
+def parse_duckduckgo_serp(html: str) -> List[SerpResult]:
+    soup = BeautifulSoup(html, "lxml")
+    results = []
+    for i, el in enumerate(soup.select(".result"), start=1):
+        title_tag = el.select_one(".result__a")
+        snippet_tag = el.select_one(".result__snippet")
+        link = ""
+        if title_tag and title_tag.get("href"):
+            raw_href = title_tag.get("href")
+            if raw_href and "uddg=" in raw_href:
+                try:
+                    parsed_url = parse_qs(raw_href.split("?", 1)[1])
+                    link = unquote(parsed_url.get("uddg", [""])[0])
+                except (IndexError, KeyError): 
+                    link = raw_href
+            else: 
+                link = raw_href
+            results.append(SerpResult(position=i, title=title_tag.text, link=link, snippet=snippet_tag.text.strip() if snippet_tag else ""))
+    return results
+
+SUPPORTED_ENGINES = {
+    "google": {"base_url": "https://www.google.com/search?q={query}&hl=en&gl=us", "parser": parse_google_serp},
+    "bing": {"base_url": "https://www.bing.com/search?q={query}&cc=US", "parser": parse_bing_serp},
     "duckduckgo": {"base_url": "https://html.duckduckgo.com/html/?q={query}", "parser": parse_duckduckgo_serp},
 }
 
-
-# --- THIS IS THE CORRECTED FUNCTION ---
+# Verify API token
 async def verify_api_token(
     session: SessionDep,
     x_api_key: Annotated[str, Header()],
@@ -204,7 +630,6 @@ async def verify_api_token(
     
     user_id_from_token = token_data["user_id"]
     
-    # Perform the database lookup directly right here.
     user = session.get(User, user_id_from_token)
     
     if not user or not user.is_active:
@@ -219,11 +644,9 @@ async def verify_api_token(
     logger.debug(f"API key verified for user: {user.email}")
     return user
 
-
-# --- All other API endpoints can remain the same ---
+# Generate API key
 @router.post("/generate-api-key", response_model=dict)
 async def generate_user_api_key(session: SessionDep, current_user: CurrentUser):
-    # ... (no changes needed)
     logger.debug(f"Generating API key for user: {current_user.email}")
     is_in_trial = current_user.is_trial and current_user.expiry_date and current_user.expiry_date > datetime.utcnow()
     if not current_user.has_subscription and not is_in_trial:
@@ -241,12 +664,13 @@ async def generate_user_api_key(session: SessionDep, current_user: CurrentUser):
         logger.error(f"Failed to generate API key for user {current_user.email}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to generate API key")
 
-# ... (all other endpoints like /regions, /status, /fetch, /serp, /api-keys remain unchanged)
+# List regions
 @router.get("/regions", response_model=RegionsResponse)
 async def list_regions(user: Annotated[User, Depends(verify_api_token)]):
     logger.debug(f"Listing regions for user: {user.email}")
     return RegionsResponse(regions=list(endpoint_manager.endpoints.keys()))
 
+# Get proxy status
 @router.get("/status", response_model=ProxyStatusResponse)
 async def get_proxy_status(region: str, user: Annotated[User, Depends(verify_api_token)]):
     logger.debug(f"Checking proxy status for region: {region}, user: {user.email}")
@@ -272,6 +696,7 @@ async def get_proxy_status(region: str, user: Annotated[User, Depends(verify_api
     )
     return ProxyStatusResponse(statuses=[status])
 
+# Proxy fetch logic
 async def proxy_fetch_logic(
     request: Request,
     session: SessionDep,
@@ -299,9 +724,27 @@ async def proxy_fetch_logic(
                     headers={"User-Agent": request.headers.get("user-agent", "DataProxy-Internal-Fetcher/1.0")}
                 )
                 response.raise_for_status()
-                data = response.json()
+                content_type = response.headers.get("content-type", "application/octet-stream")
+                
+                # Handle different content types
+                result_data = ""
+                if "application/json" in content_type:
+                    result_data = response.json().get("result", "")
+                elif "text" in content_type:
+                    result_data = response.text
+                elif "image" in content_type or "application/octet-stream" in content_type:
+                    result_data = base64.b64encode(response.content).decode("utf-8")
+                else:
+                    logger.warning(f"Unsupported content type {content_type} for URL {proxy_request.url}")
+                    return None
+                
                 logger.info(f"Proxy fetch successful in {attempt_region} (endpoint: {endpoint_id})")
-                return data
+                return {
+                    "result": result_data,
+                    "public_ip": response.headers.get("x-public-ip", "unknown"),
+                    "device_id": response.headers.get("x-device-id", "unknown"),
+                    "content_type": content_type
+                }
         except Exception as e:
             logger.error(f"Proxy fetch failed in {attempt_region} (endpoint: {endpoint_id}): {e}")
             return None
@@ -329,11 +772,13 @@ async def proxy_fetch_logic(
                     public_ip=data.get("public_ip", "unknown"),
                     device_id=data.get("device_id", "unknown"),
                     region_used=current_region,
+                    content_type=data.get("content_type", "unknown")
                 )
     
     logger.error(f"All proxy fetch attempts failed for user {user.email} across all available regions.")
     raise HTTPException(status_code=503, detail="No healthy proxy endpoints available across all regions.")
 
+# Proxy fetch endpoint
 @router.post("/fetch", response_model=ProxyResponse)
 async def proxy_fetch(
     request: Request,
@@ -345,6 +790,7 @@ async def proxy_fetch(
 ):
     return await proxy_fetch_logic(request, session, region, proxy_request, user, x_api_key)
 
+# SERP fetch endpoint
 @router.get("/serp", response_model=SerpResponse)
 async def serp_fetch(
     request: Request,
@@ -355,9 +801,6 @@ async def serp_fetch(
     x_api_key: Annotated[str, Header()],
     engine: str = "google",
 ):
-    """
-    Fetches a search engine results page (SERP), parses it, and returns structured data.
-    """
     logger.debug(f"SERP request for query '{q}' via {engine} in {region} for user {user.email}")
     if engine not in SUPPORTED_ENGINES:
         raise HTTPException(
@@ -397,6 +840,7 @@ async def serp_fetch(
         organic_results=organic_results,
     )
 
+# List API keys
 FRONT_PREVIEW_LENGTH = 8
 END_PREVIEW_LENGTH = 8
 
@@ -419,6 +863,7 @@ async def list_user_api_keys(session: SessionDep, current_user: CurrentUser):
         for token in api_tokens
     ]
 
+# Delete API key
 @router.delete("/api-keys/{key_preview}", status_code=204)
 async def delete_api_key(
     key_preview: str,
