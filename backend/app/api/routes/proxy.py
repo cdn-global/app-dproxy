@@ -317,29 +317,69 @@ async def proxy_fetch_logic(
         logger.error(f"API key passed verification but not found in DB for user {user.id}. Possible data inconsistency.")
         raise HTTPException(status_code=401, detail="API key is invalid or has been deactivated.")
     
-    async def try_endpoint(endpoint: str, attempt_region: str) -> Optional[Dict]:
+    async def try_endpoint(endpoint: str, attempt_region: str, retry_count: int = 0) -> Optional[Dict]:
+        if retry_count >= 3:
+            logger.warning(f"Max retries reached for endpoint {endpoint} in {attempt_region}")
+            return None
+        
         endpoint_id = endpoint_manager.get_endpoint_id(attempt_region, endpoint) or "unknown"
         try:
+            # Select a random user agent
+            headers = {
+                "User-Agent": random.choice(USER_AGENTS),
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Connection": "keep-alive",
+                "Referer": "https://www.google.com/",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Site": "same-origin"
+            }
             async with httpx.AsyncClient(timeout=15.0) as client:
                 response = await client.post(
                     f"{endpoint}/fetch",
                     json={"url": str(proxy_request.url)},
-                    headers={"User-Agent": request.headers.get("user-agent", "DataProxy-Internal-Fetcher/1.0")}
+                    headers=headers
                 )
                 response.raise_for_status()
-                content_type = response.headers.get("content-type", "application/octet-stream")
+                content_type = response.headers.get("content-type", "application/octet-stream").split(";")[0]
                 
                 # Handle different content types
                 result_data = ""
+                is_error_page = False
                 if "application/json" in content_type:
-                    result_data = response.json().get("result", "")
-                elif "text" in content_type:
+                    try:
+                        json_data = response.json()
+                        result_data = json_data.get("result", "")
+                        # Check for HTML error page in JSON
+                        if isinstance(result_data, str) and (
+                            "<!DOCTYPE html>" in result_data or
+                            "<title>Google Search</title>" in result_data
+                        ):
+                            is_error_page = True
+                            logger.warning(f"Received HTML error page in JSON response for URL {proxy_request.url}")
+                    except ValueError:
+                        logger.error(f"Invalid JSON response for URL {proxy_request.url}")
+                        return None
+                elif "text/html" in content_type or "text/plain" in content_type:
                     result_data = response.text
+                    # Check for Google error page
+                    if "<title>Google Search</title>" in result_data and "If you're having trouble accessing Google Search" in result_data:
+                        is_error_page = True
+                        logger.warning(f"Received Google error page for URL {proxy_request.url}")
                 elif "image" in content_type or "application/octet-stream" in content_type:
                     result_data = base64.b64encode(response.content).decode("utf-8")
+                    content_type = response.headers.get("content-type", "image/unknown")
                 else:
                     logger.warning(f"Unsupported content type {content_type} for URL {proxy_request.url}")
                     return None
+                
+                if is_error_page:
+                    logger.info(f"Retrying endpoint {endpoint_id} in {attempt_region} due to error page (attempt {retry_count + 1})")
+                    # Add a small delay before retrying
+                    await asyncio.sleep(1.0 + random.uniform(0, 0.5))
+                    return await try_endpoint(endpoint, attempt_region, retry_count + 1)
                 
                 logger.info(f"Proxy fetch successful in {attempt_region} (endpoint: {endpoint_id})")
                 return {
@@ -380,7 +420,6 @@ async def proxy_fetch_logic(
     
     logger.error(f"All proxy fetch attempts failed for user {user.email} across all available regions.")
     raise HTTPException(status_code=503, detail="No healthy proxy endpoints available across all regions.")
-
 # Proxy fetch endpoint
 @router.post("/fetch", response_model=ProxyResponse)
 async def proxy_fetch(
