@@ -1,3 +1,4 @@
+
 import {
   Box,
   Flex,
@@ -168,10 +169,9 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   }
 
   finalNavStructure.push({
-    title: currentUser ? "Sign Out" : "Sign In",
-    icon: currentUser ? FiLogOut : FiLogIn,
-    path: currentUser ? undefined : "/login",
-    onClick: currentUser ? handleLogout : undefined,
+    title: "Sign Out",
+    icon: FiLogOut,
+    onClick: handleLogout,
   });
 
   const isEnabled = (title: string) => {
@@ -180,6 +180,8 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
       "HTTPS API",
       "SERP API",
       "User Agents",
+      "Settings",
+      "Sign Out",
     ].includes(title);
   };
 
@@ -261,33 +263,48 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
       }
 
       const isLink = !!path;
-      return (
-        <Flex
-          key={title}
-          as={isLink ? RouterLink : "button"}
-          {...(isLink ? { to: path } : {})}
-          px={4}
-          py={2}
-          color={textColor}
-          _hover={{ color: hoverColor, textDecoration: "none" }}
-          // MODIFIED: Removed background from activeProps style
-          {...(isLink ? { activeProps: { style: { color: activeTextColor } } } : {})}
-          align="center"
-          onClick={
-            isLink
-              ? onClose
-              : () => {
-                  if (onClick) onClick();
-                  if (onClose) onClose();
-                }
-          }
-          w={isMobile ? "100%" : "auto"}
-          borderRadius="md"
-        >
-          {icon && <Icon as={icon} mr={2} boxSize={5} />}
-          <Text fontWeight="500">{title}</Text>
-        </Flex>
-      );
+      if (isLink) {
+        return (
+          <Flex
+            key={title}
+            as={RouterLink}
+            to={path}
+            px={4}
+            py={2}
+            color={textColor}
+            _hover={{ color: hoverColor, textDecoration: "none" }}
+            activeProps={{ style: { color: activeTextColor } }}
+            align="center"
+            onClick={onClose}
+            w={isMobile ? "100%" : "auto"}
+            borderRadius="md"
+          >
+            {icon && <Icon as={icon} mr={2} boxSize={5} />}
+            <Text fontWeight="500">{title}</Text>
+          </Flex>
+        );
+      } else {
+        return (
+          <Flex
+            key={title}
+            as="button"
+            px={4}
+            py={2}
+            color={textColor}
+            _hover={{ color: hoverColor }}
+            align="center"
+            onClick={() => {
+              if (onClick) onClick();
+              if (onClose) onClose();
+            }}
+            w={isMobile ? "100%" : "auto"}
+            borderRadius="md"
+          >
+            {icon && <Icon as={icon} mr={2} boxSize={5} />}
+            <Text fontWeight="500">{title}</Text>
+          </Flex>
+        );
+      }
     });
 
   return (
