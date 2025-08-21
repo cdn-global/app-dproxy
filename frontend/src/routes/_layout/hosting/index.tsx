@@ -91,6 +91,6 @@ function HostingIndexPage() {
   );
 }
 
-export const Route = createFileRoute("/_layout/hosting")({
+export const Route = createFileRoute("/_layout/hosting/")({
   component: HostingIndexPage,
 });
