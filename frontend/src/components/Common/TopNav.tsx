@@ -1,4 +1,3 @@
-
 import {
   Box,
   Flex,
@@ -272,11 +271,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
           color={textColor}
           _hover={{ color: hoverColor, textDecoration: "none" }}
           // MODIFIED: Removed background from activeProps style
-          activeProps={isLink
-            ? {
-                style: { color: activeTextColor },
-              }
-            : {}}
+          {...(isLink ? { activeProps: { style: { color: activeTextColor } } } : {})}
           align="center"
           onClick={
             isLink
