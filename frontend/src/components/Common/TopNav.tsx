@@ -17,6 +17,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Link as RouterLink, useRouterState } from "@tanstack/react-router";
 import {
   FiLogOut,
+  FiLogIn,
   FiMenu,
   FiUsers,
   FiSearch,
@@ -319,7 +320,7 @@ const TopNav = () => {
         {/* Desktop Navigation */}
         <Flex align="center" gap={4} display={{ base: "none", md: "flex" }}>
           <NavItems />
-          {currentUser && (
+          {currentUser ? (
             <>
               <Flex
                 as={RouterLink}
@@ -349,9 +350,23 @@ const TopNav = () => {
                 borderRadius="md"
               >
                 <Icon as={FiLogOut} mr={2} boxSize={5} />
-                <Text fontWeight="500">Log out</Text>
+                <Text fontWeight="500">Sign Out</Text>
               </Flex>
             </>
+          ) : (
+            <Flex
+              as={RouterLink}
+              to="/login"
+              px={4}
+              py={2}
+              color={textColor}
+              _hover={{ color: hoverColor, textDecoration: "none" }}
+              align="center"
+              borderRadius="md"
+            >
+              <Icon as={FiLogIn} mr={2} boxSize={5} />
+              <Text fontWeight="500">Sign In</Text>
+            </Flex>
           )}
         </Flex>
       </Flex>
@@ -369,7 +384,7 @@ const TopNav = () => {
       >
         <Flex flexDir="column" gap={4}>
           <NavItems onClose={onClose} isMobile={true} />
-          {currentUser && (
+          {currentUser ? (
             <>
               <Text
                 color={textColor}
@@ -404,10 +419,24 @@ const TopNav = () => {
                   align="center"
                 >
                   <Icon as={FiLogOut} mr={2} boxSize={5} />
-                  <Text fontWeight="500">Log out</Text>
+                  <Text fontWeight="500">Sign Out</Text>
                 </Flex>
               </Flex>
             </>
+          ) : (
+            <Flex
+              as={RouterLink}
+              to="/login"
+              px={4}
+              py={2}
+              color={textColor}
+              _hover={{ color: hoverColor }}
+              onClick={onClose}
+              align="center"
+            >
+              <Icon as={FiLogIn} mr={2} boxSize={5} />
+              <Text fontWeight="500">Sign In</Text>
+            </Flex>
           )}
         </Flex>
       </Box>
