@@ -1,3 +1,4 @@
+
 import {
   Box,
   Flex,
@@ -35,6 +36,7 @@ interface NavItem {
   title: string;
   icon?: any;
   path?: string;
+  onClick?: () => void;
   description?: string;
   subItems?: NavItem[];
 }
@@ -143,6 +145,12 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   // const bgActive = "orange.100";
   const activeTextColor = "orange.800";
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"]);
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    logout();
+    if (onClose) onClose();
+  };
 
   const finalNavStructure = [...navStructure];
   if (
@@ -151,6 +159,21 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   ) {
     finalNavStructure.push({ title: "Admin", icon: FiUsers, path: "/admin" });
   }
+
+  if (currentUser) {
+    finalNavStructure.push({
+      title: "Settings",
+      icon: FiSettings,
+      path: "/settings",
+    });
+  }
+
+  finalNavStructure.push({
+    title: currentUser ? "Sign Out" : "Sign In",
+    icon: currentUser ? FiLogOut : FiLogIn,
+    path: currentUser ? undefined : "/login",
+    onClick: currentUser ? handleLogout : undefined,
+  });
 
   const isEnabled = (title: string) => {
     return [
@@ -163,7 +186,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
 
   const renderNavItems = (items: NavItem[]) =>
     items.map((item) => {
-      const { icon, title, path, subItems } = item;
+      const { icon, title, path, subItems, onClick } = item;
       const hasSubItems = subItems && subItems.length > 0;
 
       if (hasSubItems) {
@@ -238,21 +261,31 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
         );
       }
 
+      const isLink = !!path;
       return (
         <Flex
           key={title}
-          as={RouterLink}
-          to={path}
+          as={isLink ? RouterLink : "button"}
+          {...(isLink ? { to: path } : {})}
           px={4}
           py={2}
           color={textColor}
           _hover={{ color: hoverColor, textDecoration: "none" }}
           // MODIFIED: Removed background from activeProps style
-          activeProps={{
-            style: { color: activeTextColor },
-          }}
+          activeProps={isLink
+            ? {
+                style: { color: activeTextColor },
+              }
+            : {}}
           align="center"
-          onClick={onClose}
+          onClick={
+            isLink
+              ? onClose
+              : () => {
+                  if (onClick) onClick();
+                  if (onClose) onClose();
+                }
+          }
           w={isMobile ? "100%" : "auto"}
           borderRadius="md"
         >
@@ -276,20 +309,12 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
 
 
 const TopNav = () => {
-  const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { logout } = useAuth();
-  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"]);
   const textColor = "gray.800";
   const hoverColor = "orange.600";
   // MODIFIED: bgActive is no longer needed
   // const bgActive = "orange.100";
   const activeTextColor = "orange.800";
-
-  const handleLogout = async () => {
-    logout();
-    onClose();
-  };
 
   return (
     <Box
@@ -320,54 +345,6 @@ const TopNav = () => {
         {/* Desktop Navigation */}
         <Flex align="center" gap={4} display={{ base: "none", md: "flex" }}>
           <NavItems />
-          {currentUser ? (
-            <>
-              <Flex
-                as={RouterLink}
-                to="/settings"
-                px={4}
-                py={2}
-                color={textColor}
-                _hover={{ color: hoverColor, textDecoration: "none" }}
-                // MODIFIED: Removed background from activeProps style
-                activeProps={{
-                  style: { color: activeTextColor },
-                }}
-                align="center"
-                borderRadius="md"
-              >
-                <Icon as={FiSettings} mr={2} boxSize={5} />
-                <Text fontWeight="500">Settings</Text>
-              </Flex>
-              <Flex
-                as="button"
-                onClick={handleLogout}
-                px={4}
-                py={2}
-                color={textColor}
-                _hover={{ color: hoverColor }}
-                align="center"
-                borderRadius="md"
-              >
-                <Icon as={FiLogOut} mr={2} boxSize={5} />
-                <Text fontWeight="500">Sign Out</Text>
-              </Flex>
-            </>
-          ) : (
-            <Flex
-              as={RouterLink}
-              to="/login"
-              px={4}
-              py={2}
-              color={textColor}
-              _hover={{ color: hoverColor, textDecoration: "none" }}
-              align="center"
-              borderRadius="md"
-            >
-              <Icon as={FiLogIn} mr={2} boxSize={5} />
-              <Text fontWeight="500">Sign In</Text>
-            </Flex>
-          )}
         </Flex>
       </Flex>
 
@@ -384,60 +361,6 @@ const TopNav = () => {
       >
         <Flex flexDir="column" gap={4}>
           <NavItems onClose={onClose} isMobile={true} />
-          {currentUser ? (
-            <>
-              <Text
-                color={textColor}
-                fontSize="sm"
-                mt={4}
-                borderTopWidth="1px"
-                pt={4}
-              >
-                Logged in as: {currentUser.email}
-              </Text>
-              <Flex flexDir="column" gap={2}>
-                <Flex
-                  as={RouterLink}
-                  to="/settings"
-                  px={4}
-                  py={2}
-                  color={textColor}
-                  _hover={{ color: hoverColor }}
-                  onClick={onClose}
-                  align="center"
-                >
-                  <Icon as={FiSettings} mr={2} boxSize={5} />
-                  <Text fontWeight="500">Settings</Text>
-                </Flex>
-                <Flex
-                  as="button"
-                  onClick={handleLogout}
-                  px={4}
-                  py={2}
-                  color={textColor}
-                  _hover={{ color: hoverColor }}
-                  align="center"
-                >
-                  <Icon as={FiLogOut} mr={2} boxSize={5} />
-                  <Text fontWeight="500">Sign Out</Text>
-                </Flex>
-              </Flex>
-            </>
-          ) : (
-            <Flex
-              as={RouterLink}
-              to="/login"
-              px={4}
-              py={2}
-              color={textColor}
-              _hover={{ color: hoverColor }}
-              onClick={onClose}
-              align="center"
-            >
-              <Icon as={FiLogIn} mr={2} boxSize={5} />
-              <Text fontWeight="500">Sign In</Text>
-            </Flex>
-          )}
         </Flex>
       </Box>
     </Box>
