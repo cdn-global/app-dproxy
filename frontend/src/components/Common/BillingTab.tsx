@@ -10,7 +10,7 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/react";
-
+import { Link } from "@tanstack/react-router";
 // --- Helper function for Billing ---
 const fetchBillingPortal = async (token: string) => {
   const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
@@ -95,6 +95,7 @@ const BillingTab = () => {
           >
             Manage Billing
           </Button>
+<Button as={Link} to="/hosting/billing" colorScheme="orange" variant="outline">See Details</Button>
         </Flex>
         <Divider mb={4} />
       </VStack>

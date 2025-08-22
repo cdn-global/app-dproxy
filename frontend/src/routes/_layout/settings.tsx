@@ -17,7 +17,7 @@ import {
   // Imports required for ApiKeyModule are assumed to be within that component
 } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import type { UserPublic } from "../../client";
 import ApiKeyModule from "../../components/ScrapingTools/ApiKey";
 import BillingTab from "../../components/Common/BillingTab"
@@ -34,48 +34,8 @@ const tabsConfig = [
     },
   },
   {
-    title: "Invoice and Payment Details",
+    title: "Billing",
     component: BillingTab,
-  },
-  {
-    title: "Card Details",
-    component: () => (
-      <VStack align="start" spacing={4}>
-        <Heading size="lg">Update Card Details</Heading>
-        <Text>Placeholder for updating payment card information.</Text>
-        {/* Add form or integration for card update here */}
-      </VStack>
-    ),
-  },
-  {
-    title: "Invoice History",
-    component: () => (
-      <VStack align="start" spacing={4}>
-        <Heading size="lg">Invoice History</Heading>
-        <Text>Placeholder for viewing invoice history.</Text>
-        {/* Add table or list for invoices here */}
-      </VStack>
-    ),
-  },
-  {
-    title: "Billing Analytics and Breakdown by Resource",
-    component: () => (
-      <VStack align="start" spacing={4}>
-        <Heading size="lg">Billing Analytics and Breakdown by Resource</Heading>
-        <Text>Placeholder for billing analytics and resource breakdown.</Text>
-        {/* Add charts, tables, or integrations for analytics here */}
-        <Button as={Link} to="/hosting/billing" colorScheme="orange">View Hosting Billing Breakdown</Button>
-      </VStack>
-    ),
-  },
-  {
-    title: "Hosting Billing",
-    component: () => (
-      <VStack align="start" spacing={4}>
-        <Heading size="lg">Hosting Billing Details</Heading>
-        <Button as={Link} to="/hosting/billing" colorScheme="orange">View Hosting Billing</Button>
-      </VStack>
-    ),
   },
 ];
 
