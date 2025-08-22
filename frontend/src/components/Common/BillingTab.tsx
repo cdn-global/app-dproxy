@@ -86,16 +86,18 @@ const BillingTab = () => {
               You will be securely redirected to our customer portal.
             </Text>
           </Box>
-          <Button
-            colorScheme="blue"
-            onClick={handleBillingClick}
-            isLoading={isLoading}
-            loadingText="Redirecting..."
-            isDisabled={isLoading}
-          >
-            Manage Billing
-          </Button>
-<Button as={Link} to="/hosting/billing" colorScheme="orange" variant="outline">See Details</Button>
+       <Flex direction={{ base: "column", md: "row" }} gap={2}>
+            <Button
+              colorScheme="blue"
+              onClick={handleBillingClick}
+              isLoading={isLoading}
+              loadingText="Redirecting..."
+              isDisabled={isLoading}
+            >
+              Manage Billing
+            </Button>
+            <Button as={Link} to="/hosting/billing" colorScheme="orange" variant="outline">See Details</Button>
+          </Flex>
         </Flex>
         <Divider mb={4} />
       </VStack>
