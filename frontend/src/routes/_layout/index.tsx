@@ -1,3 +1,5 @@
+
+// src/routes/_layout/index.tsx
 import { createFileRoute, Link as RouterLink } from "@tanstack/react-router";
 import { Container, Flex, Text, Box, Heading, Alert, AlertIcon, Grid, GridItem, Table, Tbody, Tr, Td, Badge, VStack, Link, Icon, useToast, Button } from "@chakra-ui/react";
 // FIX: Added useMemo
@@ -20,6 +22,18 @@ interface ApiKey {
   key_preview: string; created_at: string; expires_at: string; is_active: boolean; request_count?: number;
 }
 
+// Hardcoded VPS devices
+interface Device {
+  name: string;
+  ip: string;
+}
+
+const vpsDevices: Device[] = [
+  { name: "riv1-nyc-mini5", ip: "100.100.95.59" },
+  { name: "riv2-nyc-mini5", ip: "100.114.242.51" },
+  { name: "riv3-nyc-mini6", ip: "100.91.158.116" },
+  { name: "riv4-nyc-mini5", ip: "100.100.106.3" },
+];
 
 async function fetchSubscriptions(): Promise<Subscription[]> {
   const token = localStorage.getItem("access_token");
@@ -137,6 +151,28 @@ const HomePage = () => {
                       <GridItem key={featureSlug}><Link as={RouterLink} to={details.path} _hover={{ textDecoration: 'none' }}><Box p={5} shadow="md" borderWidth="1px" borderRadius="lg" height="100%" display="flex" flexDirection="column" transition="all 0.2s ease-in-out" _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}><Box flex="1"><Flex justifyContent="space-between" alignItems="flex-start" mb={3}><Heading size="sm" pr={4}>{details.name}</Heading><Icon as={details.icon} boxSize={8} color="orange.400" /></Flex><Text fontSize="sm" color="gray.600" minHeight={{ base: "auto", md: "60px" }}>{details.description}</Text></Box><Text mt={4} color="orange.500" fontWeight="bold" fontSize="sm" alignSelf="flex-start">Go to Service →</Text></Box></Link></GridItem>
                     );
                   })}
+                  <GridItem>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="lg" height="100%" display="flex" flexDirection="column" transition="all 0.2s ease-in-out" _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}>
+                      <Box flex="1">
+                        <Flex justifyContent="space-between" alignItems="flex-start" mb={3}>
+                          <Heading size="sm" pr={4}>VPS Hosting</Heading>
+                          <Icon as={FaTools} boxSize={8} color="orange.400" />
+                        </Flex>
+                        <Text fontSize="sm" color="gray.600" mb={4}>Your hosted VPS devices for advanced operations.</Text>
+                        <Table variant="simple" size="sm">
+                          <Tbody>
+                            {vpsDevices.map((device) => (
+                              <Tr key={device.name}>
+                                <Td p={1}>{device.name}</Td>
+                                <Td p={1}>{device.ip}</Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      </Box>
+                      <Link as={RouterLink} to="/hosting" mt={4} color="orange.500" fontWeight="bold" fontSize="sm" alignSelf="flex-start" _hover={{ textDecoration: 'none' }}>View All VPS →</Link>
+                    </Box>
+                  </GridItem>
                   <GridItem>
                     <Box p={5} shadow="md" borderWidth="1px" borderRadius="lg" height="100%" display="flex" flexDirection="column">
                         <Box flex="1">
