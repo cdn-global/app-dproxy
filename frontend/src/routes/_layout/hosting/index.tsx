@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Box,
   Container,
@@ -15,8 +15,6 @@ import {
   useToast,
   HStack,
   Button,
-  VStack,
-  Heading,
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 

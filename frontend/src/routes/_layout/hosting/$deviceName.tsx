@@ -1,4 +1,4 @@
-// src/routes/_layout/hosting/[deviceName].tsx
+// src/routes/_layout/hosting/$deviceName.tsx
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import {
   Box,
