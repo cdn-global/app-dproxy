@@ -1,5 +1,5 @@
-
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+// src/routes/_layout/hosting/index.tsx
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Box,
   Container,
@@ -16,8 +16,6 @@ import {
   useToast,
   HStack,
   Button,
-  VStack,
-  Heading,
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 
@@ -99,41 +97,6 @@ function HostingIndexPage() {
   );
 }
 
-function DeviceDetailsPage() {
-  const { deviceName } = useParams({ from: '/_layout/hosting/$deviceName' });
-  const device = devices.find((d) => d.name === deviceName);
-
-  if (!device) {
-    return <Text>Device not found</Text>;
-  }
-
-  return (
-    <Container maxW="full" py={9}>
-      <Flex align="center" justify="space-between" py={6}>
-        <Heading size="xl">Device Details: {device.name}</Heading>
-        <Button as={Link} to="..">Back to List</Button>
-      </Flex>
-      <Box borderWidth="1px" borderRadius="lg" p={6}>
-        <VStack align="start" spacing={4}>
-          <Text><strong>Name:</strong> {device.name}</Text>
-          <Text><strong>Type:</strong> {device.type}</Text>
-          <Text><strong>OS:</strong> {device.os}</Text>
-          <Text><strong>Username:</strong> {device.username}</Text>
-          <Text><strong>Password:</strong> {device.password}</Text>
-        </VStack>
-      </Box>
-    </Container>
-  );
-}
-
-const hostingRoute = createFileRoute("/_layout/hosting/")({
+export const Route = createFileRoute("/_layout/hosting/")({
   component: HostingIndexPage,
 });
-
-const deviceDetailsRoute = createFileRoute("/_layout/hosting/$deviceName")({
-  component: DeviceDetailsPage,
-});
-
-hostingRoute.addChildren([deviceDetailsRoute]);
-
-export const Route = hostingRoute;
