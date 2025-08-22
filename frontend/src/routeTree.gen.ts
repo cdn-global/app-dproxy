@@ -25,6 +25,7 @@ import { Route as LayoutHostingIndexImport } from './routes/_layout/hosting/inde
 import { Route as LayoutWebScrapingToolsUserAgentsImport } from './routes/_layout/web-scraping-tools/user-agents'
 import { Route as LayoutWebScrapingToolsSerpApiImport } from './routes/_layout/web-scraping-tools/serp-api'
 import { Route as LayoutWebScrapingToolsHttpsApiImport } from './routes/_layout/web-scraping-tools/https-api'
+import { Route as LayoutHostingDeviceNameImport } from './routes/_layout/hosting/$deviceName'
 
 // Create/Update Routes
 
@@ -114,6 +115,12 @@ const LayoutWebScrapingToolsHttpsApiRoute =
     getParentRoute: () => LayoutRoute,
   } as any)
 
+const LayoutHostingDeviceNameRoute = LayoutHostingDeviceNameImport.update({
+  id: '/hosting/$deviceName',
+  path: '/hosting/$deviceName',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -188,6 +195,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/hosting/$deviceName': {
+      id: '/_layout/hosting/$deviceName'
+      path: '/hosting/$deviceName'
+      fullPath: '/hosting/$deviceName'
+      preLoaderRoute: typeof LayoutHostingDeviceNameImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/web-scraping-tools/https-api': {
       id: '/_layout/web-scraping-tools/https-api'
       path: '/web-scraping-tools/https-api'
@@ -226,6 +240,7 @@ interface LayoutRouteChildren {
   LayoutItemsRoute: typeof LayoutItemsRoute
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
+  LayoutHostingDeviceNameRoute: typeof LayoutHostingDeviceNameRoute
   LayoutWebScrapingToolsHttpsApiRoute: typeof LayoutWebScrapingToolsHttpsApiRoute
   LayoutWebScrapingToolsSerpApiRoute: typeof LayoutWebScrapingToolsSerpApiRoute
   LayoutWebScrapingToolsUserAgentsRoute: typeof LayoutWebScrapingToolsUserAgentsRoute
@@ -237,6 +252,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutItemsRoute: LayoutItemsRoute,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutIndexRoute: LayoutIndexRoute,
+  LayoutHostingDeviceNameRoute: LayoutHostingDeviceNameRoute,
   LayoutWebScrapingToolsHttpsApiRoute: LayoutWebScrapingToolsHttpsApiRoute,
   LayoutWebScrapingToolsSerpApiRoute: LayoutWebScrapingToolsSerpApiRoute,
   LayoutWebScrapingToolsUserAgentsRoute: LayoutWebScrapingToolsUserAgentsRoute,
@@ -257,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/hosting/$deviceName': typeof LayoutHostingDeviceNameRoute
   '/web-scraping-tools/https-api': typeof LayoutWebScrapingToolsHttpsApiRoute
   '/web-scraping-tools/serp-api': typeof LayoutWebScrapingToolsSerpApiRoute
   '/web-scraping-tools/user-agents': typeof LayoutWebScrapingToolsUserAgentsRoute
@@ -273,6 +290,7 @@ export interface FileRoutesByTo {
   '/items': typeof LayoutItemsRoute
   '/settings': typeof LayoutSettingsRoute
   '/': typeof LayoutIndexRoute
+  '/hosting/$deviceName': typeof LayoutHostingDeviceNameRoute
   '/web-scraping-tools/https-api': typeof LayoutWebScrapingToolsHttpsApiRoute
   '/web-scraping-tools/serp-api': typeof LayoutWebScrapingToolsSerpApiRoute
   '/web-scraping-tools/user-agents': typeof LayoutWebScrapingToolsUserAgentsRoute
@@ -291,6 +309,7 @@ export interface FileRoutesById {
   '/_layout/items': typeof LayoutItemsRoute
   '/_layout/settings': typeof LayoutSettingsRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_layout/hosting/$deviceName': typeof LayoutHostingDeviceNameRoute
   '/_layout/web-scraping-tools/https-api': typeof LayoutWebScrapingToolsHttpsApiRoute
   '/_layout/web-scraping-tools/serp-api': typeof LayoutWebScrapingToolsSerpApiRoute
   '/_layout/web-scraping-tools/user-agents': typeof LayoutWebScrapingToolsUserAgentsRoute
@@ -310,6 +329,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/settings'
     | '/'
+    | '/hosting/$deviceName'
     | '/web-scraping-tools/https-api'
     | '/web-scraping-tools/serp-api'
     | '/web-scraping-tools/user-agents'
@@ -325,6 +345,7 @@ export interface FileRouteTypes {
     | '/items'
     | '/settings'
     | '/'
+    | '/hosting/$deviceName'
     | '/web-scraping-tools/https-api'
     | '/web-scraping-tools/serp-api'
     | '/web-scraping-tools/user-agents'
@@ -341,6 +362,7 @@ export interface FileRouteTypes {
     | '/_layout/items'
     | '/_layout/settings'
     | '/_layout/'
+    | '/_layout/hosting/$deviceName'
     | '/_layout/web-scraping-tools/https-api'
     | '/_layout/web-scraping-tools/serp-api'
     | '/_layout/web-scraping-tools/user-agents'
@@ -391,6 +413,7 @@ export const routeTree = rootRoute
         "/_layout/items",
         "/_layout/settings",
         "/_layout/",
+        "/_layout/hosting/$deviceName",
         "/_layout/web-scraping-tools/https-api",
         "/_layout/web-scraping-tools/serp-api",
         "/_layout/web-scraping-tools/user-agents",
@@ -426,6 +449,10 @@ export const routeTree = rootRoute
     },
     "/_layout/": {
       "filePath": "_layout/index.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/hosting/$deviceName": {
+      "filePath": "_layout/hosting/$deviceName.tsx",
       "parent": "/_layout"
     },
     "/_layout/web-scraping-tools/https-api": {

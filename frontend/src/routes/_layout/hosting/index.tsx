@@ -98,37 +98,7 @@ function HostingIndexPage() {
   );
 }
 
-function DeviceDetailsPage() {
-  const params = useParams({ from: "/_layout/hosting/$deviceName" });
-  const device = devices.find((d) => d.name === params.deviceName);
-
-  if (!device) {
-    return <Text>Device not found</Text>;
-  }
-
-  return (
-    <Container maxW="full" py={9}>
-      <Flex align="center" justify="space-between" py={6}>
-        <Heading size="xl">Device Details: {device.name}</Heading>
-        <Button as={Link} to="/hosting/">Back to List</Button>
-      </Flex>
-      <Box borderWidth="1px" borderRadius="lg" p={6}>
-        <VStack align="start" spacing={4}>
-          <Text><strong>Name:</strong> {device.name}</Text>
-          <Text><strong>Type:</strong> {device.type}</Text>
-          <Text><strong>OS:</strong> {device.os}</Text>
-          <Text><strong>Username:</strong> {device.username}</Text>
-          <Text><strong>Password:</strong> {device.password}</Text>
-        </VStack>
-      </Box>
-    </Container>
-  );
-}
 
 export const IndexRoute = createFileRoute("/_layout/hosting/")({
   component: HostingIndexPage,
-});
-
-export const DetailsRoute = createFileRoute("/_layout/hosting/$deviceName")({
-  component: DeviceDetailsPage,
 });
