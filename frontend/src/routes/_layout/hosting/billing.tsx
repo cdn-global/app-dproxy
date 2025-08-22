@@ -29,7 +29,8 @@ interface Device {
   os: string;
   username: string;
   password: string;
-  monthlyPrice: number;
+  monthlyComputePrice: number;
+  storageSizeGB: number;
 }
 
 const devices: Device[] = [
@@ -44,7 +45,8 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyPrice: 15,
+    monthlyComputePrice: 15,
+    storageSizeGB: 120,
   },
   {
     name: "riv2-nyc-mini5",
@@ -57,7 +59,8 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyPrice: 50,
+    monthlyComputePrice: 50,
+    storageSizeGB: 240,
   },
   {
     name: "riv3-nyc-mini6",
@@ -70,7 +73,8 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyPrice: 50,
+    monthlyComputePrice: 50,
+    storageSizeGB: 240,
   },
   {
     name: "riv4-nyc-mini5",
@@ -83,16 +87,19 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyPrice: 45,
+    monthlyComputePrice: 45,
+    storageSizeGB: 120,
   },
 ];
 
 const ELASTIC_IP_FEE_PER_MONTH = 3.6; // $0.005 per hour * 24 * 30 = $3.60 per IP per month
+const STORAGE_COST_PER_GB_MONTH = 0.10; // Approximate EBS gp2 cost: $0.10/GB-month
 
 function BillingPage() {
-  const totalDeviceCost = devices.reduce((sum, device) => sum + device.monthlyPrice, 0);
+  const totalComputeCost = devices.reduce((sum, device) => sum + device.monthlyComputePrice, 0);
   const totalElasticIPCost = devices.length * ELASTIC_IP_FEE_PER_MONTH;
-  const grandTotal = totalDeviceCost + totalElasticIPCost;
+  const totalStorageCost = devices.reduce((sum, device) => sum + (device.storageSizeGB * STORAGE_COST_PER_GB_MONTH), 0);
+  const grandTotal = totalComputeCost + totalElasticIPCost + totalStorageCost;
 
   return (
     <Container maxW="full" py={9}>
@@ -107,7 +114,9 @@ function BillingPage() {
             <Tr>
               <Th>Device Name</Th>
               <Th>IP</Th>
-              <Th>Monthly Device Price (USD)</Th>
+              <Th>Monthly Compute Price (USD)</Th>
+              <Th>Storage Size (GB)</Th>
+              <Th>Monthly Storage Cost (USD)</Th>
               <Th>Elastic IP Fee (USD)</Th>
             </Tr>
           </Thead>
@@ -116,7 +125,9 @@ function BillingPage() {
               <Tr key={device.name}>
                 <Td>{device.name}</Td>
                 <Td>{device.ip}</Td>
-                <Td>${device.monthlyPrice}</Td>
+                <Td>${device.monthlyComputePrice}</Td>
+                <Td>{device.storageSizeGB}</Td>
+                <Td>${(device.storageSizeGB * STORAGE_COST_PER_GB_MONTH).toFixed(2)}</Td>
                 <Td>${ELASTIC_IP_FEE_PER_MONTH.toFixed(2)}</Td>
               </Tr>
             ))}
@@ -125,7 +136,8 @@ function BillingPage() {
       </Box>
 
       <VStack align="start" mt={6} spacing={4}>
-        <Heading size="md">Total Device Cost: ${totalDeviceCost}</Heading>
+        <Heading size="md">Total Compute Cost: ${totalComputeCost}</Heading>
+        <Heading size="md">Total Storage Cost: ${totalStorageCost.toFixed(2)}</Heading>
         <Heading size="md">Total Elastic IP Cost: ${totalElasticIPCost.toFixed(2)}</Heading>
         <Heading size="lg">Grand Total: ${grandTotal.toFixed(2)}</Heading>
       </VStack>
