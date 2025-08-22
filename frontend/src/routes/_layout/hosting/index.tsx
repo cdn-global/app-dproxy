@@ -1,5 +1,4 @@
-// src/routes/_layout/hosting/index.tsx
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
   Container,
@@ -15,7 +14,6 @@ import {
   useClipboard,
   useToast,
   HStack,
-  Button,
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 
@@ -23,16 +21,15 @@ import { CopyIcon } from "@chakra-ui/icons";
 interface Device {
   name: string;
   type: string;
-  os: string;
   username: string;
   password: string;
 }
 
 const devices: Device[] = [
-  { name: "riv1-nyc-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
-  { name: "riv2-sf-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
-  { name: "riv3-lon-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
-  { name: "riv4-tok-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
+  { name: "riv1-nyc-mini5", type: "VPS", username: "user", password: "5660" },
+  { name: "riv2-sf-mini5", type: "VPS", username: "user", password: "5660" },
+  { name: "riv3-lon-mini5", type: "VPS", username: "user", password: "5660" },
+  { name: "riv4-tok-mini5", type: "VPS", username: "user", password: "5660" },
 ];
 
 // Reusable CopyCell component
@@ -67,7 +64,6 @@ function HostingIndexPage() {
             <Tr>
               <Th>Device Name</Th>
               <Th>Type</Th>
-              <Th>OS</Th>
               <Th>Username</Th>
               <Th>Password</Th>
               <Th isNumeric>Actions</Th>
@@ -78,14 +74,12 @@ function HostingIndexPage() {
               <Tr key={device.name}>
                 <Td>{device.name}</Td>
                 <Td>{device.type}</Td>
-                <Td>{device.os}</Td>
                 <Td>{device.username}</Td>
                 <Td>{device.password}</Td>
                 <Td isNumeric>
                   <HStack spacing={2} justify="flex-end">
                     <CopyCell textToCopy={device.username} label="Username" />
                     <CopyCell textToCopy={device.password} label="Password" />
-                    <Button size="sm" as={Link} to={device.name}>View Details</Button>
                   </HStack>
                 </Td>
               </Tr>

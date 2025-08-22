@@ -25,7 +25,7 @@ import { Route as LayoutHostingIndexImport } from './routes/_layout/hosting/inde
 import { Route as LayoutWebScrapingToolsUserAgentsImport } from './routes/_layout/web-scraping-tools/user-agents'
 import { Route as LayoutWebScrapingToolsSerpApiImport } from './routes/_layout/web-scraping-tools/serp-api'
 import { Route as LayoutWebScrapingToolsHttpsApiImport } from './routes/_layout/web-scraping-tools/https-api'
-import { Route as LayoutHostingDeviceNameImport } from './routes/_layout/hosting/$deviceName'
+import { Route as LayoutHostingDeviceNameImport } from './routes/_layout/hosting/$deviceDetails'
 
 // Create/Update Routes
 
