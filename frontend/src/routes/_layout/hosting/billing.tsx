@@ -87,8 +87,12 @@ const devices: Device[] = [
   },
 ];
 
+const ELASTIC_IP_FEE_PER_MONTH = 3.6; // $0.005 per hour * 24 * 30 = $3.60 per IP per month
+
 function BillingPage() {
-  const totalMonthlyCost = devices.reduce((sum, device) => sum + device.monthlyPrice, 0);
+  const totalDeviceCost = devices.reduce((sum, device) => sum + device.monthlyPrice, 0);
+  const totalElasticIPCost = devices.length * ELASTIC_IP_FEE_PER_MONTH;
+  const grandTotal = totalDeviceCost + totalElasticIPCost;
 
   return (
     <Container maxW="full" py={9}>
@@ -103,7 +107,8 @@ function BillingPage() {
             <Tr>
               <Th>Device Name</Th>
               <Th>IP</Th>
-              <Th>Monthly Price (USD)</Th>
+              <Th>Monthly Device Price (USD)</Th>
+              <Th>Elastic IP Fee (USD)</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -112,6 +117,7 @@ function BillingPage() {
                 <Td>{device.name}</Td>
                 <Td>{device.ip}</Td>
                 <Td>${device.monthlyPrice}</Td>
+                <Td>${ELASTIC_IP_FEE_PER_MONTH.toFixed(2)}</Td>
               </Tr>
             ))}
           </Tbody>
@@ -119,7 +125,9 @@ function BillingPage() {
       </Box>
 
       <VStack align="start" mt={6} spacing={4}>
-        <Heading size="md">Total Monthly Cost: ${totalMonthlyCost}</Heading>
+        <Heading size="md">Total Device Cost: ${totalDeviceCost}</Heading>
+        <Heading size="md">Total Elastic IP Cost: ${totalElasticIPCost.toFixed(2)}</Heading>
+        <Heading size="lg">Grand Total: ${grandTotal.toFixed(2)}</Heading>
       </VStack>
 
       <Button as={ChakraLink} href=".." mt={4}>Back to Hosting</Button>
