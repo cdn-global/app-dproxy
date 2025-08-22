@@ -17,7 +17,7 @@ import {
   // Imports required for ApiKeyModule are assumed to be within that component
 } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import type { UserPublic } from "../../client";
 import ApiKeyModule from "../../components/ScrapingTools/ApiKey";
 import BillingTab from "../../components/Common/BillingTab"
@@ -36,6 +36,35 @@ const tabsConfig = [
   {
     title: "Billing",
     component: BillingTab,
+  },
+  {
+    title: "Card Details",
+    component: () => (
+      <VStack align="start" spacing={4}>
+        <Heading size="lg">Update Card Details</Heading>
+        <Text>Placeholder for updating payment card information.</Text>
+        {/* Add form or integration for card update here */}
+      </VStack>
+    ),
+  },
+  {
+    title: "Invoice History",
+    component: () => (
+      <VStack align="start" spacing={4}>
+        <Heading size="lg">Invoice History</Heading>
+        <Text>Placeholder for viewing invoice history.</Text>
+        {/* Add table or list for invoices here */}
+      </VStack>
+    ),
+  },
+  {
+    title: "Hosting Billing",
+    component: () => (
+      <VStack align="start" spacing={4}>
+        <Heading size="lg">Hosting Billing Details</Heading>
+        <Button as={Link} to="/hosting/billing" colorScheme="orange">View Hosting Billing</Button>
+      </VStack>
+    ),
   },
 ];
 
