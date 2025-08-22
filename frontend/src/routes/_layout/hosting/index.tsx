@@ -105,9 +105,12 @@ const CopyCell = ({ textToCopy, label }: { textToCopy: string; label: string }) 
 function HostingIndexPage() {
   return (
     <Container maxW="full" py={9}>
-      <Flex align="center" justify="space-between" py={6}>
-        <Text fontSize="3xl" color="black">Web Hosting Credentials</Text>
-        <Text fontSize="lg" color="gray.600">Login details for hosting devices</Text>
+      <Flex align="center" py={6}>
+        <Flex direction="column">
+          <Text fontSize="3xl" color="black">Web Hosting Credentials</Text>
+          <Text fontSize="lg" color="gray.600">Login details for hosting devices</Text>
+        </Flex>
+        <Button ml="auto" as={Link} to="billing">View Billing</Button>
       </Flex>
 
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden">

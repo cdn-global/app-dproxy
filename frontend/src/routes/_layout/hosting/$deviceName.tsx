@@ -27,7 +27,7 @@ interface Device {
 const devices: Device[] = [
   {
     name: "riv1-nyc-mini5",
-    email: "apis.popov@gmail.com",
+    email: "nik@iconluxurygroup.com",
     ip: "100.100.95.59",
     version: "1.82.0",
     kernel: "Linux 6.8.0-57-generic",
@@ -39,7 +39,7 @@ const devices: Device[] = [
   },
   {
     name: "riv2-nyc-mini5",
-    email: "apis.popov@gmail.com",
+    email: "nik@iconluxurygroup.com",
     ip: "100.114.242.51",
     version: "1.86.2",
     kernel: "Linux 6.8.0-57-generic",
@@ -51,7 +51,7 @@ const devices: Device[] = [
   },
   {
     name: "riv3-nyc-mini6",
-    email: "apis.popov@gmail.com",
+    email: "nik@iconluxurygroup.com",
     ip: "100.91.158.116",
     version: "1.82.5",
     kernel: "Linux 6.8.0-59-generic",
@@ -63,7 +63,7 @@ const devices: Device[] = [
   },
   {
     name: "riv4-nyc-mini5",
-    email: "apis.popov@gmail.com",
+    email: "nik@iconluxurygroup.com",
     ip: "100.100.106.3",
     version: "1.80.2",
     kernel: "Linux 6.8.0-55-generic",
@@ -87,20 +87,50 @@ function DeviceDetailsPage() {
     <Container maxW="full" py={9}>
       <Flex align="center" justify="space-between" py={6}>
         <Heading size="xl">Device Details: {device.name}</Heading>
-        <Button as={Link} to="/hosting">Back to List</Button>
+        <Button as={Link} to="..">Back to List</Button>
       </Flex>
-      <Box borderWidth="1px" borderRadius="lg" p={6}>
-        <VStack align="start" spacing={4}>
-          <Text><strong>Name:</strong> {device.name}</Text>
-          <Text><strong>Email:</strong> {device.email}</Text>
-          <Text><strong>IP:</strong> {device.ip}</Text>
-          <Text><strong>Version:</strong> {device.version}</Text>
-          <Text><strong>Kernel:</strong> {device.kernel}</Text>
-          <Text><strong>Status:</strong> {device.status}</Text>
-          <Text><strong>Type:</strong> {device.type}</Text>
-          <Text><strong>OS:</strong> {device.os}</Text>
-          <Text><strong>Username:</strong> {device.username}</Text>
-          <Text><strong>Password:</strong> {device.password}</Text>
+      <Box borderWidth="1px" borderRadius="lg" p={4} bg="gray.50">
+        <VStack align="stretch" spacing={2}>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Name:</Text>
+            <Text>{device.name}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Email:</Text>
+            <Text>{device.email}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">IP:</Text>
+            <Text>{device.ip}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Version:</Text>
+            <Text>{device.version}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Kernel:</Text>
+            <Text>{device.kernel}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Status:</Text>
+            <Text>{device.status}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Type:</Text>
+            <Text>{device.type}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">OS:</Text>
+            <Text>{device.os}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Username:</Text>
+            <Text>{device.username}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Password:</Text>
+            <Text>{device.password}</Text>
+          </Flex>
         </VStack>
       </Box>
     </Container>
