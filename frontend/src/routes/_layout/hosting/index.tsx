@@ -22,6 +22,11 @@ import { CopyIcon } from "@chakra-ui/icons";
 // Hardcoded devices
 interface Device {
   name: string;
+  email: string;
+  ip: string;
+  version: string;
+  kernel: string;
+  status: string;
   type: string;
   os: string;
   username: string;
@@ -29,10 +34,54 @@ interface Device {
 }
 
 const devices: Device[] = [
-  { name: "riv1-nyc-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
-  { name: "riv2-sf-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
-  { name: "riv3-lon-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
-  { name: "riv4-tok-mini5", type: "VPS", os: "ubuntu", username: "user", password: "5660" },
+  {
+    name: "riv1-nyc-mini5",
+    email: "apis.popov@gmail.com",
+    ip: "100.100.95.59",
+    version: "1.82.0",
+    kernel: "Linux 6.8.0-57-generic",
+    status: "Connected",
+    type: "VPS",
+    os: "ubuntu",
+    username: "user",
+    password: "5660",
+  },
+  {
+    name: "riv2-nyc-mini5",
+    email: "apis.popov@gmail.com",
+    ip: "100.114.242.51",
+    version: "1.86.2",
+    kernel: "Linux 6.8.0-57-generic",
+    status: "Connected",
+    type: "VPS",
+    os: "ubuntu",
+    username: "user",
+    password: "5660",
+  },
+  {
+    name: "riv3-nyc-mini6",
+    email: "apis.popov@gmail.com",
+    ip: "100.91.158.116",
+    version: "1.82.5",
+    kernel: "Linux 6.8.0-59-generic",
+    status: "Connected",
+    type: "VPS",
+    os: "ubuntu",
+    username: "user",
+    password: "5660",
+  },
+  {
+    name: "riv4-nyc-mini5",
+    email: "apis.popov@gmail.com",
+    ip: "100.100.106.3",
+    version: "1.80.2",
+    kernel: "Linux 6.8.0-55-generic",
+    status: "Connected",
+    type: "VPS",
+    os: "ubuntu",
+    username: "user",
+    password: "5660",
+  },
 ];
 
 // Reusable CopyCell component
@@ -66,6 +115,11 @@ function HostingIndexPage() {
           <Thead>
             <Tr>
               <Th>Device Name</Th>
+              <Th>Email</Th>
+              <Th>IP</Th>
+              <Th>Version</Th>
+              <Th>Kernel</Th>
+              <Th>Status</Th>
               <Th>Type</Th>
               <Th>OS</Th>
               <Th>Username</Th>
@@ -77,6 +131,11 @@ function HostingIndexPage() {
             {devices.map((device) => (
               <Tr key={device.name}>
                 <Td>{device.name}</Td>
+                <Td>{device.email}</Td>
+                <Td>{device.ip}</Td>
+                <Td>{device.version}</Td>
+                <Td>{device.kernel}</Td>
+                <Td>{device.status}</Td>
                 <Td>{device.type}</Td>
                 <Td>{device.os}</Td>
                 <Td>{device.username}</Td>
