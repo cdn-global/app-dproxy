@@ -114,10 +114,10 @@ function BillingPage() {
             <Tr>
               <Th>Device Name</Th>
               <Th>IP</Th>
-              <Th>Monthly Compute Price (USD)</Th>
-              <Th>Storage Size (GB)</Th>
-              <Th>Monthly Storage Cost (USD)</Th>
-              <Th>Elastic IP Fee (USD)</Th>
+              <Th isNumeric>Monthly Compute Price (USD)</Th>
+              <Th isNumeric>Storage Size (GB)</Th>
+              <Th isNumeric>Monthly Storage Cost (USD)</Th>
+              <Th isNumeric>Elastic IP Fee (USD)</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -125,22 +125,36 @@ function BillingPage() {
               <Tr key={device.name}>
                 <Td>{device.name}</Td>
                 <Td>{device.ip}</Td>
-                <Td>${device.monthlyComputePrice}</Td>
-                <Td>{device.storageSizeGB}</Td>
-                <Td>${(device.storageSizeGB * STORAGE_COST_PER_GB_MONTH).toFixed(2)}</Td>
-                <Td>${ELASTIC_IP_FEE_PER_MONTH.toFixed(2)}</Td>
+                <Td isNumeric>${device.monthlyComputePrice.toFixed(2)}</Td>
+                <Td isNumeric>{device.storageSizeGB}</Td>
+                <Td isNumeric>${(device.storageSizeGB * STORAGE_COST_PER_GB_MONTH).toFixed(2)}</Td>
+                <Td isNumeric>${ELASTIC_IP_FEE_PER_MONTH.toFixed(2)}</Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
       </Box>
 
-      <VStack align="start" mt={6} spacing={4}>
-        <Heading size="md">Total Compute Cost: ${totalComputeCost}</Heading>
-        <Heading size="md">Total Storage Cost: ${totalStorageCost.toFixed(2)}</Heading>
-        <Heading size="md">Total Elastic IP Cost: ${totalElasticIPCost.toFixed(2)}</Heading>
-        <Heading size="lg">Grand Total: ${grandTotal.toFixed(2)}</Heading>
-      </VStack>
+      <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
+        <VStack align="stretch" spacing={2}>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Total Compute Cost:</Text>
+            <Text>${totalComputeCost.toFixed(2)}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Total Storage Cost:</Text>
+            <Text>${totalStorageCost.toFixed(2)}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text fontWeight="bold">Total Elastic IP Cost:</Text>
+            <Text>${totalElasticIPCost.toFixed(2)}</Text>
+          </Flex>
+          <Flex justify="space-between" fontSize="lg" fontWeight="bold" borderTopWidth="1px" pt={2}>
+            <Text>Grand Total:</Text>
+            <Text>${grandTotal.toFixed(2)}</Text>
+          </Flex>
+        </VStack>
+      </Box>
 
       <Button as={ChakraLink} href=".." mt={4}>Back to Hosting</Button>
     </Container>
