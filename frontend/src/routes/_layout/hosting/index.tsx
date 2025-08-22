@@ -1,3 +1,4 @@
+
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import {
   Box,
@@ -99,7 +100,7 @@ function HostingIndexPage() {
 }
 
 function DeviceDetailsPage() {
-  const { deviceName } = useParams();
+  const { deviceName } = useParams({ from: '/_layout/hosting/$deviceName' });
   const device = devices.find((d) => d.name === deviceName);
 
   if (!device) {
