@@ -34,7 +34,7 @@ const tabsConfig = [
     },
   },
   {
-    title: "Billing",
+    title: "Invoice and Payment Details",
     component: BillingTab,
   },
   {
@@ -54,6 +54,17 @@ const tabsConfig = [
         <Heading size="lg">Invoice History</Heading>
         <Text>Placeholder for viewing invoice history.</Text>
         {/* Add table or list for invoices here */}
+      </VStack>
+    ),
+  },
+  {
+    title: "Billing Analytics and Breakdown by Resource",
+    component: () => (
+      <VStack align="start" spacing={4}>
+        <Heading size="lg">Billing Analytics and Breakdown by Resource</Heading>
+        <Text>Placeholder for billing analytics and resource breakdown.</Text>
+        {/* Add charts, tables, or integrations for analytics here */}
+        <Button as={Link} to="/hosting/billing" colorScheme="orange">View Hosting Billing Breakdown</Button>
       </VStack>
     ),
   },
