@@ -351,7 +351,7 @@ function BillingPage() {
         description: "Please log in to manage your billing information.",
         status: "warning",
         duration: 5000,
-        isClosable Charta: true,
+        isClosable: true,
       });
       return;
     }
