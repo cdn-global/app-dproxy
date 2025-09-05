@@ -25,6 +25,8 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  SimpleGrid,
+  Divider,
 } from "@chakra-ui/react";
 
 // Hardcoded servers with pricing
@@ -205,6 +207,46 @@ function calculateTotalsForMonth(month: Month) {
   return { totals, grandTotal, activeServers, perServerTotals };
 }
 
+function PaymentDetailsTab() {
+  // Mock data for saved payment method and billing address
+  const hasSavedCard = true; // Change to false to simulate no saved card
+  const cardLast4 = "4242";
+  const cardBrand = "Visa";
+  const cardExp = "12/2026";
+  const billingAddress = {
+    name: "John Doe",
+    line1: "123 Main St",
+    city: "Anytown",
+    state: "CA",
+    postalCode: "12345",
+    country: "USA",
+  };
+
+  return (
+    <VStack align="stretch" spacing={6}>
+      <Heading size="md" color="gray.700">Payment Method</Heading>
+      {hasSavedCard ? (
+        <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
+          <Text fontWeight="bold">{cardBrand} **** {cardLast4}</Text>
+          <Text>Expires: {cardExp}</Text>
+        </Box>
+      ) : (
+        <Text>No payment method saved.</Text>
+      )}
+      <Heading size="md" color="gray.700" mt={4}>Billing Address</Heading>
+      <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
+        <Text>{billingAddress.name}</Text>
+        <Text>{billingAddress.line1}</Text>
+        <Text>{billingAddress.city}, {billingAddress.state} {billingAddress.postalCode}</Text>
+        <Text>{billingAddress.country}</Text>
+      </Box>
+      <Button colorScheme="blue" as="a" href="https://billing.stripe.com/" target="_blank">
+        Manage in Stripe
+      </Button>
+    </VStack>
+  );
+}
+
 function BillingPage() {
   const currentMonth = months[months.length - 1];
   const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
@@ -232,6 +274,7 @@ function BillingPage() {
           <Tab fontWeight="semibold">Service Details</Tab>
           <Tab fontWeight="semibold">Billing History</Tab>
           <Tab fontWeight="semibold">Invoices</Tab>
+          <Tab fontWeight="semibold">Payment Details</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
@@ -397,6 +440,10 @@ function BillingPage() {
                 </Tbody>
               </Table>
             </Box>
+          </TabPanel>
+          <TabPanel>
+            <Heading size="md" mb={6} color="gray.700">Payment Details</Heading>
+            <PaymentDetailsTab />
           </TabPanel>
         </TabPanels>
       </Tabs>
