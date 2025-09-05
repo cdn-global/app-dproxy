@@ -6,6 +6,7 @@ import {
   Table,
   Thead,
   Tbody,
+  Tfoot,
   Tr,
   Th,
   Td,
@@ -207,7 +208,7 @@ function calculateTotalsForMonth(month: Month) {
 
 function BillingPage() {
   const currentMonth = months[months.length - 1];
-  const { totals: currentTotals, activeDevices: currentActiveDevices, perDeviceTotals } = calculateTotalsForMonth(currentMonth);
+  const { totals: currentTotals, activeDevices: currentActiveDevices, perDeviceTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
 
   const history = months.slice(0, -1).map((month) => {
     const { grandTotal } = calculateTotalsForMonth(month);
@@ -220,30 +221,30 @@ function BillingPage() {
   const monthOverMonthChange = previousMonthTotal > 0 ? ((currentTotals["Compute"].total + currentTotals["Storage"].total + currentTotals["Elastic IP"].total - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
   return (
-    <Container maxW="container.lg" py={9}>
-      <Flex align="center" justify="space-between" py={6}>
-        <Text fontSize="3xl" color="black">Billing Portal</Text>
-        <Text fontSize="lg" color="gray.600">Your hosting costs and history</Text>
+    <Container maxW="container.xl" py={10}>
+      <Flex align="center" justify="space-between" py={6} mb={6}>
+        <Heading size="xl" color="gray.800">Billing Portal</Heading>
+        <Text fontSize="lg" color="gray.600">Manage your hosting costs and review billing history</Text>
       </Flex>
 
-      <Tabs variant="enclosed" colorScheme="blue">
+      <Tabs variant="enclosed" colorScheme="blue" isFitted>
         <TabList>
-          <Tab>Current Billing</Tab>
-          <Tab>Service Details</Tab>
-          <Tab>Billing History</Tab>
-          <Tab>Invoices</Tab>
+          <Tab fontWeight="semibold">Current Billing</Tab>
+          <Tab fontWeight="semibold">Service Details</Tab>
+          <Tab fontWeight="semibold">Billing History</Tab>
+          <Tab fontWeight="semibold">Invoices</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Heading size="md" mb={4}>Costs for {currentMonth.name}</Heading>
-            <VStack align="stretch" spacing={4}>
-              <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+            <Heading size="md" mb={6} color="gray.700">Costs for {currentMonth.name}</Heading>
+            <VStack align="stretch" spacing={6}>
+              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
                 <Table variant="simple" size="md">
-                  <Thead>
+                  <Thead bg="gray.100">
                     <Tr>
                       <Th>Device Name</Th>
-                      <Th>IP</Th>
-                      <Th isNumeric>Total (USD)</Th>
+                      <Th>IP Address</Th>
+                      <Th isNumeric>Total Cost (USD)</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -255,36 +256,54 @@ function BillingPage() {
                       </Tr>
                     ))}
                   </Tbody>
+                  <Tfoot bg="gray.50">
+                    <Tr>
+                      <Th colSpan={2}>Total</Th>
+                      <Th isNumeric>${grandTotal.toFixed(2)}</Th>
+                    </Tr>
+                  </Tfoot>
                 </Table>
               </Box>
-              <Box p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
-                <VStack align="stretch" spacing={2}>
-                  {services.map((s) => (
-                    <Flex key={s.name} justify="space-between" align="center">
-                      <Text color="gray.600">
-                        {s.name} ({currentTotals[s.name].count} {s.name === "Compute" ? "VPS" : s.name}{currentTotals[s.name].count !== 1 ? "s" : ""})
-                      </Text>
-                      <Text fontSize="lg" fontWeight="bold" color="blue.600">
-                        ${currentTotals[s.name].total.toFixed(2)}
-                      </Text>
-                    </Flex>
-                  ))}
-                </VStack>
+              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
+                <Table variant="simple" size="md">
+                  <Thead bg="gray.100">
+                    <Tr>
+                      <Th>Service</Th>
+                      <Th>Quantity</Th>
+                      <Th isNumeric>Cost (USD)</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {services.map((s) => (
+                      <Tr key={s.name}>
+                        <Td>{s.name} {s.isUpcharge ? "(Upcharge)" : ""}</Td>
+                        <Td>x {currentTotals[s.name].count}</Td>
+                        <Td isNumeric>${currentTotals[s.name].total.toFixed(2)}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                  <Tfoot bg="gray.50">
+                    <Tr>
+                      <Th colSpan={2}>Total</Th>
+                      <Th isNumeric>${grandTotal.toFixed(2)}</Th>
+                    </Tr>
+                  </Tfoot>
+                </Table>
               </Box>
             </VStack>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={4}>Service Details for {currentMonth.name}</Heading>
+            <Heading size="md" mb={6} color="gray.700">Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple>
               {services.map((s) => {
                 const relevantDevices = currentActiveDevices.filter((d) => s.getMonthlyCost(d) > 0);
                 const total = currentTotals[s.name].total;
                 return (
-                  <AccordionItem key={s.name}>
+                  <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
                     <h2>
-                      <AccordionButton>
-                        <Box as="span" flex="1" textAlign="left">
-                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - ${total.toFixed(2)} ({relevantDevices.length} {relevantDevices.length !== 1 ? "devices" : "device"})
+                      <AccordionButton bg="gray.50" _hover={{ bg: "gray.100" }}>
+                        <Box as="span" flex="1" textAlign="left" fontWeight="semibold">
+                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - ${total.toFixed(2)} (x {relevantDevices.length} {relevantDevices.length !== 1 ? "devices" : "device"})
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
@@ -308,7 +327,7 @@ function BillingPage() {
                           </Tbody>
                         </Table>
                       ) : (
-                        <Text>No devices using this service.</Text>
+                        <Text color="gray.600">No devices using this service.</Text>
                       )}
                     </AccordionPanel>
                   </AccordionItem>
@@ -317,10 +336,10 @@ function BillingPage() {
             </Accordion>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={4}>Billing History</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+            <Heading size="md" mb={6} color="gray.700">Billing History</Heading>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
               <Table variant="simple" size="md">
-                <Thead>
+                <Thead bg="gray.100">
                   <Tr>
                     <Th>Month</Th>
                     <Th isNumeric>Total Cost (USD)</Th>
@@ -336,28 +355,28 @@ function BillingPage() {
                 </Tbody>
               </Table>
             </Box>
-            <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
-              <VStack align="stretch" spacing={2}>
+            <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50" boxShadow="sm">
+              <VStack align="stretch" spacing={3}>
                 <Flex justify="space-between">
-                  <Text fontWeight="bold">Total Spent to Date:</Text>
-                  <Text>${allTimeTotal.toFixed(2)}</Text>
+                  <Text fontWeight="semibold" color="gray.700">Total Spent to Date:</Text>
+                  <Text fontWeight="bold">${allTimeTotal.toFixed(2)}</Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text fontWeight="bold">Average Monthly Cost:</Text>
-                  <Text>${averageMonthly.toFixed(2)}</Text>
+                  <Text fontWeight="semibold" color="gray.700">Average Monthly Cost:</Text>
+                  <Text fontWeight="bold">${averageMonthly.toFixed(2)}</Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text fontWeight="bold">Month-over-Month Change:</Text>
-                  <Text>{monthOverMonthChange.toFixed(2)}%</Text>
+                  <Text fontWeight="semibold" color="gray.700">Month-over-Month Change:</Text>
+                  <Text fontWeight="bold">{monthOverMonthChange.toFixed(2)}%</Text>
                 </Flex>
               </VStack>
             </Box>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={4}>Invoices</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+            <Heading size="md" mb={6} color="gray.700">Invoices</Heading>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
               <Table variant="simple" size="md">
-                <Thead>
+                <Thead bg="gray.100">
                   <Tr>
                     <Th>Month</Th>
                     <Th isNumeric>Total Cost (USD)</Th>
@@ -370,7 +389,7 @@ function BillingPage() {
                       <Td>{month.name}</Td>
                       <Td isNumeric>${total.toFixed(2)}</Td>
                       <Td>
-                        <Button size="sm" colorScheme="blue">
+                        <Button size="sm" colorScheme="blue" variant="outline">
                           Download Invoice
                         </Button>
                       </Td>
@@ -383,7 +402,9 @@ function BillingPage() {
         </TabPanels>
       </Tabs>
 
-      <Button as={ChakraLink} href=".." mt={4}>Back to Hosting</Button>
+      <Button as={ChakraLink} href=".." mt={6} colorScheme="blue" variant="outline" size="md">
+        Back to Hosting
+      </Button>
     </Container>
   );
 }
