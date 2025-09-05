@@ -192,13 +192,13 @@ const months: Month[] = [
 
 function calculateTotalsForMonth(month: Month) {
   const activeServers = servers.filter((s) => new Date(s.activeSince) <= month.end);
-  const totals = services.reduce((acc, s) => {
-    const count = activeServers.filter((s) => s.getMonthlyCost(s) > 0).length;
-    acc[s.name] = { total: activeServers.reduce((sum, s) => sum + s.getMonthlyCost(s), 0), count };
+  const totals = services.reduce((acc, service) => {
+    const count = activeServers.filter((server) => service.getMonthlyCost(server) > 0).length;
+    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + service.getMonthlyCost(server), 0), count };
     return acc;
   }, {} as Record<string, { total: number; count: number }>);
-  const perServerTotals = activeServers.reduce((acc, s) => {
-    acc[s.name] = services.reduce((sum, svc) => sum + svc.getMonthlyCost(s), 0);
+  const perServerTotals = activeServers.reduce((acc, server) => {
+    acc[server.name] = services.reduce((sum, svc) => sum + svc.getMonthlyCost(server), 0);
     return acc;
   }, {} as Record<string, number>);
   const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
