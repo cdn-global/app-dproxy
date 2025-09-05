@@ -15,6 +15,16 @@ import {
   Heading,
   Button,
   Link as ChakraLink,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 
 // Hardcoded devices with pricing (shared or duplicated)
@@ -40,7 +50,7 @@ interface Device {
 const devices: Device[] = [
   {
     name: "riv1-nyc-mini5",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov@gmail.com",
     ip: "100.100.95.59",
     version: "1.82.0",
     kernel: "Linux 6.8.0-57-generic",
@@ -58,7 +68,7 @@ const devices: Device[] = [
   },
   {
     name: "riv2-nyc-mini5",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov@gmail.com",
     ip: "100.114.242.51",
     version: "1.86.2",
     kernel: "Linux 6.8.0-57-generic",
@@ -76,7 +86,7 @@ const devices: Device[] = [
   },
   {
     name: "riv3-nyc-mini6",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov@gmail.com",
     ip: "100.91.158.116",
     version: "1.82.5",
     kernel: "Linux 6.8.0-59-generic",
@@ -94,7 +104,7 @@ const devices: Device[] = [
   },
   {
     name: "riv4-nyc-mini5",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov@gmail.com",
     ip: "100.100.106.3",
     version: "1.80.2",
     kernel: "Linux 6.8.0-55-generic",
@@ -112,7 +122,7 @@ const devices: Device[] = [
   },
   {
     name: "riv5-nyc-mini7",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov@gmail.com",
     ip: "100.120.30.40",
     version: "1.85.0",
     kernel: "Linux 6.8.0-60-generic",
@@ -130,7 +140,7 @@ const devices: Device[] = [
   },
   {
     name: "riv6-nyc-mini8",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov@gmail.com",
     ip: "100.130.40.50",
     version: "1.87.0",
     kernel: "Linux 6.8.0-61-generic",
@@ -157,15 +167,16 @@ const CDN_FEE_PER_MONTH = 20.0;
 interface Service {
   name: string;
   getMonthlyCost: (device: Device) => number;
+  isUpcharge?: boolean;
 }
 
 const services: Service[] = [
   { name: "Compute", getMonthlyCost: (d) => d.monthlyComputePrice },
   { name: "Storage", getMonthlyCost: (d) => d.storageSizeGB * STORAGE_COST_PER_GB_MONTH },
   { name: "Elastic IP", getMonthlyCost: (d) => ELASTIC_IP_FEE_PER_MONTH },
-  { name: "Rotating IP", getMonthlyCost: (d) => (d.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH : 0) },
-  { name: "Backup", getMonthlyCost: (d) => (d.hasBackup ? BACKUP_FEE_PER_MONTH : 0) },
-  { name: "CDN", getMonthlyCost: (d) => (d.hasCDN ? CDN_FEE_PER_MONTH : 0) },
+  { name: "Rotating IP", getMonthlyCost: (d) => (d.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH : 0), isUpcharge: true },
+  { name: "Backup", getMonthlyCost: (d) => (d.hasBackup ? BACKUP_FEE_PER_MONTH : 0), isUpcharge: true },
+  { name: "CDN", getMonthlyCost: (d) => (d.hasCDN ? CDN_FEE_PER_MONTH : 0), isUpcharge: true },
 ];
 
 interface Month {
@@ -181,96 +192,205 @@ const months: Month[] = [
   // Add more months here as needed
 ];
 
-function BillingPage() {
-  const currentMonth = months[months.length - 1];
-  const activeDevices = devices.filter((d) => new Date(d.activeSince) <= currentMonth.end);
-
-  const currentTotals = services.reduce((acc, s) => {
+function calculateTotalsForMonth(month: Month) {
+  const activeDevices = devices.filter((d) => new Date(d.activeSince) <= month.end);
+  const totals = services.reduce((acc, s) => {
     acc[s.name] = activeDevices.reduce((sum, d) => sum + s.getMonthlyCost(d), 0);
     return acc;
   }, {} as Record<string, number>);
+  const grandTotal = Object.values(totals).reduce((sum, cost) => sum + cost, 0);
+  return { totals, grandTotal, activeDevices };
+}
 
-  const currentGrandTotal = Object.values(currentTotals).reduce((sum, cost) => sum + cost, 0);
+function BillingPage() {
+  const currentMonth = months[months.length - 1];
+  const { totals: currentTotals, grandTotal: currentGrandTotal, activeDevices: currentActiveDevices } = calculateTotalsForMonth(currentMonth);
+
+  const history = months.slice(0, -1).map((month) => {
+    const { grandTotal } = calculateTotalsForMonth(month);
+    return { month, total: grandTotal };
+  });
+
+  const allTimeTotal = months.reduce((sum, month) => sum + calculateTotalsForMonth(month).grandTotal, 0);
+  const averageMonthly = allTimeTotal / months.length;
+  const previousMonthTotal = history.length > 0 ? history[history.length - 1].total : 0;
+  const monthOverMonthChange = previousMonthTotal > 0 ? ((currentGrandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
   return (
     <Container maxW="full" py={9}>
       <Flex align="center" justify="space-between" py={6}>
-        <Text fontSize="3xl" color="black">Billing Information</Text>
-        <Text fontSize="lg" color="gray.600">Monthly costs for hosting devices</Text>
+        <Text fontSize="3xl" color="black">Billing Portal</Text>
+        <Text fontSize="lg" color="gray.600">Detailed billing information and history</Text>
       </Flex>
 
-      <Heading size="md" mb={4}>Current Month: {currentMonth.name}</Heading>
-
-      <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Table variant="simple" size="md">
-          <Thead>
-            <Tr>
-              <Th>Device Name</Th>
-              <Th>IP</Th>
-              {services.map((s) => (
-                <Th key={s.name} isNumeric>
-                  Monthly {s.name} (USD)
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {activeDevices.map((device) => (
-              <Tr key={device.name}>
-                <Td>{device.name}</Td>
-                <Td>{device.ip}</Td>
+      <Tabs variant="enclosed">
+        <TabList>
+          <Tab>Current Billing</Tab>
+          <Tab>Service Details</Tab>
+          <Tab>Billing History</Tab>
+          <Tab>Invoices</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <Heading size="md" mb={4}>Current Month: {currentMonth.name}</Heading>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+              <Table variant="simple" size="md">
+                <Thead>
+                  <Tr>
+                    <Th>Device Name</Th>
+                    <Th>IP</Th>
+                    {services.map((s) => (
+                      <Th key={s.name} isNumeric>
+                        Monthly {s.name} (USD)
+                      </Th>
+                    ))}
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {currentActiveDevices.map((device) => (
+                    <Tr key={device.name}>
+                      <Td>{device.name}</Td>
+                      <Td>{device.ip}</Td>
+                      {services.map((s) => (
+                        <Td key={s.name} isNumeric>
+                          ${s.getMonthlyCost(device).toFixed(2)}
+                        </Td>
+                      ))}
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Box>
+            <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
+              <VStack align="stretch" spacing={2}>
                 {services.map((s) => (
-                  <Td key={s.name} isNumeric>
-                    ${s.getMonthlyCost(device).toFixed(2)}
-                  </Td>
+                  <Flex key={s.name} justify="space-between">
+                    <Text fontWeight="bold">Total {s.name} Cost:</Text>
+                    <Text>${currentTotals[s.name].toFixed(2)}</Text>
+                  </Flex>
                 ))}
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
-
-      <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
-        <VStack align="stretch" spacing={2}>
-          {services.map((s) => (
-            <Flex key={s.name} justify="space-between">
-              <Text fontWeight="bold">Total {s.name} Cost:</Text>
-              <Text>${currentTotals[s.name].toFixed(2)}</Text>
-            </Flex>
-          ))}
-          <Flex justify="space-between" fontSize="lg" fontWeight="bold" borderTopWidth="1px" pt={2}>
-            <Text>Grand Total:</Text>
-            <Text>${currentGrandTotal.toFixed(2)}</Text>
-          </Flex>
-        </VStack>
-      </Box>
-
-      <Heading size="md" mt={8} mb={4}>Billing History</Heading>
-      <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-        <Table variant="simple" size="md">
-          <Thead>
-            <Tr>
-              <Th>Month</Th>
-              <Th isNumeric>Total Cost (USD)</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {months.slice(0, -1).map((month) => {
-              const activeDevicesForMonth = devices.filter((d) => new Date(d.activeSince) <= month.end);
-              const monthTotal = services.reduce(
-                (sum, s) => sum + activeDevicesForMonth.reduce((ss, d) => ss + s.getMonthlyCost(d), 0),
-                0
-              );
-              return (
-                <Tr key={month.name}>
-                  <Td>{month.name}</Td>
-                  <Td isNumeric>${monthTotal.toFixed(2)}</Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-      </Box>
+                <Flex justify="space-between" fontSize="lg" fontWeight="bold" borderTopWidth="1px" pt={2}>
+                  <Text>Grand Total:</Text>
+                  <Text>${currentGrandTotal.toFixed(2)}</Text>
+                </Flex>
+              </VStack>
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <Heading size="md" mb={4}>Service and Upcharge Details for {currentMonth.name}</Heading>
+            <Accordion allowMultiple>
+              {services.map((s) => {
+                const relevantDevices = currentActiveDevices.filter((d) => s.getMonthlyCost(d) > 0);
+                const total = currentTotals[s.name];
+                return (
+                  <AccordionItem key={s.name}>
+                    <h2>
+                      <AccordionButton>
+                        <Box as="span" flex="1" textAlign="left">
+                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - Total: ${total.toFixed(2)}
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                      {relevantDevices.length > 0 ? (
+                        <Table variant="simple" size="sm">
+                          <Thead>
+                            <Tr>
+                              <Th>Device Name</Th>
+                              <Th isNumeric>Cost (USD)</Th>
+                            </Tr>
+                          </Thead>
+                          <Tbody>
+                            {relevantDevices.map((d) => (
+                              <Tr key={d.name}>
+                                <Td>{d.name}</Td>
+                                <Td isNumeric>${s.getMonthlyCost(d).toFixed(2)}</Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      ) : (
+                        <Text>No devices using this service.</Text>
+                      )}
+                    </AccordionPanel>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </TabPanel>
+          <TabPanel>
+            <Heading size="md" mb={4}>Billing History</Heading>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+              <Table variant="simple" size="md">
+                <Thead>
+                  <Tr>
+                    <Th>Month</Th>
+                    <Th isNumeric>Total Cost (USD)</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {months.map((month) => {
+                    const { grandTotal } = calculateTotalsForMonth(month);
+                    return (
+                      <Tr key={month.name}>
+                        <Td>{month.name}</Td>
+                        <Td isNumeric>${grandTotal.toFixed(2)}</Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </Box>
+            <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
+              <VStack align="stretch" spacing={2}>
+                <Flex justify="space-between">
+                  <Text fontWeight="bold">Total Spent to Date:</Text>
+                  <Text>${allTimeTotal.toFixed(2)}</Text>
+                </Flex>
+                <Flex justify="space-between">
+                  <Text fontWeight="bold">Average Monthly Cost:</Text>
+                  <Text>${averageMonthly.toFixed(2)}</Text>
+                </Flex>
+                <Flex justify="space-between">
+                  <Text fontWeight="bold">Month-over-Month Change (Current vs Previous):</Text>
+                  <Text>{monthOverMonthChange.toFixed(2)}%</Text>
+                </Flex>
+              </VStack>
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <Heading size="md" mb={4}>Invoices</Heading>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+              <Table variant="simple" size="md">
+                <Thead>
+                  <Tr>
+                    <Th>Month</Th>
+                    <Th isNumeric>Total Cost (USD)</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {months.map((month) => {
+                    const { grandTotal } = calculateTotalsForMonth(month);
+                    return (
+                      <Tr key={month.name}>
+                        <Td>{month.name}</Td>
+                        <Td isNumeric>${grandTotal.toFixed(2)}</Td>
+                        <Td>
+                          <Button size="sm" colorScheme="blue">
+                            Download Invoice
+                          </Button>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </Box>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
 
       <Button as={ChakraLink} href=".." mt={4}>Back to Hosting</Button>
     </Container>
