@@ -1,3 +1,4 @@
+// src/routes/_layout/hosting/billing.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
@@ -196,13 +197,17 @@ function calculateTotalsForMonth(month: Month) {
     acc[s.name] = activeDevices.reduce((sum, d) => sum + s.getMonthlyCost(d), 0);
     return acc;
   }, {} as Record<string, number>);
+  const perDeviceTotals = activeDevices.reduce((acc, d) => {
+    acc[d.name] = services.reduce((sum, s) => sum + s.getMonthlyCost(d), 0);
+    return acc;
+  }, {} as Record<string, number>);
   const grandTotal = Object.values(totals).reduce((sum, cost) => sum + cost, 0);
-  return { totals, grandTotal, activeDevices };
+  return { totals, grandTotal, activeDevices, perDeviceTotals };
 }
 
 function BillingPage() {
   const currentMonth = months[months.length - 1];
-  const { totals: currentTotals, activeDevices: currentActiveDevices } = calculateTotalsForMonth(currentMonth);
+  const { totals: currentTotals, activeDevices: currentActiveDevices, perDeviceTotals } = calculateTotalsForMonth(currentMonth);
 
   const history = months.slice(0, -1).map((month) => {
     const { grandTotal } = calculateTotalsForMonth(month);
@@ -231,44 +236,38 @@ function BillingPage() {
         <TabPanels>
           <TabPanel>
             <Heading size="md" mb={4}>Estimated Costs for {currentMonth.name}</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
-              <Table variant="simple" size="md">
-                <Thead>
-                  <Tr>
-                    <Th>Device Name</Th>
-                    <Th>IP</Th>
-                    {services.map((s) => (
-                      <Th key={s.name} isNumeric>
-                        Monthly {s.name} (USD)
-                      </Th>
-                    ))}
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {currentActiveDevices.map((device) => (
-                    <Tr key={device.name}>
-                      <Td>{device.name}</Td>
-                      <Td>{device.ip}</Td>
-                      {services.map((s) => (
-                        <Td key={s.name} isNumeric>
-                          ${s.getMonthlyCost(device).toFixed(2)}
-                        </Td>
-                      ))}
+            <Flex direction={{ base: "column", md: "row" }} gap={6}>
+              <Box flex="3" borderWidth="1px" borderRadius="lg" overflow="hidden">
+                <Table variant="simple" size="md">
+                  <Thead>
+                    <Tr>
+                      <Th>Device Name</Th>
+                      <Th>IP</Th>
+                      <Th isNumeric>Estimated Total (USD)</Th>
                     </Tr>
+                  </Thead>
+                  <Tbody>
+                    {currentActiveDevices.map((device) => (
+                      <Tr key={device.name}>
+                        <Td>{device.name}</Td>
+                        <Td>{device.ip}</Td>
+                        <Td isNumeric>${perDeviceTotals[device.name].toFixed(2)}</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Box>
+              <Box flex="2" p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
+                <VStack align="stretch" spacing={2}>
+                  {services.map((s) => (
+                    <Flex key={s.name} justify="space-between">
+                      <Text fontWeight="bold">Estimated {s.name} Cost:</Text>
+                      <Text>${currentTotals[s.name].toFixed(2)}</Text>
+                    </Flex>
                   ))}
-                </Tbody>
-              </Table>
-            </Box>
-            <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
-              <VStack align="stretch" spacing={2}>
-                {services.map((s) => (
-                  <Flex key={s.name} justify="space-between">
-                    <Text fontWeight="bold">Estimated {s.name} Cost:</Text>
-                    <Text>${currentTotals[s.name].toFixed(2)}</Text>
-                  </Flex>
-                ))}
-              </VStack>
-            </Box>
+                </VStack>
+              </Box>
+            </Flex>
           </TabPanel>
           <TabPanel>
             <Heading size="md" mb={4}>Service and Upcharge Details for {currentMonth.name}</Heading>
