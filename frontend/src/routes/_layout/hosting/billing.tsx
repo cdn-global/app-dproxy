@@ -185,7 +185,6 @@ interface Month {
 }
 
 const months: Month[] = [
-  { name: "July 2025", start: new Date(2025, 6, 1), end: new Date(2025, 6, 31) },
   { name: "August 2025", start: new Date(2025, 7, 1), end: new Date(2025, 7, 31) },
   { name: "September 2025", start: new Date(2025, 8, 1), end: new Date(2025, 8, 30) },
 ];
@@ -251,20 +250,20 @@ function BillingPage() {
   const currentMonth = months[months.length - 1];
   const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
 
-  const history = months.slice(0, -1).map((month) => {
-    const { grandTotal } = calculateTotalsForMonth(month);
-    return { month, total: grandTotal };
-  });
+  const history = [
+    { month: months[0], total: 246.40, invoiceId: "inv_001" },
+    { month: months[0], total: 122.00, invoiceId: "inv_002" },
+  ];
 
-  const allTimeTotal = months.slice(0, -1).reduce((sum, month) => sum + calculateTotalsForMonth(month).grandTotal, 0);
-  const averageMonthly = history.length > 0 ? allTimeTotal / history.length : 0;
-  const previousMonthTotal = history.length > 0 ? history[history.length - 1].total : 0;
+  const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
+  const averageMonthly = allTimeTotal / 2; // Since we have two invoices for August
+  const previousMonthTotal = 0; // No previous month before August
   const monthOverMonthChange = previousMonthTotal > 0 ? ((currentTotals["Compute"].total + currentTotals["Storage"].total + currentTotals["Elastic IP"].total - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
   return (
     <Container maxW="container.xl" py={10}>
       <Flex align="center" justify="space-between" py={6} mb={6}>
-        <Heading size="xl" color="gray.800">Billing Portal</Heading>
+        <Heading size="xl" color="gray.800">Billing Details</Heading>
         <Text fontSize="lg" color="gray.600">Manage your hosting costs and review billing history</Text>
       </Flex>
 
@@ -388,8 +387,8 @@ function BillingPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total }) => (
-                    <Tr key={month.name}>
+                  {history.map(({ month, total, invoiceId }) => (
+                    <Tr key={invoiceId}>
                       <Td>{month.name}</Td>
                       <Td isNumeric>${total.toFixed(2)}</Td>
                     </Tr>
@@ -426,8 +425,8 @@ function BillingPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total }) => (
-                    <Tr key={month.name}>
+                  {history.map(({ month, total, invoiceId }) => (
+                    <Tr key={invoiceId}>
                       <Td>{month.name}</Td>
                       <Td isNumeric>${total.toFixed(2)}</Td>
                       <Td>
