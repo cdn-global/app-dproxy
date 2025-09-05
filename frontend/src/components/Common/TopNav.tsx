@@ -11,6 +11,7 @@ import {
   MenuList,
   MenuItem,
   VStack,
+  SystemStyleObject,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -113,6 +114,17 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
     };
   }, []);
 
+  const hoverStyles: SystemStyleObject = {
+    color: hoverColor,
+    background: "gray.100",
+    textDecoration: "none",
+  };
+
+  const activeStyles: SystemStyleObject = {
+    color: activeTextColor,
+    background: "orange.100",
+  };
+
   return (
     <Box onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} position="relative">
       <Menu isOpen={isOpen} gutter={4} isLazy>
@@ -123,7 +135,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           align="center"
           cursor="pointer"
           color={isGroupActive ? activeTextColor : textColor}
-          _hover={{ color: hoverColor, bg: "gray.100", textDecoration: "none" }}
+          _hover={hoverStyles}
           borderRadius="md"
           transition="all 0.2s"
           aria-label={`Open ${title} menu`}
@@ -148,10 +160,8 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
               to={subItem.path}
               borderRadius="md"
               p={3}
-              _hover={{ bg: "orange.50" }}
-              activeProps={{
-                style: { color: activeTextColor, bg: "orange.100" },
-              }}
+              _hover={{ background: "orange.50" }}
+              activeProps={{ style: activeStyles }}
               aria-label={subItem.title}
             >
               <Flex align="flex-start" w="100%">
@@ -217,6 +227,21 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
     ].includes(title);
   };
 
+  const hoverStyles: SystemStyleObject = {
+    color: hoverColor,
+    background: "gray.100",
+    textDecoration: "none",
+  };
+
+  const activeStyles: SystemStyleObject = {
+    color: activeTextColor,
+    background: "orange.100",
+  };
+
+  const disabledHoverStyles: SystemStyleObject = {
+    background: "gray.100",
+  };
+
   const renderNavItems = (items: NavItem[]) =>
     items.map((item) => {
       const { icon, title, path, subItems, onClick } = item;
@@ -242,7 +267,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               py={2}
               color={textColor}
               align="center"
-              _hover={{ color: hoverColor, bg: "gray.100" }}
+              _hover={{ color: hoverColor, background: "gray.100" }}
               borderRadius="md"
               transition="all 0.2s"
             >
@@ -258,10 +283,8 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
                   px={4}
                   py={2}
                   color={textColor}
-                  _hover={{ color: hoverColor, bg: "gray.100", textDecoration: "none" }}
-                  activeProps={{
-                    style: { color: activeTextColor, bg: "orange.100" },
-                  }}
+                  _hover={hoverStyles}
+                  activeProps={{ style: activeStyles }}
                   align="center"
                   onClick={onClose}
                   w="100%"
@@ -292,7 +315,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               cursor="not-allowed"
               align="center"
               flexDir="row"
-              _hover={{ bg: "gray.100" }}
+              _hover={disabledHoverStyles}
               borderRadius="md"
               transition="all 0.2s"
             >
@@ -313,8 +336,8 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             px={4}
             py={2}
             color={textColor}
-            _hover={{ color: hoverColor, bg: "gray.100", textDecoration: "none" }}
-            activeProps={{ style: { color: activeTextColor, bg: "orange.100" } }}
+            _hover={hoverStyles}
+            activeProps={{ style: activeStyles }}
             align="center"
             onClick={onClose}
             w={isMobile ? "100%" : "auto"}
@@ -334,7 +357,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             px={4}
             py={2}
             color={textColor}
-            _hover={{ color: hoverColor, bg: "gray.100" }}
+            _hover={hoverStyles}
             align="center"
             onClick={() => {
               if (onClick) onClick();
