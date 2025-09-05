@@ -32,11 +32,11 @@ import useAuth from "../../hooks/useAuth";
 
 interface NavItem {
   title: string;
-  icon: any; // Changed to required to ensure all items have icons
+  icon?: any; // Icon is optional for top-level items
   path?: string;
   onClick?: () => void;
   description?: string;
-  subItems?: NavItem[];
+  subItems?: { title: string; path: string; description: string }[]; // Sub-items without icon
 }
 
 interface NavGroupDropdownProps {
@@ -63,7 +63,6 @@ const navStructure: NavItem[] = [
       {
         title: "HTTPS API",
         path: "/web-scraping-tools/https-api",
-        icon: FaGlobe,
         description: "Access any webpage with our powerful rotating proxy network.",
       },
     ],
@@ -74,7 +73,6 @@ const navStructure: NavItem[] = [
       {
         title: "Managed VPS",
         path: "https://cloud.thedataproxy.com/hosting/billing",
-        icon: FaServer,
         description: "Fully managed virtual private servers for your needs.",
       },
     ],
@@ -134,7 +132,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           transition="all 0.2s"
           aria-label={`Open ${title} menu`}
         >
-          <Icon as={icon} mr={2} boxSize={5} />
+          {icon && <Icon as={icon} mr={2} boxSize={5} />}
           <Text fontWeight="500">{title}</Text>
           <ChevronDownIcon ml={1} />
         </MenuButton>
@@ -160,7 +158,6 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
               aria-label={subItem.title}
             >
               <Flex align="flex-start" w="100%">
-                <Icon as={subItem.icon} boxSize={6} color="orange.500" mt={1} mr={4} />
                 <VStack align="flex-start" spacing={0}>
                   <Text fontWeight="600" color="gray.800">{subItem.title}</Text>
                   <Text fontSize="sm" color="gray.500" whiteSpace="normal">{subItem.description}</Text>
@@ -266,7 +263,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               borderRadius="md"
               transition="all 0.2s"
             >
-              <Icon as={icon} mr={2} boxSize={5} />
+              {icon && <Icon as={icon} mr={2} boxSize={5} />}
               <Text fontWeight="600">{title}</Text>
             </Flex>
             <Flex direction="column" pl={6}>
@@ -286,7 +283,6 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
                   borderRadius="md"
                   transition="all 0.2s"
                 >
-                  <Icon as={subItem.icon} mr={2} boxSize={5} />
                   <Text fontWeight="500">{subItem.title}</Text>
                 </Flex>
               ))}
@@ -314,7 +310,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               borderRadius="md"
               transition="all 0.2s"
             >
-              <Icon as={icon} mr={2} boxSize={5} color={disabledColor} />
+              {icon && <Icon as={icon} mr={2} boxSize={5} color={disabledColor} />}
               <Text fontWeight="500">{title}</Text>
             </Flex>
           </Tooltip>
@@ -340,7 +336,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             transition="all 0.2s"
             aria-label={title}
           >
-            <Icon as={icon} mr={2} boxSize={5} />
+            {icon && <Icon as={icon} mr={2} boxSize={5} />}
             <Text fontWeight="500">{title}</Text>
           </Flex>
         );
@@ -363,7 +359,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             transition="all 0.2s"
             aria-label={title}
           >
-            <Icon as={icon} mr={2} boxSize={5} />
+            {icon && <Icon as={icon} mr={2} boxSize={5} />}
             <Text fontWeight="500">{title}</Text>
           </Flex>
         );
