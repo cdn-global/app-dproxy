@@ -334,7 +334,7 @@ function BillingPage() {
       month: months[0],
       total: 122.00,
       invoiceId: "02A67775-0008",
-      paymentDate: "August 25, 2025",
+      paymentDate: "September 5, 2025",
       paymentMethod: "American Express •••• 3007",
     },
     {
