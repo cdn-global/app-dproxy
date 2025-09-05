@@ -1,4 +1,3 @@
-// src/routes/_layout/hosting/billing.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
@@ -27,7 +26,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 
-// Hardcoded devices with pricing (shared or duplicated)
+// Hardcoded devices with pricing
 interface Device {
   name: string;
   email: string;
@@ -189,7 +188,6 @@ const months: Month[] = [
   { name: "July 2025", start: new Date(2025, 6, 1), end: new Date(2025, 6, 31) },
   { name: "August 2025", start: new Date(2025, 7, 1), end: new Date(2025, 7, 31) },
   { name: "September 2025", start: new Date(2025, 8, 1), end: new Date(2025, 8, 30) },
-  // Add more months here as needed
 ];
 
 function calculateTotalsForMonth(month: Month) {
@@ -204,17 +202,17 @@ function calculateTotalsForMonth(month: Month) {
 
 function BillingPage() {
   const currentMonth = months[months.length - 1];
-  const { totals: currentTotals, grandTotal: currentGrandTotal, activeDevices: currentActiveDevices } = calculateTotalsForMonth(currentMonth);
+  const { totals: currentTotals, activeDevices: currentActiveDevices } = calculateTotalsForMonth(currentMonth);
 
   const history = months.slice(0, -1).map((month) => {
     const { grandTotal } = calculateTotalsForMonth(month);
     return { month, total: grandTotal };
   });
 
-  const allTimeTotal = months.reduce((sum, month) => sum + calculateTotalsForMonth(month).grandTotal, 0);
-  const averageMonthly = allTimeTotal / months.length;
+  const allTimeTotal = months.slice(0, -1).reduce((sum, month) => sum + calculateTotalsForMonth(month).grandTotal, 0);
+  const averageMonthly = history.length > 0 ? allTimeTotal / history.length : 0;
   const previousMonthTotal = history.length > 0 ? history[history.length - 1].total : 0;
-  const monthOverMonthChange = previousMonthTotal > 0 ? ((currentGrandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
+  const monthOverMonthChange = previousMonthTotal > 0 ? ((currentTotals["Compute"] + currentTotals["Storage"] + currentTotals["Elastic IP"] - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
   return (
     <Container maxW="full" py={9}>
@@ -232,7 +230,7 @@ function BillingPage() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Heading size="md" mb={4}>Current Month: {currentMonth.name}</Heading>
+            <Heading size="md" mb={4}>Estimated Costs for {currentMonth.name}</Heading>
             <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
               <Table variant="simple" size="md">
                 <Thead>
@@ -265,14 +263,10 @@ function BillingPage() {
               <VStack align="stretch" spacing={2}>
                 {services.map((s) => (
                   <Flex key={s.name} justify="space-between">
-                    <Text fontWeight="bold">Total {s.name} Cost:</Text>
+                    <Text fontWeight="bold">Estimated {s.name} Cost:</Text>
                     <Text>${currentTotals[s.name].toFixed(2)}</Text>
                   </Flex>
                 ))}
-                <Flex justify="space-between" fontSize="lg" fontWeight="bold" borderTopWidth="1px" pt={2}>
-                  <Text>Grand Total:</Text>
-                  <Text>${currentGrandTotal.toFixed(2)}</Text>
-                </Flex>
               </VStack>
             </Box>
           </TabPanel>
@@ -287,7 +281,7 @@ function BillingPage() {
                     <h2>
                       <AccordionButton>
                         <Box as="span" flex="1" textAlign="left">
-                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - Total: ${total.toFixed(2)}
+                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - Estimated: ${total.toFixed(2)}
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
@@ -330,15 +324,12 @@ function BillingPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {months.map((month) => {
-                    const { grandTotal } = calculateTotalsForMonth(month);
-                    return (
-                      <Tr key={month.name}>
-                        <Td>{month.name}</Td>
-                        <Td isNumeric>${grandTotal.toFixed(2)}</Td>
-                      </Tr>
-                    );
-                  })}
+                  {history.map(({ month, total }) => (
+                    <Tr key={month.name}>
+                      <Td>{month.name}</Td>
+                      <Td isNumeric>${total.toFixed(2)}</Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </Box>
@@ -353,7 +344,7 @@ function BillingPage() {
                   <Text>${averageMonthly.toFixed(2)}</Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text fontWeight="bold">Month-over-Month Change (Current vs Previous):</Text>
+                  <Text fontWeight="bold">Month-over-Month Change:</Text>
                   <Text>{monthOverMonthChange.toFixed(2)}%</Text>
                 </Flex>
               </VStack>
@@ -371,20 +362,17 @@ function BillingPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {months.map((month) => {
-                    const { grandTotal } = calculateTotalsForMonth(month);
-                    return (
-                      <Tr key={month.name}>
-                        <Td>{month.name}</Td>
-                        <Td isNumeric>${grandTotal.toFixed(2)}</Td>
-                        <Td>
-                          <Button size="sm" colorScheme="blue">
-                            Download Invoice
-                          </Button>
-                        </Td>
-                      </Tr>
-                    );
-                  })}
+                  {history.map(({ month, total }) => (
+                    <Tr key={month.name}>
+                      <Td>{month.name}</Td>
+                      <Td isNumeric>${total.toFixed(2)}</Td>
+                      <Td>
+                        <Button size="sm" colorScheme="blue">
+                          Download Invoice
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </Box>
