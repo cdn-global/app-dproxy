@@ -25,7 +25,9 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  Icon,
 } from "@chakra-ui/react";
+import { FaCreditCard } from "react-icons/fa";
 
 // Hardcoded servers with pricing
 interface Server {
@@ -206,17 +208,23 @@ function calculateTotalsForMonth(month: Month) {
 
 function PaymentDetailsTab() {
   // Mock data for saved payment method and billing address
-  const hasSavedCard = true; // Change to false to simulate no saved card
-  const cardLast4 = "4242";
-  const cardBrand = "Visa";
+  const hasSavedCard = true;
+  const cardLast4 = "3007";
+  const cardBrand = "American Express";
   const cardExp = "12/2026";
   const billingAddress = {
-    name: "John Doe",
-    line1: "123 Main St",
-    city: "Anytown",
-    state: "CA",
-    postalCode: "12345",
-    country: "USA",
+    name: "Nik Popov",
+    email: "nik@iconluxurygroup.com",
+    line1: "599 Broadway, floor 3",
+    city: "New York",
+    state: "NY",
+    postalCode: "10012",
+    country: "US",
+    phone: "(212) 595-3915",
+  };
+  const isPortalLoading = false; // Mock state for loading
+  const handleBillingClick = () => {
+    window.open("https://billing.stripe.com/", "_blank");
   };
 
   return (
@@ -235,12 +243,22 @@ function PaymentDetailsTab() {
       <Text color="gray.600">Manage your billing address for invoices and payments.</Text>
       <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
         <Text>{billingAddress.name}</Text>
+        <Text>{billingAddress.email}</Text>
         <Text>{billingAddress.line1}</Text>
         <Text>{billingAddress.city}, {billingAddress.state} {billingAddress.postalCode}</Text>
         <Text>{billingAddress.country}</Text>
+        <Text>{billingAddress.phone}</Text>
       </Box>
-      <Button colorScheme="orange" as="a" href="https://billing.stripe.com/" target="_blank">
-        Manage in Stripe
+      <Button
+        variant="link"
+        onClick={handleBillingClick}
+        isLoading={isPortalLoading}
+        leftIcon={<Icon as={FaCreditCard} />}
+        colorScheme="orange"
+        fontWeight="medium"
+        justifyContent="flex-start"
+      >
+        Billing Portal
       </Button>
     </VStack>
   );
@@ -251,14 +269,24 @@ function BillingPage() {
   const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
 
   const history = [
-    { month: months[0], total: 246.40, invoiceId: "inv_001" },
-    { month: months[0], total: 122.00, invoiceId: "inv_002" },
+    {
+      month: months[0],
+      total: 246.40,
+      invoiceId: "02A67775-0007",
+      paymentDate: "August 22, 2025",
+      paymentMethod: "American Express •••• 3007",
+    },
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
-  const averageMonthly = allTimeTotal / 2; // Since we have two invoices for August
-  const previousMonthTotal = 0; // No previous month before August
-  const monthOverMonthChange = previousMonthTotal > 0 ? ((currentTotals["Compute"].total + currentTotals["Storage"].total + currentTotals["Elastic IP"].total - previousMonthTotal) / previousMonthTotal) * 100 : 0;
+  const averageMonthly = allTimeTotal; // Only one invoice
+  const previousMonthTotal = 0; // No previous month
+  const monthOverMonthChange = 0; // No previous month to compare
+
+  const isPortalLoading = false; // Mock state for loading
+  const handleBillingClick = () => {
+    window.open("https://billing.stripe.com/", "_blank");
+  };
 
   return (
     <Container maxW="container.xl" py={10}>
@@ -420,19 +448,42 @@ function BillingPage() {
                 <Thead bg="orange.100">
                   <Tr>
                     <Th color="orange.800">Month</Th>
-                    <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
+                    <Th color="orange.800">Invoice Number</Th>
+                    <Th color="orange.800">Payment Date</Th>
+                    <Th color="orange.800">Payment Method</Th>
                     <Th color="orange.800"></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total, invoiceId }) => (
+                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod }) => (
                     <Tr key={invoiceId}>
                       <Td>{month.name}</Td>
-                      <Td isNumeric>${total.toFixed(2)}</Td>
+                      <Td>{invoiceId}</Td>
+                      <Td>{paymentDate}</Td>
+                      <Td>{paymentMethod}</Td>
                       <Td>
-                        <Flex justify="center">
-                          <Button size="sm" colorScheme="orange" variant="outline">
-                            Download Invoice
+                        <Flex justify="center" gap={2}>
+                          <Button
+                            size="sm"
+                            variant="link"
+                            onClick={handleBillingClick}
+                            isLoading={isPortalLoading}
+                            leftIcon={<Icon as={FaCreditCard} />}
+                            colorScheme="orange"
+                            fontWeight="medium"
+                          >
+                            View Invoice
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="link"
+                            onClick={handleBillingClick}
+                            isLoading={isPortalLoading}
+                            leftIcon={<Icon as={FaCreditCard} />}
+                            colorScheme="orange"
+                            fontWeight="medium"
+                          >
+                            View Receipt
                           </Button>
                         </Flex>
                       </Td>
