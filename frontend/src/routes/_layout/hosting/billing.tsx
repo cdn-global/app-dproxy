@@ -276,12 +276,19 @@ function BillingPage() {
       paymentDate: "August 22, 2025",
       paymentMethod: "American Express •••• 3007",
     },
+    {
+      month: months[0],
+      total: 122.00,
+      invoiceId: "02A67775-0008",
+      paymentDate: "August 25, 2025",
+      paymentMethod: "American Express •••• 3007",
+    },
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
-  const averageMonthly = allTimeTotal; // Only one invoice
-  const previousMonthTotal = 0; // No previous month
-  const monthOverMonthChange = 0; // No previous month to compare
+  const averageMonthly = allTimeTotal / history.length; // Average over number of invoices
+  const previousMonthTotal = history.filter(({ month }) => month.name === "August 2025").reduce((sum, { total }) => sum + total, 0);
+  const monthOverMonthChange = previousMonthTotal ? ((grandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
   const isPortalLoading = false; // Mock state for loading
   const handleBillingClick = () => {
