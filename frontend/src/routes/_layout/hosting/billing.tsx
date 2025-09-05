@@ -422,7 +422,7 @@ function BillingPage() {
                   <Tr>
                     <Th color="orange.800">Month</Th>
                     <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
-                    <Th color="orange.800">Action</Th>
+                    <Th color="orange.800"></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
