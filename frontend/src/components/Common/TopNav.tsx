@@ -24,8 +24,10 @@ import {
   FiShield,
   FiUserCheck,
   FiSettings,
+  FiGlobe,
 } from "react-icons/fi";
-import { FaBook, FaKey, FaCreditCard, FaGlobe, FaSitemap, FaServer } from 'react-icons/fa';
+import { FaBook, FaKey, FaCreditCard, FaGlobe, FaSitemap, FaServer } from "react-icons/fa";
+import { useEffect, useRef } from "react";
 
 import Logo from "../Common/Logo";
 import type { UserPublic } from "../../client";
@@ -33,12 +35,13 @@ import useAuth from "../../hooks/useAuth";
 
 interface NavItem {
   title: string;
-  icon?: any;
+  icon: any;
   path?: string;
   onClick?: () => void;
   description?: string;
   subItems?: NavItem[];
 }
+
 interface NavGroupDropdownProps {
   item: NavItem;
   activeTextColor: string;
@@ -83,17 +86,36 @@ const navStructure: NavItem[] = [
   },
 ];
 
-const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }) => {
+const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavGroupDropdownProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { location } = useRouterState();
   const { pathname } = location;
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const { title, subItems } = item;
-  const isGroupActive = subItems.some(sub => pathname.startsWith(sub.path!));
+  const { title, subItems, icon } = item;
+  const isGroupActive = subItems?.some((sub) => pathname.startsWith(sub.path!));
+
+  // Add delay to prevent abrupt menu closure
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    onOpen();
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      onClose();
+    }, 200); // 200ms delay for better UX
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   return (
-    <Box onMouseEnter={onOpen} onMouseLeave={onClose} position="relative">
-      <Menu isOpen={isOpen} gutter={4}>
+    <Box onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} position="relative">
+      <Menu isOpen={isOpen} gutter={4} isLazy>
         <MenuButton
           as={Flex}
           px={4}
@@ -101,24 +123,36 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }) => {
           align="center"
           cursor="pointer"
           color={isGroupActive ? activeTextColor : textColor}
-          _hover={{ color: hoverColor, textDecoration: "none" }}
+          _hover={{ color: hoverColor, bg: "gray.100", textDecoration: "none" }}
           borderRadius="md"
+          transition="all 0.2s"
+          aria-label={`Open ${title} menu`}
         >
+          <Icon as={icon} mr={2} boxSize={5} />
           <Text fontWeight="500">{title}</Text>
+          <ChevronDownIcon ml={1} />
         </MenuButton>
-        <MenuList boxShadow="lg" p={2} borderRadius="md" borderWidth={1} minW="320px">
-          {subItems.map((subItem) => (
+        <MenuList
+          boxShadow="lg"
+          p={2}
+          borderRadius="md"
+          borderWidth={1}
+          minW="320px"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {subItems?.map((subItem) => (
             <MenuItem
               key={subItem.title}
               as={RouterLink}
               to={subItem.path}
-              onClick={onClose}
               borderRadius="md"
               p={3}
               _hover={{ bg: "orange.50" }}
               activeProps={{
-                style: { color: activeTextColor },
+                style: { color: activeTextColor, bg: "orange.100" },
               }}
+              aria-label={subItem.title}
             >
               <Flex align="flex-start" w="100%">
                 <Icon as={subItem.icon} boxSize={6} color="orange.500" mt={1} mr={4} />
@@ -149,7 +183,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
     if (onClose) onClose();
   };
 
-  const finalNavStructure = [...navStructure];
+  const finalNavStructure: NavItem[] = [...navStructure];
   if (
     currentUser?.is_superuser &&
     !finalNavStructure.some((item) => item.title === "Admin")
@@ -203,7 +237,15 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
 
         return (
           <Box key={title} w="100%">
-            <Flex px={4} py={2} color={textColor} align="center">
+            <Flex
+              px={4}
+              py={2}
+              color={textColor}
+              align="center"
+              _hover={{ color: hoverColor, bg: "gray.100" }}
+              borderRadius="md"
+              transition="all 0.2s"
+            >
               <Icon as={icon} mr={2} boxSize={5} />
               <Text fontWeight="600">{title}</Text>
             </Flex>
@@ -216,14 +258,15 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
                   px={4}
                   py={2}
                   color={textColor}
-                  _hover={{ color: hoverColor, textDecoration: "none" }}
+                  _hover={{ color: hoverColor, bg: "gray.100", textDecoration: "none" }}
                   activeProps={{
-                    style: { color: activeTextColor },
+                    style: { color: activeTextColor, bg: "orange.100" },
                   }}
                   align="center"
                   onClick={onClose}
                   w="100%"
                   borderRadius="md"
+                  transition="all 0.2s"
                 >
                   <Icon as={subItem.icon} mr={2} boxSize={5} />
                   <Text fontWeight="500">{subItem.title}</Text>
@@ -233,7 +276,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
           </Box>
         );
       }
-      
+
       const enabled = isEnabled(title);
       if (!enabled) {
         return (
@@ -249,8 +292,11 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               cursor="not-allowed"
               align="center"
               flexDir="row"
+              _hover={{ bg: "gray.100" }}
+              borderRadius="md"
+              transition="all 0.2s"
             >
-              {icon && <Icon as={icon} mr={2} boxSize={5} color={disabledColor} />}
+              <Icon as={icon} mr={2} boxSize={5} color={disabledColor} />
               <Text fontWeight="500">{title}</Text>
             </Flex>
           </Tooltip>
@@ -267,14 +313,16 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             px={4}
             py={2}
             color={textColor}
-            _hover={{ color: hoverColor, textDecoration: "none" }}
-            activeProps={{ style: { color: activeTextColor } }}
+            _hover={{ color: hoverColor, bg: "gray.100", textDecoration: "none" }}
+            activeProps={{ style: { color: activeTextColor, bg: "orange.100" } }}
             align="center"
             onClick={onClose}
             w={isMobile ? "100%" : "auto"}
             borderRadius="md"
+            transition="all 0.2s"
+            aria-label={title}
           >
-            {icon && <Icon as={icon} mr={2} boxSize={5} />}
+            <Icon as={icon} mr={2} boxSize={5} />
             <Text fontWeight="500">{title}</Text>
           </Flex>
         );
@@ -286,7 +334,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             px={4}
             py={2}
             color={textColor}
-            _hover={{ color: hoverColor }}
+            _hover={{ color: hoverColor, bg: "gray.100" }}
             align="center"
             onClick={() => {
               if (onClick) onClick();
@@ -294,8 +342,10 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             }}
             w={isMobile ? "100%" : "auto"}
             borderRadius="md"
+            transition="all 0.2s"
+            aria-label={title}
           >
-            {icon && <Icon as={icon} mr={2} boxSize={5} />}
+            <Icon as={icon} mr={2} boxSize={5} />
             <Text fontWeight="500">{title}</Text>
           </Flex>
         );
@@ -305,7 +355,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   return (
     <Flex
       align="center"
-      gap={isMobile ? 2 : 1}
+      gap={isMobile ? 2 : 4}
       flexDir={isMobile ? "column" : "row"}
       w={isMobile ? "100%" : "auto"}
     >
@@ -319,6 +369,7 @@ const TopNav = () => {
   const textColor = "gray.800";
   const hoverColor = "orange.600";
   const activeTextColor = "orange.800";
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <Box
@@ -337,9 +388,10 @@ const TopNav = () => {
         <Logo />
 
         <IconButton
+          ref={btnRef}
           onClick={isOpen ? onClose : onOpen}
           display={{ base: "flex", md: "none" }}
-          aria-label="Open Menu"
+          aria-label="Toggle Menu"
           fontSize="20px"
           color="orange.600"
           icon={<FiMenu />}
@@ -360,6 +412,9 @@ const TopNav = () => {
         bg="white"
         boxShadow="md"
         p={4}
+        maxH="80vh"
+        overflowY="auto"
+        transition="all 0.3s"
       >
         <Flex flexDir="column" gap={4}>
           <NavItems onClose={onClose} isMobile={true} />
