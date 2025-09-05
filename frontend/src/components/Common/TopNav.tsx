@@ -1,4 +1,3 @@
-
 import {
   Box,
   Flex,
@@ -26,7 +25,7 @@ import {
   FiUserCheck,
   FiSettings,
 } from "react-icons/fi";
-import { FaBook, FaKey, FaCreditCard, FaGlobe, FaSitemap } from 'react-icons/fa';
+import { FaBook, FaKey, FaCreditCard, FaGlobe, FaSitemap, FaServer } from 'react-icons/fa';
 
 import Logo from "../Common/Logo";
 import type { UserPublic } from "../../client";
@@ -53,7 +52,7 @@ interface NavItemsProps {
 }
 
 const navStructure: NavItem[] = [
-    {
+  {
     title: "User Agents",
     path: "/web-scraping-tools/user-agents",
     icon: FiUserCheck,
@@ -68,15 +67,20 @@ const navStructure: NavItem[] = [
         icon: FaGlobe,
         description: "Access any webpage with our powerful rotating proxy network.",
       },
-      // {
-      //   title: "SERP API",
-      //   path: "/web-scraping-tools/serp-api",
-      //   icon: FiSearch,
-      //   description: "Scrape search engine results pages from Google in real-time.",
-      // },
     ],
   },
-
+  {
+    title: "Hosting",
+    icon: FaServer,
+    subItems: [
+      {
+        title: "Managed VPS",
+        path: "https://cloud.thedataproxy.com/hosting/billing",
+        icon: FaServer,
+        description: "Fully managed virtual private servers for your needs.",
+      },
+    ],
+  },
 ];
 
 const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }) => {
@@ -96,14 +100,11 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }) => {
           py={2}
           align="center"
           cursor="pointer"
-          // MODIFIED: No background color change, only text color for active group
           color={isGroupActive ? activeTextColor : textColor}
           _hover={{ color: hoverColor, textDecoration: "none" }}
           borderRadius="md"
         >
           <Text fontWeight="500">{title}</Text>
-          {/* Chevron icon can be added for better UX if desired */}
-          {/* <Icon as={ChevronDownIcon} ml={1} /> */}
         </MenuButton>
         <MenuList boxShadow="lg" p={2} borderRadius="md" borderWidth={1} minW="320px">
           {subItems.map((subItem) => (
@@ -115,10 +116,9 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }) => {
               borderRadius="md"
               p={3}
               _hover={{ bg: "orange.50" }}
-               // MODIFIED: Removed background from activeProps style
-               activeProps={{
-                 style: { color: activeTextColor },
-               }}
+              activeProps={{
+                style: { color: activeTextColor },
+              }}
             >
               <Flex align="flex-start" w="100%">
                 <Icon as={subItem.icon} boxSize={6} color="orange.500" mt={1} mr={4} />
@@ -135,14 +135,11 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }) => {
   );
 };
 
-
 const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   const queryClient = useQueryClient();
   const textColor = "gray.800";
   const disabledColor = "gray.300";
   const hoverColor = "orange.600";
-  // MODIFIED: bgActive is no longer needed as we only change text color
-  // const bgActive = "orange.100";
   const activeTextColor = "orange.800";
   const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"]);
   const { logout } = useAuth();
@@ -182,6 +179,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
       "User Agents",
       "Settings",
       "Sign Out",
+      "Managed VPS",
     ].includes(title);
   };
 
@@ -199,12 +197,10 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               textColor={textColor}
               hoverColor={hoverColor}
               activeTextColor={activeTextColor}
-              // MODIFIED: bgActive prop removed
             />
           );
         }
 
-        // Mobile Grouped List
         return (
           <Box key={title} w="100%">
             <Flex px={4} py={2} color={textColor} align="center">
@@ -221,7 +217,6 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
                   py={2}
                   color={textColor}
                   _hover={{ color: hoverColor, textDecoration: "none" }}
-                  // MODIFIED: Removed background from activeProps style
                   activeProps={{
                     style: { color: activeTextColor },
                   }}
@@ -319,13 +314,10 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   );
 };
 
-
 const TopNav = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const textColor = "gray.800";
   const hoverColor = "orange.600";
-  // MODIFIED: bgActive is no longer needed
-  // const bgActive = "orange.100";
   const activeTextColor = "orange.800";
 
   return (
@@ -354,13 +346,11 @@ const TopNav = () => {
           variant="ghost"
         />
 
-        {/* Desktop Navigation */}
         <Flex align="center" gap={4} display={{ base: "none", md: "flex" }}>
           <NavItems />
         </Flex>
       </Flex>
 
-      {/* Mobile Menu */}
       <Box
         display={{ base: isOpen ? "block" : "none", md: "none" }}
         position="absolute"
