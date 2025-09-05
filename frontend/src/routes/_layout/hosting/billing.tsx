@@ -27,8 +27,8 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 
-// Hardcoded devices with pricing
-interface Device {
+// Hardcoded servers with pricing
+interface Server {
   name: string;
   email: string;
   ip: string;
@@ -47,7 +47,7 @@ interface Device {
   hasMonitoring?: boolean;
 }
 
-const devices: Device[] = [
+const servers: Server[] = [
   {
     name: "riv1-nyc-mini5",
     email: "apis.popov@gmail.com",
@@ -166,17 +166,16 @@ const MONITORING_FEE_PER_MONTH = 8.0;
 
 interface Service {
   name: string;
-  getMonthlyCost: (device: Device) => number;
-  isUpcharge?: boolean;
+  getMonthlyCost: (server: Server) => number;
 }
 
 const services: Service[] = [
-  { name: "Compute", getMonthlyCost: (d) => d.monthlyComputePrice },
-  { name: "Storage", getMonthlyCost: (d) => d.storageSizeGB * STORAGE_COST_PER_GB_MONTH },
-  { name: "Elastic IP", getMonthlyCost: (d) => ELASTIC_IP_FEE_PER_MONTH },
-  { name: "Rotating IP", getMonthlyCost: (d) => (d.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH : 0), isUpcharge: true },
-  { name: "Backup", getMonthlyCost: (d) => (d.hasBackup ? BACKUP_FEE_PER_MONTH : 0), isUpcharge: true },
-  { name: "Monitoring", getMonthlyCost: (d) => (d.hasMonitoring ? MONITORING_FEE_PER_MONTH : 0), isUpcharge: true },
+  { name: "Compute", getMonthlyCost: (s) => s.monthlyComputePrice },
+  { name: "Storage", getMonthlyCost: (s) => s.storageSizeGB * STORAGE_COST_PER_GB_MONTH },
+  { name: "Elastic IP", getMonthlyCost: () => ELASTIC_IP_FEE_PER_MONTH },
+  { name: "Rotating IP", getMonthlyCost: (s) => (s.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH : 0) },
+  { name: "Backup", getMonthlyCost: (s) => (s.hasBackup ? BACKUP_FEE_PER_MONTH : 0) },
+  { name: "Monitoring", getMonthlyCost: (s) => (s.hasMonitoring ? MONITORING_FEE_PER_MONTH : 0) },
 ];
 
 interface Month {
@@ -192,23 +191,23 @@ const months: Month[] = [
 ];
 
 function calculateTotalsForMonth(month: Month) {
-  const activeDevices = devices.filter((d) => new Date(d.activeSince) <= month.end);
+  const activeServers = servers.filter((s) => new Date(s.activeSince) <= month.end);
   const totals = services.reduce((acc, s) => {
-    const count = activeDevices.filter((d) => s.getMonthlyCost(d) > 0).length;
-    acc[s.name] = { total: activeDevices.reduce((sum, d) => sum + s.getMonthlyCost(d), 0), count };
+    const count = activeServers.filter((s) => s.getMonthlyCost(s) > 0).length;
+    acc[s.name] = { total: activeServers.reduce((sum, s) => sum + s.getMonthlyCost(s), 0), count };
     return acc;
   }, {} as Record<string, { total: number; count: number }>);
-  const perDeviceTotals = activeDevices.reduce((acc, d) => {
-    acc[d.name] = services.reduce((sum, s) => sum + s.getMonthlyCost(d), 0);
+  const perServerTotals = activeServers.reduce((acc, s) => {
+    acc[s.name] = services.reduce((sum, svc) => sum + svc.getMonthlyCost(s), 0);
     return acc;
   }, {} as Record<string, number>);
   const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
-  return { totals, grandTotal, activeDevices, perDeviceTotals };
+  return { totals, grandTotal, activeServers, perServerTotals };
 }
 
 function BillingPage() {
   const currentMonth = months[months.length - 1];
-  const { totals: currentTotals, activeDevices: currentActiveDevices, perDeviceTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
+  const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
 
   const history = months.slice(0, -1).map((month) => {
     const { grandTotal } = calculateTotalsForMonth(month);
@@ -242,17 +241,17 @@ function BillingPage() {
                 <Table variant="simple" size="md">
                   <Thead bg="gray.100">
                     <Tr>
-                      <Th>Device Name</Th>
+                      <Th>Server Name</Th>
                       <Th>IP Address</Th>
                       <Th isNumeric>Total Cost (USD)</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {currentActiveDevices.map((device) => (
-                      <Tr key={device.name}>
-                        <Td>{device.name}</Td>
-                        <Td>{device.ip}</Td>
-                        <Td isNumeric>${perDeviceTotals[device.name].toFixed(2)}</Td>
+                    {currentActiveServers.map((server) => (
+                      <Tr key={server.name}>
+                        <Td>{server.name}</Td>
+                        <Td>{server.ip}</Td>
+                        <Td isNumeric>${perServerTotals[server.name].toFixed(2)}</Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -276,7 +275,7 @@ function BillingPage() {
                   <Tbody>
                     {services.map((s) => (
                       <Tr key={s.name}>
-                        <Td>{s.name} {s.isUpcharge ? "(Upcharge)" : ""}</Td>
+                        <Td>{s.name}</Td>
                         <Td>x {currentTotals[s.name].count}</Td>
                         <Td isNumeric>${currentTotals[s.name].total.toFixed(2)}</Td>
                       </Tr>
@@ -296,38 +295,38 @@ function BillingPage() {
             <Heading size="md" mb={6} color="gray.700">Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple>
               {services.map((s) => {
-                const relevantDevices = currentActiveDevices.filter((d) => s.getMonthlyCost(d) > 0);
+                const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0);
                 const total = currentTotals[s.name].total;
                 return (
                   <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
                     <h2>
                       <AccordionButton bg="gray.50" _hover={{ bg: "gray.100" }}>
                         <Box as="span" flex="1" textAlign="left" fontWeight="semibold">
-                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - ${total.toFixed(2)} (x {relevantDevices.length} {relevantDevices.length !== 1 ? "devices" : "device"})
+                          {s.name} - ${total.toFixed(2)} (x {relevantServers.length} {relevantServers.length !== 1 ? "servers" : "server"})
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
                     </h2>
                     <AccordionPanel pb={4}>
-                      {relevantDevices.length > 0 ? (
+                      {relevantServers.length > 0 ? (
                         <Table variant="simple" size="sm">
                           <Thead>
                             <Tr>
-                              <Th>Device Name</Th>
+                              <Th>Server Name</Th>
                               <Th isNumeric>Cost (USD)</Th>
                             </Tr>
                           </Thead>
                           <Tbody>
-                            {relevantDevices.map((d) => (
-                              <Tr key={d.name}>
-                                <Td>{d.name}</Td>
-                                <Td isNumeric>${s.getMonthlyCost(d).toFixed(2)}</Td>
+                            {relevantServers.map((server) => (
+                              <Tr key={server.name}>
+                                <Td>{server.name}</Td>
+                                <Td isNumeric>${s.getMonthlyCost(server).toFixed(2)}</Td>
                               </Tr>
                             ))}
                           </Tbody>
                         </Table>
                       ) : (
-                        <Text color="gray.600">No devices using this service.</Text>
+                        <Text color="gray.600">No servers using this service.</Text>
                       )}
                     </AccordionPanel>
                   </AccordionItem>
@@ -358,15 +357,15 @@ function BillingPage() {
             <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="gray.50" boxShadow="sm">
               <VStack align="stretch" spacing={3}>
                 <Flex justify="space-between">
-                  <Text fontWeight="semibold" color="gray.700">Total Spent to Date:</Text>
+                  <Text fontWeight="semibold" color="gray.700">Total Spent to Date</Text>
                   <Text fontWeight="bold">${allTimeTotal.toFixed(2)}</Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text fontWeight="semibold" color="gray.700">Average Monthly Cost:</Text>
+                  <Text fontWeight="semibold" color="gray.700">Average Monthly Cost</Text>
                   <Text fontWeight="bold">${averageMonthly.toFixed(2)}</Text>
                 </Flex>
                 <Flex justify="space-between">
-                  <Text fontWeight="semibold" color="gray.700">Month-over-Month Change:</Text>
+                  <Text fontWeight="semibold" color="gray.700">Month-over-Month Change</Text>
                   <Text fontWeight="bold">{monthOverMonthChange.toFixed(2)}%</Text>
                 </Flex>
               </VStack>
