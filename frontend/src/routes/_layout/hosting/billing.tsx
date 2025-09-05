@@ -26,8 +26,10 @@ import {
   AccordionPanel,
   AccordionIcon,
   Icon,
+  useToast,
 } from "@chakra-ui/react";
 import { FaCreditCard } from "react-icons/fa";
+import { useState } from "react";
 
 // Hardcoded servers with pricing
 interface Server {
@@ -206,7 +208,60 @@ function calculateTotalsForMonth(month: Month) {
   return { totals, grandTotal, activeServers, perServerTotals };
 }
 
+// Helper function for fetching billing portal URL
+const fetchBillingPortal = async (token: string) => {
+  const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch portal: ${response.status}`);
+  }
+  const data = await response.json();
+  if (!data.portal_url) {
+    throw new Error("No portal URL received");
+  }
+  return data.portal_url;
+};
+
 function PaymentDetailsTab() {
+  const [token] = useState<string | null>(localStorage.getItem("access_token"));
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+
+  const handleBillingClick = async () => {
+    if (!token) {
+      toast({
+        title: "Error",
+        description: "Please log in to manage your billing information.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const portalUrl = await fetchBillingPortal(token);
+      window.location.href = portalUrl;
+    } catch (error) {
+      console.error("Error accessing customer portal:", error);
+      toast({
+        title: "Error",
+        description: "Failed to access billing portal. Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Mock data for saved payment method and billing address
   const hasSavedCard = true;
   const cardLast4 = "3007";
@@ -221,10 +276,6 @@ function PaymentDetailsTab() {
     postalCode: "10012",
     country: "US",
     phone: "(212) 595-3915",
-  };
-  const isPortalLoading = false; // Mock state for loading
-  const handleBillingClick = () => {
-    window.open("https://billing.stripe.com/", "_blank");
   };
 
   return (
@@ -252,7 +303,7 @@ function PaymentDetailsTab() {
       <Button
         variant="link"
         onClick={handleBillingClick}
-        isLoading={isPortalLoading}
+        isLoading={isLoading}
         leftIcon={<Icon as={FaCreditCard} />}
         colorScheme="orange"
         fontWeight="medium"
@@ -267,6 +318,9 @@ function PaymentDetailsTab() {
 function BillingPage() {
   const currentMonth = months[months.length - 1];
   const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
+  const [token] = useState<string | null>(localStorage.getItem("access_token"));
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const history = [
     {
@@ -290,9 +344,33 @@ function BillingPage() {
   const previousMonthTotal = history.filter(({ month }) => month.name === "August 2025").reduce((sum, { total }) => sum + total, 0);
   const monthOverMonthChange = previousMonthTotal ? ((grandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
-  const isPortalLoading = false; // Mock state for loading
-  const handleBillingClick = () => {
-    window.open("https://billing.stripe.com/", "_blank");
+  const handleBillingClick = async () => {
+    if (!token) {
+      toast({
+        title: "Error",
+        description: "Please log in to manage your billing information.",
+        status: "warning",
+        duration: 5000,
+        isClosable Charta: true,
+      });
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const portalUrl = await fetchBillingPortal(token);
+      window.location.href = portalUrl;
+    } catch (error) {
+      console.error("Error accessing customer portal:", error);
+      toast({
+        title: "Error",
+        description: "Failed to access billing portal. Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -474,7 +552,7 @@ function BillingPage() {
                             size="sm"
                             variant="link"
                             onClick={handleBillingClick}
-                            isLoading={isPortalLoading}
+                            isLoading={isLoading}
                             leftIcon={<Icon as={FaCreditCard} />}
                             colorScheme="orange"
                             fontWeight="medium"
@@ -485,7 +563,7 @@ function BillingPage() {
                             size="sm"
                             variant="link"
                             onClick={handleBillingClick}
-                            isLoading={isPortalLoading}
+                            isLoading={isLoading}
                             leftIcon={<Icon as={FaCreditCard} />}
                             colorScheme="orange"
                             fontWeight="medium"
