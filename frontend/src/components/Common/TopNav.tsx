@@ -32,11 +32,11 @@ import useAuth from "../../hooks/useAuth";
 
 interface NavItem {
   title: string;
-  icon?: any; // Icon is optional for top-level items
+  icon?: any;
   path?: string;
   onClick?: () => void;
   description?: string;
-  subItems?: { title: string; path: string; description: string }[]; // Sub-items without icon
+  subItems?: { title: string; path: string; description: string }[];
 }
 
 interface NavGroupDropdownProps {
@@ -88,7 +88,6 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
   const { title, subItems, icon } = item;
   const isGroupActive = subItems?.some((sub) => pathname.startsWith(sub.path!));
 
-  // Add delay to prevent abrupt menu closure
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     onOpen();
@@ -97,7 +96,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       onClose();
-    }, 200); // 200ms delay for better UX
+    }, 200);
   };
 
   useEffect(() => {
@@ -124,7 +123,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           as={Flex}
           px={4}
           py={2}
-          align="center"
+          alignItems="center" // Ensure all items are vertically centered
           cursor="pointer"
           color={isGroupActive ? activeTextColor : textColor}
           _hover={hoverStyles}
@@ -133,8 +132,8 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           aria-label={`Open ${title} menu`}
         >
           {icon && <Icon as={icon} mr={2} boxSize={5} />}
-          <Text fontWeight="500">{title}</Text>
-          <ChevronDownIcon ml={1} />
+          <Text fontWeight="500" mr={1}>{title}</Text>
+          <ChevronDownIcon boxSize={5} transform="translateY(1px)" /> {/* Fine-tune vertical alignment */}
         </MenuButton>
         <MenuList
           boxShadow="lg"
