@@ -12,7 +12,6 @@ import {
   MenuItem,
   VStack,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link as RouterLink, useRouterState } from "@tanstack/react-router";
 import {
@@ -133,7 +132,6 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
         >
           {icon && <Icon as={icon} mr={2} boxSize={5} />}
           <Text fontWeight="500" mr={1}>{title}</Text>
-          <ChevronDownIcon boxSize={5} transform="translateY(1px)" /> {/* Fine-tune vertical alignment */}
         </MenuButton>
         <MenuList
           boxShadow="lg"
