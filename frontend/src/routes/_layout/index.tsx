@@ -195,7 +195,7 @@ const HomePage = () => {
                                 >
                                   Billing Portal
                                 </Button>
-                                <Link href="https://docs.thedataproxy.com" isExternal display="flex" alignItems="center" color="orange.500" fontWeight="medium">
+                                <Link href="https://thedataproxy.com" isExternal display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                                     <Icon as={FaBook} mr={2} /> Documentation
                                 </Link>
                             </VStack>
