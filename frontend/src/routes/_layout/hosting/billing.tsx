@@ -337,6 +337,13 @@ function BillingPage() {
       paymentDate: "August 25, 2025",
       paymentMethod: "American Express •••• 3007",
     },
+    {
+    month: months[1], // September 2025
+    total: 246.30,
+    invoiceId: "02A67775-0009",
+    paymentDate: "September 5, 2025",
+    paymentMethod: "American Express •••• 3007",
+  },
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
