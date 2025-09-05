@@ -1,4 +1,3 @@
-// src/routes/_layout/hosting/billing.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
@@ -194,14 +193,15 @@ const months: Month[] = [
 function calculateTotalsForMonth(month: Month) {
   const activeDevices = devices.filter((d) => new Date(d.activeSince) <= month.end);
   const totals = services.reduce((acc, s) => {
-    acc[s.name] = activeDevices.reduce((sum, d) => sum + s.getMonthlyCost(d), 0);
+    const count = activeDevices.filter((d) => s.getMonthlyCost(d) > 0).length;
+    acc[s.name] = { total: activeDevices.reduce((sum, d) => sum + s.getMonthlyCost(d), 0), count };
     return acc;
-  }, {} as Record<string, number>);
+  }, {} as Record<string, { total: number; count: number }>);
   const perDeviceTotals = activeDevices.reduce((acc, d) => {
     acc[d.name] = services.reduce((sum, s) => sum + s.getMonthlyCost(d), 0);
     return acc;
   }, {} as Record<string, number>);
-  const grandTotal = Object.values(totals).reduce((sum, cost) => sum + cost, 0);
+  const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
   return { totals, grandTotal, activeDevices, perDeviceTotals };
 }
 
@@ -217,16 +217,16 @@ function BillingPage() {
   const allTimeTotal = months.slice(0, -1).reduce((sum, month) => sum + calculateTotalsForMonth(month).grandTotal, 0);
   const averageMonthly = history.length > 0 ? allTimeTotal / history.length : 0;
   const previousMonthTotal = history.length > 0 ? history[history.length - 1].total : 0;
-  const monthOverMonthChange = previousMonthTotal > 0 ? ((currentTotals["Compute"] + currentTotals["Storage"] + currentTotals["Elastic IP"] - previousMonthTotal) / previousMonthTotal) * 100 : 0;
+  const monthOverMonthChange = previousMonthTotal > 0 ? ((currentTotals["Compute"].total + currentTotals["Storage"].total + currentTotals["Elastic IP"].total - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
   return (
-    <Container maxW="full" py={9}>
+    <Container maxW="container.lg" py={9}>
       <Flex align="center" justify="space-between" py={6}>
         <Text fontSize="3xl" color="black">Billing Portal</Text>
-        <Text fontSize="lg" color="gray.600">Detailed billing information and history</Text>
+        <Text fontSize="lg" color="gray.600">Your hosting costs and history</Text>
       </Flex>
 
-      <Tabs variant="enclosed">
+      <Tabs variant="enclosed" colorScheme="blue">
         <TabList>
           <Tab>Current Billing</Tab>
           <Tab>Service Details</Tab>
@@ -236,8 +236,8 @@ function BillingPage() {
         <TabPanels>
           <TabPanel>
             <Heading size="md" mb={4}>Estimated Costs for {currentMonth.name}</Heading>
-            <Flex direction={{ base: "column", md: "row" }} gap={6}>
-              <Box flex="3" borderWidth="1px" borderRadius="lg" overflow="hidden">
+            <VStack align="stretch" spacing={4}>
+              <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
                 <Table variant="simple" size="md">
                   <Thead>
                     <Tr>
@@ -257,30 +257,32 @@ function BillingPage() {
                   </Tbody>
                 </Table>
               </Box>
-              <Box flex="2" p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
+              <Box p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
                 <VStack align="stretch" spacing={2}>
                   {services.map((s) => (
                     <Flex key={s.name} justify="space-between">
-                      <Text fontWeight="bold">Estimated {s.name} Cost:</Text>
-                      <Text>${currentTotals[s.name].toFixed(2)}</Text>
+                      <Text fontWeight="bold">
+                        Estimated {s.name} Cost ({currentTotals[s.name].count} {s.name === "Compute" ? "VPS" : s.name}{currentTotals[s.name].count !== 1 ? "s" : ""}):
+                      </Text>
+                      <Text>${currentTotals[s.name].total.toFixed(2)}</Text>
                     </Flex>
                   ))}
                 </VStack>
               </Box>
-            </Flex>
+            </VStack>
           </TabPanel>
           <TabPanel>
             <Heading size="md" mb={4}>Service and Upcharge Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple>
               {services.map((s) => {
                 const relevantDevices = currentActiveDevices.filter((d) => s.getMonthlyCost(d) > 0);
-                const total = currentTotals[s.name];
+                const total = currentTotals[s.name].total;
                 return (
                   <AccordionItem key={s.name}>
                     <h2>
                       <AccordionButton>
                         <Box as="span" flex="1" textAlign="left">
-                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - Estimated: ${total.toFixed(2)}
+                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - Estimated: ${total.toFixed(2)} ({relevantDevices.length} {relevantDevices.length !== 1 ? "devices" : "device"})
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
