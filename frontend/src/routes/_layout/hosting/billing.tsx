@@ -1,4 +1,3 @@
-// src/routes/_layout/hosting/billing.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
@@ -44,7 +43,7 @@ interface Device {
   activeSince: string; // YYYY-MM-DD
   hasRotatingIP?: boolean;
   hasBackup?: boolean;
-  hasCDN?: boolean;
+  hasMonitoring?: boolean;
 }
 
 const devices: Device[] = [
@@ -64,7 +63,7 @@ const devices: Device[] = [
     activeSince: "2025-07-01",
     hasRotatingIP: false,
     hasBackup: true,
-    hasCDN: false,
+    hasMonitoring: true,
   },
   {
     name: "riv2-nyc-mini5",
@@ -82,7 +81,7 @@ const devices: Device[] = [
     activeSince: "2025-07-01",
     hasRotatingIP: true,
     hasBackup: false,
-    hasCDN: false,
+    hasMonitoring: false,
   },
   {
     name: "riv3-nyc-mini6",
@@ -100,7 +99,7 @@ const devices: Device[] = [
     activeSince: "2025-08-01",
     hasRotatingIP: true,
     hasBackup: true,
-    hasCDN: false,
+    hasMonitoring: true,
   },
   {
     name: "riv4-nyc-mini5",
@@ -118,7 +117,7 @@ const devices: Device[] = [
     activeSince: "2025-09-01",
     hasRotatingIP: false,
     hasBackup: false,
-    hasCDN: true,
+    hasMonitoring: false,
   },
   {
     name: "riv5-nyc-mini7",
@@ -136,7 +135,7 @@ const devices: Device[] = [
     activeSince: "2025-08-01",
     hasRotatingIP: true,
     hasBackup: true,
-    hasCDN: true,
+    hasMonitoring: true,
   },
   {
     name: "riv6-nyc-mini8",
@@ -154,7 +153,7 @@ const devices: Device[] = [
     activeSince: "2025-09-01",
     hasRotatingIP: true,
     hasBackup: false,
-    hasCDN: false,
+    hasMonitoring: false,
   },
 ];
 
@@ -162,7 +161,7 @@ const ELASTIC_IP_FEE_PER_MONTH = 3.6; // $0.005 per hour * 24 * 30 = $3.60 per I
 const STORAGE_COST_PER_GB_MONTH = 0.10; // Approximate EBS gp2 cost: $0.10/GB-month
 const ROTATING_IP_FEE_PER_MONTH = 10.0;
 const BACKUP_FEE_PER_MONTH = 5.0;
-const CDN_FEE_PER_MONTH = 20.0;
+const MONITORING_FEE_PER_MONTH = 8.0;
 
 interface Service {
   name: string;
@@ -176,7 +175,7 @@ const services: Service[] = [
   { name: "Elastic IP", getMonthlyCost: (d) => ELASTIC_IP_FEE_PER_MONTH },
   { name: "Rotating IP", getMonthlyCost: (d) => (d.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH : 0), isUpcharge: true },
   { name: "Backup", getMonthlyCost: (d) => (d.hasBackup ? BACKUP_FEE_PER_MONTH : 0), isUpcharge: true },
-  { name: "CDN", getMonthlyCost: (d) => (d.hasCDN ? CDN_FEE_PER_MONTH : 0), isUpcharge: true },
+  { name: "Monitoring", getMonthlyCost: (d) => (d.hasMonitoring ? MONITORING_FEE_PER_MONTH : 0), isUpcharge: true },
 ];
 
 interface Month {
@@ -236,7 +235,7 @@ function BillingPage() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Heading size="md" mb={4}>Estimated Costs for {currentMonth.name}</Heading>
+            <Heading size="md" mb={4}>Costs for {currentMonth.name}</Heading>
             <VStack align="stretch" spacing={4}>
               <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
                 <Table variant="simple" size="md">
@@ -275,7 +274,7 @@ function BillingPage() {
             </VStack>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={4}>Service and Upcharge Details for {currentMonth.name}</Heading>
+            <Heading size="md" mb={4}>Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple>
               {services.map((s) => {
                 const relevantDevices = currentActiveDevices.filter((d) => s.getMonthlyCost(d) > 0);
