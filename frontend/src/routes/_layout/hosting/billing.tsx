@@ -444,7 +444,6 @@ function BillingPage() {
             </Box>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={6} color="gray.700">Payment Details</Heading>
             <PaymentDetailsTab />
           </TabPanel>
         </TabPanels>
