@@ -1,3 +1,4 @@
+// src/routes/_layout/hosting/billing.tsx
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
@@ -243,7 +244,7 @@ function BillingPage() {
                     <Tr>
                       <Th>Device Name</Th>
                       <Th>IP</Th>
-                      <Th isNumeric>Estimated Total (USD)</Th>
+                      <Th isNumeric>Total (USD)</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -260,11 +261,13 @@ function BillingPage() {
               <Box p={4} borderWidth="1px" borderRadius="lg" bg="gray.50">
                 <VStack align="stretch" spacing={2}>
                   {services.map((s) => (
-                    <Flex key={s.name} justify="space-between">
-                      <Text fontWeight="bold">
-                        Estimated {s.name} Cost ({currentTotals[s.name].count} {s.name === "Compute" ? "VPS" : s.name}{currentTotals[s.name].count !== 1 ? "s" : ""}):
+                    <Flex key={s.name} justify="space-between" align="center">
+                      <Text color="gray.600">
+                        {s.name} ({currentTotals[s.name].count} {s.name === "Compute" ? "VPS" : s.name}{currentTotals[s.name].count !== 1 ? "s" : ""})
                       </Text>
-                      <Text>${currentTotals[s.name].total.toFixed(2)}</Text>
+                      <Text fontSize="lg" fontWeight="bold" color="blue.600">
+                        ${currentTotals[s.name].total.toFixed(2)}
+                      </Text>
                     </Flex>
                   ))}
                 </VStack>
@@ -282,7 +285,7 @@ function BillingPage() {
                     <h2>
                       <AccordionButton>
                         <Box as="span" flex="1" textAlign="left">
-                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - Estimated: ${total.toFixed(2)} ({relevantDevices.length} {relevantDevices.length !== 1 ? "devices" : "device"})
+                          {s.name} {s.isUpcharge ? "(Upcharge)" : ""} - ${total.toFixed(2)} ({relevantDevices.length} {relevantDevices.length !== 1 ? "devices" : "device"})
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
