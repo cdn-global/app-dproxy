@@ -62,11 +62,6 @@ const navStructure: NavItem[] = [ {
     path: '/hosting/billing',
     icon: FaServer,
   },
-  {
-    title: 'User Agents',
-    path: '/web-scraping-tools/user-agents',
-    icon: FiUserCheck,
-  }, 
 ];
 
 const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavGroupDropdownProps) => {
