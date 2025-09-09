@@ -350,6 +350,21 @@ const HomePage = () => {
                   </VStack>
                 </Box>
               </GridItem>
+               <GridItem>
+                <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
+                  <VStack align="start" spacing={3}>
+                    <Heading size="xs">HTTPs API Usage</Heading>
+                    <Flex alignItems="baseline">
+                      <Text fontSize="sm" color="gray.600" mr={2}>Total Requests:</Text>
+                      <Text fontSize="3xl" fontWeight="bold">{totalRequests.toLocaleString()}</Text>
+                    </Flex>
+                    <Flex alignItems="baseline">
+                      <Text fontSize="sm" color="gray.600" mr={2}>Data Transferred:</Text>
+                      <Text fontSize="3xl" fontWeight="bold">{totalDataGB} GB</Text>
+                    </Flex>
+                  </VStack>
+                </Box>
+              </GridItem>
             </Grid>
 {/* Row 2: Services */}
 {displayedFeatures.length > 0 && (
