@@ -11,21 +11,24 @@ const featureDetails = {
     description: 'Extract structured data from any website with our powerful and scalable scraping infrastructure.',
     icon: FaGlobe,
     path: '/web-scraping-tools/https-api',
-    period: '8/15/2025 - 9/15/2025'
+    period: '8/15/2025 - 9/15/2025',
+    isActive: true, // Added to track active status
   },
   'vps-hosting': {
     name: 'VPS Hosting',
     description: 'Manage your virtual private servers with high performance and reliability.',
     icon: FaServer,
     path: '/hosting',
-    period: '9/9/2025 - 10/9/2025'
+    period: '9/9/2025 - 10/9/2025',
+    isActive: true, // Added to track active status
   },
   'serp-api': {
     name: 'SERP API',
     description: 'Get structured JSON data from major search engines.',
     icon: FaSearch,
     path: '/web-scraping-tools/serp-api',
-    period: 'N/A'
+    period: 'N/A',
+    isActive: false, // Mark as not active
   },
 };
 
@@ -348,58 +351,60 @@ const HomePage = () => {
                 </Box>
               </GridItem>
             </Grid>
-            {/* Row 2: Services */}
-            {displayedFeatures.length > 0 && (
-              <VStack align="stretch" spacing={4} pt={4}>
-                <Heading size="md">Your Services</Heading>
-                <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
-                  {displayedFeatures.map((featureSlug) => {
-                    const details = featureDetails[featureSlug];
-                    if (!details) return null;
-                    return (
-                      <GridItem key={featureSlug} w="100%">
-                        <Link as={RouterLink} to={details.path} _hover={{ textDecoration: "none" }}>
-                          <Box
-                            p={5}
-                            shadow="md"
-                            borderWidth="1px"
-                            borderRadius="lg"
-                            height="100%"
-                            display="flex"
-                            flexDirection="column"
-                            transition="all 0.2s ease-in-out"
-                            _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
-                          >
-                            <Box flex="1">
-                              <Flex justifyContent="space-between" alignItems="flex-start" mb={3}>
-                                <Heading size="sm" pr={4}>
-                                  {details.name}
-                                </Heading>
-                                <Flex alignItems="center" gap={2}>
-                                  <Badge colorScheme="green">Active</Badge>
-                                  <Icon as={details.icon} boxSize={8} color="red.400" />
-                                </Flex>
-                              </Flex>
-                              <Text fontSize="sm" color="gray.600" minHeight={{ base: "auto", md: "60px" }}>
-                                {details.description}
-                              </Text>
-                              {details.period && (
-                                <Text fontSize="xs" color="gray.600" mt={2}>
-                                  Period: {details.period}
-                                </Text>
-                              )}
-                            </Box>
-                            <Text mt={4} color="red.500" fontWeight="bold" fontSize="sm" alignSelf="flex-start">
-                              Go to Service →
-                            </Text>
-                          </Box>
-                        </Link>
-                      </GridItem>
-                    );
-                  })}
-                </Grid>
-              </VStack>
-            )}
+{/* Row 2: Services */}
+{displayedFeatures.length > 0 && (
+  <VStack align="stretch" spacing={4} pt={4}>
+    <Heading size="md">Your Services</Heading>
+    <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
+      {displayedFeatures.map((featureSlug) => {
+        const details = featureDetails[featureSlug];
+        if (!details) return null;
+        return (
+          <GridItem key={featureSlug} w="100%">
+            <Link as={RouterLink} to={details.path} _hover={{ textDecoration: "none" }}>
+              <Box
+                p={5}
+                shadow="md"
+                borderWidth="1px"
+                borderRadius="lg"
+                height="100%"
+                display="flex"
+                flexDirection="column"
+                transition="all 0.2s ease-in-out"
+                _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
+              >
+                <Box flex="1">
+                  <Flex justifyContent="space-between" alignItems="flex-start" mb={3}>
+                    <Heading size="xs" pr={4}>
+                      {details.name}
+                    </Heading>
+                    <Flex alignItems="center" gap={2}>
+                      <Badge colorScheme={details.isActive ? "green" : "red"}>
+                        {details.isActive ? "Active" : "Inactive"}
+                      </Badge>
+                      <Icon as={details.icon} boxSize={8} color="red.400" />
+                    </Flex>
+                  </Flex>
+                  <Text fontSize="sm" color="gray.600" minHeight={{ base: "auto", md: "60px" }}>
+                    {details.description}
+                  </Text>
+                  {details.period && (
+                    <Text fontSize="xs" color="gray.600" mt={2}>
+                      Period: {details.period}
+                    </Text>
+                  )}
+                </Box>
+                <Text mt={4} color="red.500" fontWeight="bold" fontSize="sm" alignSelf="flex-start">
+                  Go to Service →
+                </Text>
+              </Box>
+            </Link>
+          </GridItem>
+        );
+      })}
+    </Grid>
+  </VStack>
+)}
             {/* Quick Links */}
             <VStack align="stretch" spacing={4} pt={4}>
               <Heading size="md">Quick Links</Heading>
