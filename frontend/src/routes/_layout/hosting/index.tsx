@@ -194,7 +194,7 @@ function HostingIndexPage() {
     <Container maxW="full" py={9}>
       <Flex align="center" py={6}>
         <Flex direction="column">
-          <Text fontSize="3xl" color="black">Web Hosting Credentials</Text>
+          <Text fontSize="3xl" color="black">VPS Credentials</Text>
           <Text fontSize="lg" color="gray.600">Login details for hosting devices</Text>
         </Flex>
         <Button ml="auto" as={Link} to="billing">View Billing</Button>
