@@ -325,28 +325,28 @@ const HomePage = () => {
             <Text fontSize="sm">No active subscriptions found. Please subscribe to access your dashboard.</Text>
           </Alert>
         ) : (
-        <VStack spacing={8} align="stretch" mt={6} pb={10}>
+            <VStack spacing={8} align="stretch" mt={6} pb={10}>
             {/* Row 1: Usage */}
             <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
               <GridItem>
                 <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
                   <VStack align="start" spacing={3}>
-                    <Heading size="xs">VPS Status</Heading> {/* Changed size from "sm" to "xs" */}
-                    <Text fontSize="3xl" fontWeight="bold">Total vCPUs: {totalVCPUs}</Text> {/* Increased fontSize from "2xl" to "3xl" */}
-                    <Text fontSize="3xl" fontWeight="bold">Total RAM: {totalRAM} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
-                    <Text fontSize="3xl" fontWeight="bold">Total Storage: {totalStorage} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
+                    <Heading size="xs">VPS Status</Heading>
+                    <Flex alignItems="baseline">
+                      <Text fontSize="sm" color="gray.600" mr={2}>Total vCPUs:</Text>
+                      <Text fontSize="3xl" fontWeight="bold">{totalVCPUs}</Text>
+                    </Flex>
+                    <Flex alignItems="baseline">
+                      <Text fontSize="sm" color="gray.600" mr={2}>Total RAM:</Text>
+                      <Text fontSize="3xl" fontWeight="bold">{totalRAM} GB</Text>
+                    </Flex>
+                    <Flex alignItems="baseline">
+                      <Text fontSize="sm" color="gray.600" mr={2}>Total Storage:</Text>
+                      <Text fontSize="3xl" fontWeight="bold">{totalStorage} GB</Text>
+                    </Flex>
                     <Text fontSize="sm" color="gray.600">
-                      Note: Detailed VPS settings available in the <Link as={RouterLink} to="/hosting" color="orange.500">VPS Dashboard</Link>.
+                      Note: Detailed VPS settings available in the <Link as={RouterLink} to="/hosting" color="red.500">VPS Dashboard</Link>.
                     </Text>
-                  </VStack>
-                </Box>
-              </GridItem>
-              <GridItem>
-                <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
-                  <VStack align="start" spacing={3}>
-                    <Heading size="xs">HTTPs API Usage</Heading> {/* Changed size from "sm" to "xs" */}
-                    <Text fontSize="3xl" fontWeight="bold">Total Requests: {totalRequests.toLocaleString()}</Text> {/* Increased fontSize from "2xl" to "3xl" */}
-                    <Text fontSize="3xl" fontWeight="bold">Data Transferred: {totalDataGB} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
                   </VStack>
                 </Box>
               </GridItem>
