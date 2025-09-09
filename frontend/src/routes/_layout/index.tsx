@@ -437,8 +437,9 @@ const HomePage = () => {
                     fontWeight="medium"
                     justifyContent="flex-start"
                   >
-                    Billing Portal
+                    Stripe Billing Portal
                   </Button>
+                  
                   <Link href="https://docs.THEDATAPROXY.com" isExternal display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                     <Icon as={FaBook} mr={2} /> Documentation
                   </Link>
