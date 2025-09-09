@@ -11,23 +11,20 @@ import {
   MenuList,
   MenuItem,
   VStack,
-} from "@chakra-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { Link as RouterLink, useRouterState } from "@tanstack/react-router";
-import {
-  FiLogOut,
-  FiMenu,
-  FiUsers,
-  FiUserCheck,
-  FiSettings,
-} from "react-icons/fi";
-import { FaGlobe, FaSitemap, FaServer } from "react-icons/fa";
-import { useEffect, useRef } from "react";
-import { CSSProperties } from "react";
+  useColorMode,
+  Collapse,
+} from '@chakra-ui/react';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { useQueryClient } from '@tanstack/react-query';
+import { Link as RouterLink, useRouterState } from '@tanstack/react-router';
+import { FiLogOut, FiUsers, FiUserCheck, FiSettings } from 'react-icons/fi';
+import { FaGlobe, FaSitemap, FaServer } from 'react-icons/fa';
+import { useEffect, useRef } from 'react';
+import { CSSProperties } from 'react';
 
-import Logo from "../Common/Logo";
-import type { UserPublic } from "../../client";
-import useAuth from "../../hooks/useAuth";
+import Logo from '../Common/Logo';
+import type { UserPublic } from '../../client';
+import useAuth from '../../hooks/useAuth';
 
 interface NavItem {
   title: string;
@@ -50,31 +47,25 @@ interface NavItemsProps {
   isMobile?: boolean;
 }
 
-const navStructure: NavItem[] = [
-  {
-    title: "User Agents",
-    path: "/web-scraping-tools/user-agents",
+const navStructure: NavItem[] = [ {
+        title: 'HTTPS API',
+        path: '/web-scraping-tools/https-api',
+        description: 'Access any webpage with our powerful rotating proxy network.',
+      },
+      {
+        title: 'Managed VPS',
+        path: 'https://cloud.thedataproxy.com/hosting',
+        description: 'Fully managed virtual private servers for your needs.',
+      },
+        {
+    title: 'User Agents',
+    path: '/web-scraping-tools/user-agents',
     icon: FiUserCheck,
-  },
+  }, 
   {
-    title: "Web Scraping APIs",
-    subItems: [
-      {
-        title: "HTTPS API",
-        path: "/web-scraping-tools/https-api",
-        description: "Access any webpage with our powerful rotating proxy network.",
-      },
-    ],
-  },
-  {
-    title: "Hosting",
-    subItems: [
-      {
-        title: "Managed VPS",
-        path: "https://cloud.thedataproxy.com/hosting/billing",
-        description: "Fully managed virtual private servers for your needs.",
-      },
-    ],
+    title: 'Billing',
+    path: '/hosting/billing',
+    icon: FaServer,
   },
 ];
 
@@ -106,13 +97,13 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
 
   const hoverStyles: CSSProperties = {
     color: hoverColor,
-    background: "gray.100",
-    textDecoration: "none",
+    background: 'gray.100',
+    textDecoration: 'none',
   };
 
   const activeStyles: CSSProperties = {
     color: activeTextColor,
-    background: "orange.100",
+    background: 'orange.100',
   };
 
   return (
@@ -122,7 +113,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           as={Flex}
           px={4}
           py={2}
-          alignItems="center" // Ensure all items are vertically centered
+          alignItems="center"
           cursor="pointer"
           color={isGroupActive ? activeTextColor : textColor}
           _hover={hoverStyles}
@@ -150,7 +141,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
               onClick={onClose}
               borderRadius="md"
               p={3}
-              _hover={{ background: "orange.50" }}
+              _hover={{ background: 'orange.50' }}
               activeProps={{ style: activeStyles }}
               aria-label={subItem.title}
             >
@@ -170,11 +161,11 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
 
 const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   const queryClient = useQueryClient();
-  const textColor = "gray.800";
-  const disabledColor = "gray.300";
-  const hoverColor = "orange.600";
-  const activeTextColor = "orange.800";
-  const currentUser = queryClient.getQueryData<UserPublic>(["currentUser"]);
+  const textColor = 'gray.800';
+  const disabledColor = 'gray.300';
+  const hoverColor = 'orange.600';
+  const activeTextColor = 'orange.800';
+  const currentUser = queryClient.getQueryData<UserPublic>(['currentUser']);
   const { logout } = useAuth();
 
   const handleLogout = async () => {
@@ -185,50 +176,51 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   const finalNavStructure: NavItem[] = [...navStructure];
   if (
     currentUser?.is_superuser &&
-    !finalNavStructure.some((item) => item.title === "Admin")
+    !finalNavStructure.some((item) => item.title === 'Admin')
   ) {
-    finalNavStructure.push({ title: "Admin", icon: FiUsers, path: "/admin" });
+    finalNavStructure.push({ title: 'Admin', icon: FiUsers, path: '/admin' });
   }
 
   if (currentUser) {
     finalNavStructure.push({
-      title: "Settings",
+      title: 'Settings',
       icon: FiSettings,
-      path: "/settings",
+      path: '/settings',
     });
   }
 
   finalNavStructure.push({
-    title: "Sign Out",
+    title: 'Sign Out',
     icon: FiLogOut,
     onClick: handleLogout,
   });
 
   const isEnabled = (title: string) => {
     return [
-      "Admin",
-      "HTTPS API",
-      "SERP API",
-      "User Agents",
-      "Settings",
-      "Sign Out",
-      "Managed VPS",
+      'Admin',
+      'HTTPS API',
+      'SERP API',
+      'User Agents',
+      'Settings',
+      'Sign Out',
+      'Managed VPS',
+      'Billing',
     ].includes(title);
   };
 
   const hoverStyles: CSSProperties = {
     color: hoverColor,
-    background: "gray.100",
-    textDecoration: "none",
+    background: 'gray.100',
+    textDecoration: 'none',
   };
 
   const activeStyles: CSSProperties = {
     color: activeTextColor,
-    background: "orange.100",
+    background: 'orange.100',
   };
 
   const disabledHoverStyles: CSSProperties = {
-    background: "gray.100",
+    background: 'gray.100',
   };
 
   const renderNavItems = (items: NavItem[]) =>
@@ -256,7 +248,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               py={2}
               color={textColor}
               align="center"
-              _hover={{ color: hoverColor, background: "gray.100" }}
+              _hover={{ color: hoverColor, background: 'gray.100' }}
               borderRadius="md"
               transition="all 0.2s"
             >
@@ -294,7 +286,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
           <Tooltip
             key={title}
             label="Coming Soon"
-            placement={isMobile ? "right" : "bottom"}
+            placement={isMobile ? 'right' : 'bottom'}
           >
             <Flex
               px={4}
@@ -328,7 +320,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             activeProps={{ style: activeStyles }}
             align="center"
             onClick={onClose}
-            w={isMobile ? "100%" : "auto"}
+            w={isMobile ? '100%' : 'auto'}
             borderRadius="md"
             transition="all 0.2s"
             aria-label={title}
@@ -351,7 +343,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               if (onClick) onClick();
               if (onClose) onClose();
             }}
-            w={isMobile ? "100%" : "auto"}
+            w={isMobile ? '100%' : 'auto'}
             borderRadius="md"
             transition="all 0.2s"
             aria-label={title}
@@ -367,8 +359,8 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
     <Flex
       align="center"
       gap={isMobile ? 2 : 4}
-      flexDir={isMobile ? "column" : "row"}
-      w={isMobile ? "100%" : "auto"}
+      flexDir={isMobile ? 'column' : 'row'}
+      w={isMobile ? '100%' : 'auto'}
     >
       {renderNavItems(finalNavStructure)}
     </Flex>
@@ -376,15 +368,16 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
 };
 
 const TopNav = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const textColor = "gray.800";
-  const hoverColor = "orange.600";
-  const activeTextColor = "orange.800";
+  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const { colorMode } = useColorMode();
+  const textColor = 'gray.800';
+  const hoverColor = 'orange.600';
+  const activeTextColor = 'orange.800';
   const btnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <Box
-      bg="gray.50"
+      bg={colorMode === 'light' ? 'gray.50' : 'gray.800'}
       px={4}
       py={2}
       position="sticky"
@@ -393,44 +386,35 @@ const TopNav = () => {
       boxShadow="sm"
       w="100%"
       borderBottomWidth="1px"
-      borderBottomColor="gray.300"
+      borderBottomColor={colorMode === 'light' ? 'gray.300' : 'gray.600'}
     >
-      <Flex align="center" justify="space-between" maxW="1200px" mx="auto">
-        <Logo />
-
-        <IconButton
-          ref={btnRef}
-          onClick={isOpen ? onClose : onOpen}
-          display={{ base: "flex", md: "none" }}
-          aria-label="Toggle Menu"
-          fontSize="20px"
-          color="orange.600"
-          icon={<FiMenu />}
-          variant="ghost"
+      <Flex align="center" maxW="1200px" mx="auto" w="100%" justify="space-between">
+        <Logo
+          src="/assets/images/roaming-proxy-network-logo.png"
+          alt="Roaming Proxy Logo"
+          to="/"
+          width={{ base: '80px', md: '110px' }}
         />
-
-        <Flex align="center" gap={4} display={{ base: "none", md: "flex" }}>
-          <NavItems />
+        <Flex align="center" gap={4}>
+          <Box display={{ base: 'none', md: 'block' }}>
+            <NavItems />
+          </Box>
+          <IconButton
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            display={{ base: 'block', md: 'none' }}
+            onClick={onToggle}
+            variant="ghost"
+            size="lg"
+            ref={btnRef}
+          />
         </Flex>
       </Flex>
-
-      <Box
-        display={{ base: isOpen ? "block" : "none", md: "none" }}
-        position="absolute"
-        top="100%"
-        left={0}
-        right={0}
-        bg="white"
-        boxShadow="md"
-        p={4}
-        maxH="80vh"
-        overflowY="auto"
-        transition="all 0.3s"
-      >
-        <Flex flexDir="column" gap={4}>
-          <NavItems onClose={onClose} isMobile={true} />
-        </Flex>
-      </Box>
+      <Collapse in={isOpen} animateOpacity>
+        <Box display={{ base: 'block', md: 'none' }} mt={4}>
+          <NavItems isMobile onClose={onClose} />
+        </Box>
+      </Collapse>
     </Box>
   );
 };
