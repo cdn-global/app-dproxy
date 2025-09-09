@@ -1,4 +1,3 @@
-// src/routes/_layout/hosting/$deviceName.tsx
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import {
   Box,
@@ -8,10 +7,17 @@ import {
   Button,
   VStack,
   Heading,
+  SimpleGrid,
+  Badge,
+  IconButton,
+  useToast,
+  HStack,
 } from "@chakra-ui/react";
+import { CopyIcon } from "@chakra-ui/icons";
 
-// Hardcoded devices
-interface Device {
+
+// Hardcoded servers with pricing
+interface Server {
   name: string;
   email: string;
   ip: string;
@@ -22,12 +28,18 @@ interface Device {
   os: string;
   username: string;
   password: string;
+  monthlyComputePrice: number;
+  storageSizeGB: number;
+  activeSince: string; // YYYY-MM-DD
+  hasRotatingIP?: boolean;
+  hasBackup?: boolean;
+  hasMonitoring?: boolean;
 }
 
-const devices: Device[] = [
+const servers: Server[] = [
   {
-    name: "riv1-nyc-mini5",
-    email: "nik@popov.cloud",
+    name: "e-coast-nyc-lower-4core-ssd",
+    email: "apis.popov@gmail.com",
     ip: "100.100.95.59",
     version: "1.82.0",
     kernel: "Linux 6.8.0-57-generic",
@@ -36,10 +48,16 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
+    monthlyComputePrice: 43.60,
+    storageSizeGB: 120,
+    activeSince: "2025-07-01",
+    hasRotatingIP: false,
+    hasBackup: true,
+    hasMonitoring: true,
   },
   {
-    name: "riv2-nyc-mini5",
-    email: "nik@popov.cloud",
+    name: "e-coast-nyc-midtown-8core-ssd",
+    email: "apis.popov@gmail.com",
     ip: "100.114.242.51",
     version: "1.86.2",
     kernel: "Linux 6.8.0-57-generic",
@@ -48,10 +66,16 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
+    monthlyComputePrice: 87.60,
+    storageSizeGB: 240,
+    activeSince: "2025-07-01",
+    hasRotatingIP: true,
+    hasBackup: false,
+    hasMonitoring: false,
   },
   {
-    name: "riv3-nyc-mini6",
-    email: "nik@popov.cloud",
+    name: "e-coast-nyc-bk-8core-ssd",
+    email: "apis.popov@gmail.com",
     ip: "100.91.158.116",
     version: "1.82.5",
     kernel: "Linux 6.8.0-59-generic",
@@ -60,10 +84,16 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
+    monthlyComputePrice: 100.60,
+    storageSizeGB: 240,
+    activeSince: "2025-08-01",
+    hasRotatingIP: true,
+    hasBackup: true,
+    hasMonitoring: true,
   },
   {
-    name: "riv4-nyc-mini5",
-    email: "nik@popov.cloud",
+    name: "e-coast-nyc-lower-4core-hdd",
+    email: "apis.popov@gmail.com",
     ip: "100.100.106.3",
     version: "1.80.2",
     kernel: "Linux 6.8.0-55-generic",
@@ -72,67 +102,257 @@ const devices: Device[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
+    monthlyComputePrice: 60.60,
+    storageSizeGB: 120,
+    activeSince: "2025-09-01",
+    hasRotatingIP: false,
+    hasBackup: false,
+    hasMonitoring: false,
+  },
+  {
+    name: "e-coast-nyc-midtown-16core-ssd",
+    email: "apis.popov@gmail.com",
+    ip: "100.120.30.40",
+    version: "1.85.0",
+    kernel: "Linux 6.8.0-60-generic",
+    status: "Connected",
+    type: "VPS",
+    os: "ubuntu",
+    username: "user",
+    password: "5660",
+    monthlyComputePrice: 136.60,
+    storageSizeGB: 500,
+    activeSince: "2025-08-01",
+    hasRotatingIP: true,
+    hasBackup: true,
+    hasMonitoring: true,
+  },
+  {
+    name: "e-coast-nyc-bk-2core-ssd",
+    email: "apis.popov@gmail.com",
+    ip: "100.130.40.50",
+    version: "1.87.0",
+    kernel: "Linux 6.8.0-61-generic",
+    status: "Connected",
+    type: "VPS",
+    os: "ubuntu",
+    username: "user",
+    password: "5660",
+    monthlyComputePrice: 63.60,
+    storageSizeGB: 200,
+    activeSince: "2025-09-01",
+    hasRotatingIP: true,
+    hasBackup: false,
+    hasMonitoring: false,
   },
 ];
-
 function DeviceDetailsPage() {
   const { deviceName } = useParams({ from: "/_layout/hosting/$deviceName" });
-  const device = devices.find((d) => d.name === deviceName);
+  const server = servers.find((s) => s.name === deviceName);
+  const toast = useToast();
 
-  if (!device) {
-    return <Text>Device not found</Text>;
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: `${label} copied!`,
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+  };
+
+  if (!server) {
+    return (
+      <Container maxW="container.xl" py={8}>
+        <Text fontSize="xl" color="red.500">Server not found</Text>
+      </Container>
+    );
   }
 
+  const statusColor = server.status === "Connected" ? "green" : "red";
+
   return (
-    <Container maxW="full" py={9}>
-      <Flex align="center" justify="space-between" py={6}>
-        <Heading size="xl">Device Details: {device.name}</Heading>
-        <Button as={Link} to="..">Back to List</Button>
+    <Container maxW="container.xl" py={8}>
+      <Flex align="center" justify="space-between" mb={6}>
+        <HStack>
+          <Heading size="lg">Server: {server.name}</Heading>
+          <Badge colorScheme={statusColor} fontSize="md" px={2} py={1}>
+            {server.status}
+          </Badge>
+        </HStack>
+        <Button
+          as={Link}
+          to=".."
+          colorScheme="blue"
+          variant="outline"
+          size="md"
+          _hover={{ bg: "blue.50" }}
+        >
+          Back to List
+        </Button>
       </Flex>
-      <Box borderWidth="1px" borderRadius="lg" p={4} bg="gray.50">
-        <VStack align="stretch" spacing={2}>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Name:</Text>
-            <Text>{device.name}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Email:</Text>
-            <Text>{device.email}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">IP:</Text>
-            <Text>{device.ip}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Version:</Text>
-            <Text>{device.version}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Kernel:</Text>
-            <Text>{device.kernel}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Status:</Text>
-            <Text>{device.status}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Type:</Text>
-            <Text>{device.type}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">OS:</Text>
-            <Text>{device.os}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Username:</Text>
-            <Text>{device.username}</Text>
-          </Flex>
-          <Flex justify="space-between">
-            <Text fontWeight="bold">Password:</Text>
-            <Text>{device.password}</Text>
-          </Flex>
-        </VStack>
-      </Box>
+
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+        {/* Basic Information */}
+        <Box
+          bg="white"
+          p={6}
+          borderRadius="lg"
+          boxShadow="sm"
+          borderWidth="1px"
+        >
+          <Heading size="md" mb={4}>Basic Information</Heading>
+          <VStack align="stretch" spacing={3}>
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium">Name:</Text>
+              <Text>{server.name}</Text>
+            </Flex>
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium">Email:</Text>
+              <HStack>
+                <Text>{server.email}</Text>
+                <IconButton
+                  aria-label="Copy email"
+                  icon={<CopyIcon />}
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => copyToClipboard(server.email, "Email")}
+                />
+              </HStack>
+            </Flex>
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium">IP:</Text>
+              <HStack>
+                <Text>{server.ip}</Text>
+                <IconButton
+                  aria-label="Copy IP"
+                  icon={<CopyIcon />}
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => copyToClipboard(server.ip, "IP")}
+                />
+              </HStack>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Type:</Text>
+              <Text>{server.type}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">OS:</Text>
+              <Text>{server.os}</Text>
+            </Flex>
+          </VStack>
+        </Box>
+
+        {/* System Specifications */}
+        <Box
+          bg="white"
+          p={6}
+          borderRadius="lg"
+          boxShadow="sm"
+          borderWidth="1px"
+        >
+          <Heading size="md" mb={4}>System Specifications</Heading>
+          <VStack align="stretch" spacing={3}>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Version:</Text>
+              <Text>{server.version}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Kernel:</Text>
+              <Text>{server.kernel}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">vCPUs:</Text>
+              <Text>{server.vCPUs ?? "N/A"}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">RAM:</Text>
+              <Text>{server.ramGB ? `${server.ramGB} GB` : "N/A"}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Storage Size:</Text>
+              <Text>{server.storageSizeGB} GB</Text>
+            </Flex>
+          </VStack>
+        </Box>
+
+        {/* Credentials */}
+        <Box
+          bg="white"
+          p={6}
+          borderRadius="lg"
+          boxShadow="sm"
+          borderWidth="1px"
+        >
+          <Heading size="md" mb={4}>Credentials</Heading>
+          <VStack align="stretch" spacing={3}>
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium">Username:</Text>
+              <HStack>
+                <Text>{server.username}</Text>
+                <IconButton
+                  aria-label="Copy username"
+                  icon={<CopyIcon />}
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => copyToClipboard(server.username, "Username")}
+                />
+              </HStack>
+            </Flex>
+            <Flex justify="space-between" align="center">
+              <Text fontWeight="medium">Password:</Text>
+              <HStack>
+                <Text>{server.password}</Text>
+                <IconButton
+                  aria-label="Copy password"
+                  icon={<CopyIcon />}
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => copyToClipboard(server.password, "Password")}
+                />
+              </HStack>
+            </Flex>
+          </VStack>
+        </Box>
+
+        {/* Billing & Features */}
+        <Box
+          bg="white"
+          p={6}
+          borderRadius="lg"
+          boxShadow="sm"
+          borderWidth="1px"
+        >
+          <Heading size="md" mb={4}>Billing & Features</Heading>
+          <VStack align="stretch" spacing={3}>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Monthly Compute Price:</Text>
+              <Text>${server.monthlyComputePrice.toFixed(2)}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Active Since:</Text>
+              <Text>{server.activeSince}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Rotating IP:</Text>
+              <Text>{server.hasRotatingIP ? "Yes" : "No"}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Backup:</Text>
+              <Text>{server.hasBackup ? "Yes" : "No"}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Monitoring:</Text>
+              <Text>{server.hasMonitoring ? "Yes" : "No"}</Text>
+            </Flex>
+            <Flex justify="space-between">
+              <Text fontWeight="medium">Managed Support:</Text>
+              <Text>{server.hasManagedSupport ? "Yes" : "No"}</Text>
+            </Flex>
+          </VStack>
+        </Box>
+      </SimpleGrid>
     </Container>
   );
 }
