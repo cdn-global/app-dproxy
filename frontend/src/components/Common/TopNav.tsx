@@ -48,12 +48,12 @@ interface NavItemsProps {
 }
 
 const navStructure: NavItem[] = [ {
-        title: 'HTTPS API',
+        title: 'HTTPs API',
         path: '/web-scraping-tools/https-api',
         description: 'Access any webpage with our powerful rotating proxy network.',
       },
       {
-        title: 'Managed VPS',
+        title: 'VPS',
         path: 'https://cloud.thedataproxy.com/hosting',
         description: 'Fully managed virtual private servers for your needs.',
       },
