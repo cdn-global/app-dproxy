@@ -15,8 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 
-
-// Hardcoded servers with pricing
 interface Server {
   name: string;
   email: string;
@@ -30,10 +28,13 @@ interface Server {
   password: string;
   monthlyComputePrice: number;
   storageSizeGB: number;
-  activeSince: string; // YYYY-MM-DD
-  hasRotatingIP?: boolean;
-  hasBackup?: boolean;
-  hasMonitoring?: boolean;
+  activeSince: string;
+  hasRotatingIP: boolean;
+  hasBackup: boolean;
+  hasMonitoring: boolean;
+  hasManagedSupport?: boolean;
+  vCPUs?: number;
+  ramGB: number;
 }
 
 const servers: Server[] = [
@@ -54,6 +55,7 @@ const servers: Server[] = [
     hasRotatingIP: false,
     hasBackup: true,
     hasMonitoring: true,
+    ramGB: 4,
   },
   {
     name: "e-coast-nyc-midtown-8core-ssd",
@@ -72,6 +74,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: false,
     hasMonitoring: false,
+    ramGB: 16,
   },
   {
     name: "e-coast-nyc-bk-8core-ssd",
@@ -90,6 +93,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: true,
     hasMonitoring: true,
+    ramGB: 16,
   },
   {
     name: "e-coast-nyc-lower-4core-hdd",
@@ -108,6 +112,7 @@ const servers: Server[] = [
     hasRotatingIP: false,
     hasBackup: false,
     hasMonitoring: false,
+    ramGB: 4,
   },
   {
     name: "e-coast-nyc-midtown-16core-ssd",
@@ -126,6 +131,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: true,
     hasMonitoring: true,
+    ramGB: 64,
   },
   {
     name: "e-coast-nyc-bk-2core-ssd",
@@ -144,6 +150,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: false,
     hasMonitoring: false,
+    ramGB: 8,
   },
 ];
 
@@ -269,7 +276,7 @@ function DeviceDetailsPage() {
             </Flex>
             <Flex justify="space-between">
               <Text fontWeight="medium">RAM:</Text>
-              <Text>{server.ramGB ? `${server.ramGB} GB` : "N/A"}</Text>
+              <Text>{server.ramGB} GB</Text>
             </Flex>
             <Flex justify="space-between">
               <Text fontWeight="medium">Storage Size:</Text>
@@ -349,7 +356,7 @@ function DeviceDetailsPage() {
             </Flex>
             <Flex justify="space-between">
               <Text fontWeight="medium">Managed Support:</Text>
-              <Text>{server.hasManagedSupport ? "Yes" : "No"}</Text>
+              <Text>{server.hasManagedSupport ?? "N/A"}</Text>
             </Flex>
           </VStack>
         </Box>
