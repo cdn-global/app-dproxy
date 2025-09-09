@@ -336,7 +336,7 @@ const HomePage = () => {
                     <Text fontSize="3xl" fontWeight="bold">Total RAM: {totalRAM} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
                     <Text fontSize="3xl" fontWeight="bold">Total Storage: {totalStorage} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
                     <Text fontSize="sm" color="gray.600">
-                      Note: Detailed VPS settings available in the <Link as={RouterLink} to="/hosting" color="red.500">VPS Dashboard</Link>.
+                      Note: Detailed VPS settings available in the <Link as={RouterLink} to="/hosting" color="orange.500">VPS Dashboard</Link>.
                     </Text>
                   </VStack>
                 </Box>
@@ -382,7 +382,7 @@ const HomePage = () => {
                       <Badge colorScheme={details.isActive ? "green" : "red"}>
                         {details.isActive ? "Active" : "Inactive"}
                       </Badge>
-                      <Icon as={details.icon} boxSize={8} color="red.400" />
+                      <Icon as={details.icon} boxSize={8} color="orange.400" />
                     </Flex>
                   </Flex>
                   <Text fontSize="sm" color="gray.600" minHeight={{ base: "auto", md: "60px" }}>
@@ -394,7 +394,7 @@ const HomePage = () => {
                     </Text>
                   )}
                 </Box>
-                <Text mt={4} color="red.500" fontWeight="bold" fontSize="sm" alignSelf="flex-start">
+                <Text mt={4} color="orange.500" fontWeight="bold" fontSize="sm" alignSelf="flex-start">
                   Go to Service →
                 </Text>
               </Box>
@@ -410,7 +410,7 @@ const HomePage = () => {
               <Heading size="md">Quick Links</Heading>
               <Box p={5} shadow="md" borderWidth="1px" borderRadius="lg">
                 <VStack align="start" spacing={3}>
-                  <Link as={RouterLink} to="/settings" display="flex" alignItems="center" color="red.500" fontWeight="medium">
+                  <Link as={RouterLink} to="/settings" display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                     <Icon as={FaKey} mr={2} /> Manage API Keys
                   </Link>
                   <Button
@@ -424,7 +424,7 @@ const HomePage = () => {
                   >
                     Billing Portal
                   </Button>
-                  <Link href="https://docs.THEDATAPROXY.com" isExternal display="flex" alignItems="center" color="red.500" fontWeight="medium">
+                  <Link href="https://docs.THEDATAPROXY.com" isExternal display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                     <Icon as={FaBook} mr={2} /> Documentation
                   </Link>
                 </VStack>

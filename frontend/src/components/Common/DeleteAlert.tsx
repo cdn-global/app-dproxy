@@ -52,7 +52,7 @@ const Delete = ({ type, id, isOpen, onClose }: DeleteProps) => {
     },
     onError: () => {
       showToast(
-        "An error occurred.",
+        "An error occurorange.",
         `An error occurred while deleting the ${type.toLowerCase()}.`,
         "error",
       )

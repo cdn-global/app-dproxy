@@ -112,7 +112,7 @@ const ProtectedComponent: React.FC<{ children: React.ReactNode }> = ({
     if (isUnauthorizedError) {
       return (
         <VStack spacing={4}>
-          <Text color="red.500">Your session has expired. Please log in again.</Text>
+          <Text color="orange.500">Your session has expiorange. Please log in again.</Text>
           <Button colorScheme="blue" onClick={() => navigate({ to: "/login" })}>
             Log In
           </Button>
@@ -123,7 +123,7 @@ const ProtectedComponent: React.FC<{ children: React.ReactNode }> = ({
     // Handle other errors with a timed logout
     return (
       <VStack spacing={4}>
-        <Text color="red.500">
+        <Text color="orange.500">
           An error occurred while loading your subscription status.
         </Text>
         <Text>You will be logged out in 30 seconds to clear your session.</Text>
@@ -138,7 +138,7 @@ const ProtectedComponent: React.FC<{ children: React.ReactNode }> = ({
   if (!subscriptionStatus) {
     return (
       <VStack spacing={4}>
-        <Text color="red.500">
+        <Text color="orange.500">
           Unable to load subscription status. Please try again.
         </Text>
         <Button colorScheme="blue" onClick={() => window.location.reload()}>
@@ -168,7 +168,7 @@ const ProtectedComponent: React.FC<{ children: React.ReactNode }> = ({
         align="center"
         w="full"
         p={4}
-        bg="red.50"
+        bg="orange.50"
         borderRadius="md"
       >
         <Text color="gray.800">Your tools have been deactivated.</Text>

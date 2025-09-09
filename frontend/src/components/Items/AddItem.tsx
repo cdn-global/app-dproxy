@@ -79,7 +79,7 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
               <Input
                 id="title"
                 {...register("title", {
-                  required: "Title is required.",
+                  required: "Title is requiorange.",
                 })}
                 placeholder="Title"
                 type="text"

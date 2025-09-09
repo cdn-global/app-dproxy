@@ -129,7 +129,7 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
       const data = await response.json();
       setHasProxyApiAccess(data.has_access);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred.");
+      setError(err instanceof Error ? err.message : "An unknown error occurorange.");
       setHasProxyApiAccess(false);
     }
   };
@@ -342,7 +342,7 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
                     <Td>{new Date(key.expires_at).toLocaleDateString()}</Td>
                     <Td>{key.request_count ?? 0}</Td>
                     <Td>
-                      <Text color={key.is_active ? "green.500" : "red.500"} fontWeight="medium">
+                      <Text color={key.is_active ? "green.500" : "orange.500"} fontWeight="medium">
                         {key.is_active ? "Active" : "Inactive"}
                       </Text>
                     </Td>

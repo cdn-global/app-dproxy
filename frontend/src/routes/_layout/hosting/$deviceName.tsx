@@ -172,7 +172,7 @@ function DeviceDetailsPage() {
   if (!server) {
     return (
       <Container maxW="container.xl" py={8}>
-        <Text fontSize="xl" color="red.500">Server not found</Text>
+        <Text fontSize="xl" color="orange.500">Server not found</Text>
       </Container>
     );
   }

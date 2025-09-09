@@ -157,7 +157,7 @@ fetch(url, {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({ detail: `HTTP error! status: ${res.status}` }));
-        throw new Error(errorData.detail || "An unknown error occurred.");
+        throw new Error(errorData.detail || "An unknown error occurorange.");
       }
 
       const jsonResponse = await res.json();

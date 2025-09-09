@@ -115,10 +115,10 @@ const theme = extendTheme({
       variants: {
         error: {
           container: {
-            bg: "red.100", // Light red for error
-            color: "red.900",
+            bg: "orange.100", // Light red for error
+            color: "orange.900",
             border: "1px solid",
-            borderColor: "red.300",
+            borderColor: "orange.300",
           },
         },
         success: {

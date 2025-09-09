@@ -174,11 +174,11 @@ const UserMenu = () => {
               </MenuItem>
             )}
             <MenuItem
-              icon={<FiLogOut fontSize="18px" color="red.500" />}
+              icon={<FiLogOut fontSize="18px" color="orange.500" />}
               onClick={handleLogout}
-              color="red.500"
+              color="orange.500"
               fontWeight="bold"
-              _hover={{ bg: "red.100" }}
+              _hover={{ bg: "orange.100" }}
               data-testid="logout-menu-item"
             >
               Log out
@@ -235,11 +235,11 @@ const UserMenu = () => {
               </MenuItem>
             )}
             <MenuItem
-              icon={<FiLogOut fontSize="16px" color="red.500" />}
+              icon={<FiLogOut fontSize="16px" color="orange.500" />}
               onClick={handleLogout}
-              color="red.500"
+              color="orange.500"
               fontWeight="bold"
-              _hover={{ bg: "red.100" }}
+              _hover={{ bg: "orange.100" }}
               data-testid="logout-menu-item-mobile"
             >
               Log out

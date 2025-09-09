@@ -10,8 +10,8 @@ import { FiPhone, FiMail, FiTwitter, FiGithub, FiGlobe, FiBook } from "react-ico
 
 const Footer = () => {
     const textColor = "gray.800";
-    const accentColor = "red.400";
-    const hoverColor = "red.600";
+    const accentColor = "orange.400";
+    const hoverColor = "orange.600";
 
     return (
         <Box bg="white" py={3} px={4} boxShadow="sm" w="100%">
