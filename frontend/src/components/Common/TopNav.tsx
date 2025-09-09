@@ -390,9 +390,7 @@ const TopNav = () => {
     >
       <Flex align="center" maxW="1200px" mx="auto" w="100%" justify="space-between">
         <Logo
-          src="/assets/images/roaming-proxy-network-logo.png"
-          alt="Roaming Proxy Logo"
-          to="/"
+          href="/"
           width={{ base: '80px', md: '110px' }}
         />
         <Flex align="center" gap={4}>
