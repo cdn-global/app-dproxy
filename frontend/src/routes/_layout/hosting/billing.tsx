@@ -53,7 +53,7 @@ interface Server {
 
 const servers: Server[] = [
   {
-    name: "riv1-nyc-mini5",
+    name: "e-coast-nyc-lower-4core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.100.95.59",
     version: "1.82.0",
@@ -63,7 +63,7 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 15,
+    monthlyComputePrice: 43.60,
     storageSizeGB: 120,
     activeSince: "2025-07-01",
     hasRotatingIP: false,
@@ -71,7 +71,7 @@ const servers: Server[] = [
     hasMonitoring: true,
   },
   {
-    name: "riv2-nyc-mini5",
+    name: "e-coast-nyc-midtown-8core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.114.242.51",
     version: "1.86.2",
@@ -81,7 +81,7 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 50,
+    monthlyComputePrice: 87.60,
     storageSizeGB: 240,
     activeSince: "2025-07-01",
     hasRotatingIP: true,
@@ -89,7 +89,7 @@ const servers: Server[] = [
     hasMonitoring: false,
   },
   {
-    name: "riv3-nyc-mini6",
+    name: "e-coast-nyc-bk-8core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.91.158.116",
     version: "1.82.5",
@@ -99,7 +99,7 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 50,
+    monthlyComputePrice: 100.60,
     storageSizeGB: 240,
     activeSince: "2025-08-01",
     hasRotatingIP: true,
@@ -107,7 +107,7 @@ const servers: Server[] = [
     hasMonitoring: true,
   },
   {
-    name: "riv4-nyc-mini5",
+    name: "e-coast-nyc-lower-4core-hdd",
     email: "apis.popov@gmail.com",
     ip: "100.100.106.3",
     version: "1.80.2",
@@ -117,7 +117,7 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 45,
+    monthlyComputePrice: 60.60,
     storageSizeGB: 120,
     activeSince: "2025-09-01",
     hasRotatingIP: false,
@@ -125,7 +125,7 @@ const servers: Server[] = [
     hasMonitoring: false,
   },
   {
-    name: "riv5-nyc-mini7",
+    name: "e-coast-nyc-midtown-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.120.30.40",
     version: "1.85.0",
@@ -135,7 +135,7 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 60,
+    monthlyComputePrice: 136.60,
     storageSizeGB: 500,
     activeSince: "2025-08-01",
     hasRotatingIP: true,
@@ -143,7 +143,7 @@ const servers: Server[] = [
     hasMonitoring: true,
   },
   {
-    name: "riv6-nyc-mini8",
+    name: "e-coast-nyc-bk-2core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.130.40.50",
     version: "1.87.0",
@@ -153,7 +153,7 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 30,
+    monthlyComputePrice: 63.60,
     storageSizeGB: 200,
     activeSince: "2025-09-01",
     hasRotatingIP: true,
@@ -269,7 +269,7 @@ function PaymentDetailsTab() {
   const cardExp = "12/2026";
   const billingAddress = {
     name: "Nik Popov",
-    email: "nik@iconluxurygroup.com",
+    email: "apis.popov",
     line1: "599 Broadway, floor 3",
     city: "New York",
     state: "NY",
@@ -338,12 +338,12 @@ function BillingPage() {
       paymentMethod: "American Express •••• 3007",
     },
     {
-    month: months[1], // September 2025
-    total: 246.30,
-    invoiceId: "02A67775-0009",
-    paymentDate: "September 5, 2025",
-    paymentMethod: "American Express •••• 3007",
-  },
+      month: months[1], // September 2025
+      total: 246.30,
+      invoiceId: "02A67775-0009",
+      paymentDate: "September 5, 2025",
+      paymentMethod: "American Express •••• 3007",
+    },
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
