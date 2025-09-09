@@ -3,7 +3,8 @@ import { Container, Flex, Text, Box, Heading, Alert, AlertIcon, Grid, GridItem, 
 import { useMemo, useState } from "react";
 import ProtectedComponent from "../../components/Common/ProtectedComponent";
 import { useQuery } from "@tanstack/react-query";
-import { FaBook, FaKey, FaCreditCard, FaGlobe, FaSearch, FaServer } from 'react-icons/fa';
+import { FaBook, FaKey, FaGlobe, FaSearch, FaServer } from 'react-icons/fa';
+import { FiUserCheck } from 'react-icons/fi';
 
 const featureDetails = {
   'proxy-api': {
