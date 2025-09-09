@@ -27,7 +27,7 @@ interface Device {
 const devices: Device[] = [
   {
     name: "riv1-nyc-mini5",
-    email: "nik@iconluxurygroup.com",
+    email: "nik@popov.cloud",
     ip: "100.100.95.59",
     version: "1.82.0",
     kernel: "Linux 6.8.0-57-generic",
@@ -39,7 +39,7 @@ const devices: Device[] = [
   },
   {
     name: "riv2-nyc-mini5",
-    email: "nik@iconluxurygroup.com",
+    email: "nik@popov.cloud",
     ip: "100.114.242.51",
     version: "1.86.2",
     kernel: "Linux 6.8.0-57-generic",
@@ -51,7 +51,7 @@ const devices: Device[] = [
   },
   {
     name: "riv3-nyc-mini6",
-    email: "nik@iconluxurygroup.com",
+    email: "nik@popov.cloud",
     ip: "100.91.158.116",
     version: "1.82.5",
     kernel: "Linux 6.8.0-59-generic",
@@ -63,7 +63,7 @@ const devices: Device[] = [
   },
   {
     name: "riv4-nyc-mini5",
-    email: "nik@iconluxurygroup.com",
+    email: "nik@popov.cloud",
     ip: "100.100.106.3",
     version: "1.80.2",
     kernel: "Linux 6.8.0-55-generic",
