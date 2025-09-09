@@ -429,7 +429,7 @@ const HomePage = () => {
                   <Link as={RouterLink} to="/settings" display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                     <Icon as={FaKey} mr={2} /> Manage API Keys
                   </Link>
-                    <Link as={RouterLink} to="/web-scraping-tools/user-agentss" display="flex" alignItems="center" color="orange.500" fontWeight="medium">
+                    <Link as={RouterLink} to="/web-scraping-tools/user-agents" display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                     <Icon as={FiUserCheck} mr={2} /> Latest User Agents
                   </Link>
                   {/* <Button
