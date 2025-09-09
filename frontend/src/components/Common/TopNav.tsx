@@ -198,12 +198,12 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   const isEnabled = (title: string) => {
     return [
       'Admin',
-      'HTTPS API',
+      'HTTPs API',
       'SERP API',
       'User Agents',
       'Settings',
       'Sign Out',
-      'Managed VPS',
+      'VPS',
       'Billing',
     ].includes(title);
   };
