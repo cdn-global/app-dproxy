@@ -56,17 +56,17 @@ const navStructure: NavItem[] = [ {
         title: 'VPS',
         path: 'https://cloud.thedataproxy.com/hosting',
         description: 'Fully managed virtual private servers for your needs.',
-      },
-        {
-    title: 'User Agents',
-    path: '/web-scraping-tools/user-agents',
-    icon: FiUserCheck,
-  }, 
+      },     
   {
     title: 'Billing',
     path: '/hosting/billing',
     icon: FaServer,
   },
+  {
+    title: 'User Agents',
+    path: '/web-scraping-tools/user-agents',
+    icon: FiUserCheck,
+  }, 
 ];
 
 const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavGroupDropdownProps) => {
