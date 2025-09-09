@@ -31,7 +31,6 @@ import {
 import { FaCreditCard } from "react-icons/fa";
 import { useState } from "react";
 
-// Hardcoded servers with pricing
 interface Server {
   name: string;
   email: string;
@@ -45,10 +44,10 @@ interface Server {
   password: string;
   monthlyComputePrice: number;
   storageSizeGB: number;
-  activeSince: string; // YYYY-MM-DD
-  hasRotatingIP?: boolean;
-  hasBackup?: boolean;
-  hasMonitoring?: boolean;
+  activeSince: string;
+  hasRotatingIP: boolean;
+  hasBackup: boolean;
+  hasMonitoring: boolean;
 }
 
 const servers: Server[] = [
@@ -162,8 +161,8 @@ const servers: Server[] = [
   },
 ];
 
-const ELASTIC_IP_FEE_PER_MONTH = 3.6; // $0.005 per hour * 24 * 30 = $3.60 per IP per month
-const STORAGE_COST_PER_GB_MONTH = 0.10; // Approximate EBS gp2 cost: $0.10/GB-month
+const ELASTIC_IP_FEE_PER_MONTH = 3.6;
+const STORAGE_COST_PER_GB_MONTH = 0.10;
 const ROTATING_IP_FEE_PER_MONTH = 10.0;
 const BACKUP_FEE_PER_MONTH = 5.0;
 const MONITORING_FEE_PER_MONTH = 8.0;
@@ -189,6 +188,7 @@ interface Month {
 }
 
 const months: Month[] = [
+  { name: "July 2025", start: new Date(2025, 6, 1), end: new Date(2025, 6, 31) },
   { name: "August 2025", start: new Date(2025, 7, 1), end: new Date(2025, 7, 31) },
   { name: "September 2025", start: new Date(2025, 8, 1), end: new Date(2025, 8, 30) },
 ];
@@ -208,7 +208,6 @@ function calculateTotalsForMonth(month: Month) {
   return { totals, grandTotal, activeServers, perServerTotals };
 }
 
-// Helper function for fetching billing portal URL
 const fetchBillingPortal = async (token: string) => {
   const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
     method: "GET",
@@ -262,14 +261,13 @@ function PaymentDetailsTab() {
     }
   };
 
-  // Mock data for saved payment method and billing address
   const hasSavedCard = true;
   const cardLast4 = "3007";
   const cardBrand = "American Express";
   const cardExp = "12/2026";
   const billingAddress = {
     name: "Nik Popov",
-    email: "apis.popov",
+    email: "apis.popov@gmail.com",
     line1: "599 Broadway, floor 3",
     city: "New York",
     state: "NY",
@@ -324,22 +322,22 @@ function BillingPage() {
 
   const history = [
     {
-      month: months[0],
-      total: 246.40,
+      month: months[0], // July 2025
+      total: 197.40,
       invoiceId: "02A67775-0007",
-      paymentDate: "August 22, 2025",
+      paymentDate: "August 1, 2025",
       paymentMethod: "American Express •••• 3007",
     },
     {
-      month: months[0],
-      total: 122.00,
+      month: months[1], // August 2025
+      total: 561.80,
       invoiceId: "02A67775-0008",
-      paymentDate: "September 5, 2025",
+      paymentDate: "September 1, 2025",
       paymentMethod: "American Express •••• 3007",
     },
     {
-      month: months[1], // September 2025
-      total: 246.30,
+      month: months[2], // September 2025
+      total: 735.20,
       invoiceId: "02A67775-0009",
       paymentDate: "September 5, 2025",
       paymentMethod: "American Express •••• 3007",
@@ -347,7 +345,7 @@ function BillingPage() {
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
-  const averageMonthly = allTimeTotal / history.length; // Average over number of invoices
+  const averageMonthly = allTimeTotal / history.length;
   const previousMonthTotal = history.filter(({ month }) => month.name === "August 2025").reduce((sum, { total }) => sum + total, 0);
   const monthOverMonthChange = previousMonthTotal ? ((grandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
 
