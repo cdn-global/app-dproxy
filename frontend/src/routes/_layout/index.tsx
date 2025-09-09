@@ -325,16 +325,16 @@ const HomePage = () => {
             <Text fontSize="sm">No active subscriptions found. Please subscribe to access your dashboard.</Text>
           </Alert>
         ) : (
-          <VStack spacing={8} align="stretch" mt={6} pb={10}>
+        <VStack spacing={8} align="stretch" mt={6} pb={10}>
             {/* Row 1: Usage */}
             <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
               <GridItem>
                 <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
                   <VStack align="start" spacing={3}>
-                    <Heading size="sm">VPS Status</Heading>
-                    <Text fontSize="2xl" fontWeight="bold">Total vCPUs: {totalVCPUs}</Text>
-                    <Text fontSize="2xl" fontWeight="bold">Total RAM: {totalRAM} GB</Text>
-                    <Text fontSize="2xl" fontWeight="bold">Total Storage: {totalStorage} GB</Text>
+                    <Heading size="xs">VPS Status</Heading> {/* Changed size from "sm" to "xs" */}
+                    <Text fontSize="3xl" fontWeight="bold">Total vCPUs: {totalVCPUs}</Text> {/* Increased fontSize from "2xl" to "3xl" */}
+                    <Text fontSize="3xl" fontWeight="bold">Total RAM: {totalRAM} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
+                    <Text fontSize="3xl" fontWeight="bold">Total Storage: {totalStorage} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
                     <Text fontSize="sm" color="gray.600">
                       Note: Detailed VPS settings available in the <Link as={RouterLink} to="/hosting" color="red.500">VPS Dashboard</Link>.
                     </Text>
@@ -344,9 +344,9 @@ const HomePage = () => {
               <GridItem>
                 <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
                   <VStack align="start" spacing={3}>
-                    <Heading size="sm">HTTPs API Usage</Heading>
-                    <Text fontSize="2xl" fontWeight="bold">Total Requests: {totalRequests.toLocaleString()}</Text>
-                    <Text fontSize="2xl" fontWeight="bold">Data Transferred: {totalDataGB} GB</Text>
+                    <Heading size="xs">HTTPs API Usage</Heading> {/* Changed size from "sm" to "xs" */}
+                    <Text fontSize="3xl" fontWeight="bold">Total Requests: {totalRequests.toLocaleString()}</Text> {/* Increased fontSize from "2xl" to "3xl" */}
+                    <Text fontSize="3xl" fontWeight="bold">Data Transferred: {totalDataGB} GB</Text> {/* Increased fontSize from "2xl" to "3xl" */}
                   </VStack>
                 </Box>
               </GridItem>
