@@ -146,6 +146,7 @@ const servers: Server[] = [
     hasMonitoring: false,
   },
 ];
+
 function DeviceDetailsPage() {
   const { deviceName } = useParams({ from: "/_layout/hosting/$deviceName" });
   const server = servers.find((s) => s.name === deviceName);
