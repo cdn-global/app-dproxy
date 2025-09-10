@@ -586,7 +586,7 @@ function BillingPage() {
                   </Tbody>
                   <Tfoot bg="orange.50">
                     <Tr>
-                      <Th colSpan={3} color="orange.800">Total (Excluding Subscription)</Th>
+                      <Th colSpan={3} color="orange.800">Server Total</Th>
                       <Th isNumeric color="orange.800">${(grandTotal - SUBSCRIPTION_COST_PER_MONTH).toFixed(2)}</Th>
                       <Th isNumeric color="orange.800">${(fullGrandTotal - SUBSCRIPTION_COST_PER_MONTH).toFixed(2)}</Th>
                     </Tr>
