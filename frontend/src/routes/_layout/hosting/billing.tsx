@@ -545,7 +545,7 @@ function BillingPage() {
         </TabList>
         <TabPanels bg="orange.50" borderRadius="0 0 md md">
           <TabPanel>
-            <Heading size="md" mb={6} color="orange.700">Billing Cycle - {currentMonth.name}</Heading>
+            <Heading size="md" mb={6} color="orange.700">{currentMonth.name} - Billing Cycle</Heading>
             <VStack align="stretch" spacing={6}>
         
               {outstandingBalance > 0 && (
