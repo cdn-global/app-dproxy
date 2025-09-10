@@ -56,7 +56,7 @@ interface Server {
   hasMonitoring: boolean;
   hasManagedSupport?: boolean;
   vCPUs?: number;
-  ramGB?: number;
+  ramGB: number;
 }
 
 const servers: Server[] = [
@@ -77,6 +77,7 @@ const servers: Server[] = [
     hasRotatingIP: false,
     hasBackup: true,
     hasMonitoring: true,
+    ramGB: 4,
   },
   {
     name: "09-NYC-TRB-16core-ssd",
@@ -95,6 +96,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: false,
     hasMonitoring: false,
+    ramGB: 16,
   },
   {
     name: "10-NYC-LES-16core-ssd",
@@ -113,6 +115,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: true,
     hasMonitoring: true,
+    ramGB: 16,
   },
   {
     name: "11-NYC-EVI-16core-ssd",
@@ -131,6 +134,7 @@ const servers: Server[] = [
     hasRotatingIP: false,
     hasBackup: false,
     hasMonitoring: false,
+    ramGB: 4,
   },
   {
     name: "12-NYC-WVI-16core-ssd",
@@ -149,6 +153,7 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: true,
     hasMonitoring: true,
+    ramGB: 64,
   },
   {
     name: "13-NYC-MTW-16core-ssd",
@@ -167,8 +172,10 @@ const servers: Server[] = [
     hasRotatingIP: true,
     hasBackup: false,
     hasMonitoring: false,
+    ramGB: 8,
   },
 ];
+
 
 const ELASTIC_IP_FEE_PER_MONTH = 3.6;
 const STORAGE_COST_PER_GB_MONTH = 0.10;
