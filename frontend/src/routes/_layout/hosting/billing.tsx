@@ -282,6 +282,7 @@ function calculateTotalsForMonth(month: Month) {
 
   return { totals, grandTotal, fullPriceTotals, fullGrandTotal, activeServers, perServerTotals, fullPricePerServerTotals };
 }
+
 const fetchBillingPortal = async (token: string) => {
   try {
     const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
@@ -403,7 +404,15 @@ function PaymentDetailsTab() {
 
 function BillingPage() {
   const currentMonth = months[months.length - 1];
-  const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
+  const { 
+    totals: currentTotals, 
+    activeServers: currentActiveServers, 
+    perServerTotals, 
+    grandTotal, 
+    fullPriceTotals, 
+    fullGrandTotal, 
+    fullPricePerServerTotals 
+  } = calculateTotalsForMonth(currentMonth);
   const [token] = useState<string | null>(localStorage.getItem("access_token"));
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -526,7 +535,7 @@ function BillingPage() {
     }
   };
 
-  return (
+return (
     <Container maxW="container.xl" py={10} as="main">
       <Flex align="center" justify="space-between" py={6} mb={6}>
         <Heading as="h1" size="xl" color="orange.800">Billing</Heading>
@@ -649,163 +658,177 @@ function BillingPage() {
     </Box>
   </VStack>
 </TabPanel>
-          <TabPanel>
-            <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
-            <Accordion allowMultiple defaultIndex={[0]}>
-<AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
-  <h2>
-    <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
-      <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
-        Server Resources
-      </Box>
-      <AccordionIcon color="orange.600" />
-    </AccordionButton>
-  </h2>
-  <AccordionPanel pb={4}>
-    <Table variant="simple" size="sm">
-      <Thead bg="orange.100">
-        <Tr>
-          <Th color="orange.800">Server Name</Th>
-          <Th color="orange.800">vCPUs</Th>
-          <Th color="orange.800">RAM (GB)</Th>
-          <Th color="orange.800">Storage (GB)</Th>
-          <Th color="orange.800">Floating IPs</Th>
-          <Th color="orange.800">Features</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {currentActiveServers.map((server) => (
-          <Tr key={server.name}>
-            <Td>{server.name}</Td>
-            <Td>{server.vCPUs}</Td> {/* Updated: No need for || "N/A" */}
-            <Td>{server.ramGB}</Td>
-            <Td>{server.storageSizeGB}</Td>
-            <Td>{server.hasRotatingIP ? 1 : 0}</Td>
-            <Td>
-              <List spacing={1}>
-                {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
-                {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
-                {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
-                {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
-                {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
-              </List>
-            </Td>
-          </Tr>
-        ))}
-      </Tbody>
-    </Table>
-  </AccordionPanel>
-</AccordionItem>
-              {services.map((s) => {
-                const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0);
-                const total = currentTotals[s.name].total;
-                return (
-                  <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
-                    <h2>
-                      <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
-                        <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
-                          {s.name} - ${total.toFixed(2)} (x {relevantServers.length} {relevantServers.length !== 1 ? "servers" : "server"})
-                        </Box>
-                        <AccordionIcon color="orange.600" />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                      {relevantServers.length > 0 ? (
-                        <Table variant="simple" size="sm">
-                          <Thead bg="orange.100">
-                            <Tr>
-                              <Th color="orange.800">Server Name</Th>
-                              <Th color="orange.800" isNumeric>Cost (USD)</Th>
-                            </Tr>
-                          </Thead>
-                          <Tbody>
-                            {relevantServers.map((server) => (
-                              <Tr key={server.name}>
-                                <Td>{server.name}</Td>
-                                <Td isNumeric>${s.getMonthlyCost(server).toFixed(2)}</Td>
-                              </Tr>
-                            ))}
-                          </Tbody>
-                        </Table>
-                      ) : (
-                        <Text color="orange.600">No servers using this service.</Text>
-                      )}
-                    </AccordionPanel>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-          </TabPanel>
-          <TabPanel>
-            <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
-              <Table variant="simple" size="md">
+    <TabPanel>
+  <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
+  <Accordion allowMultiple defaultIndex={[0]}>
+    <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
+      <h2>
+        <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+          <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+            Server Resources
+          </Box>
+          <AccordionIcon color="orange.600" />
+        </AccordionButton>
+      </h2>
+      <AccordionPanel pb={4}>
+        <Table variant="simple" size="sm">
+          <Thead bg="orange.100">
+            <Tr>
+              <Th color="orange.800">Server Name</Th>
+              <Th color="orange.800">vCPUs</Th>
+              <Th color="orange.800">RAM (GB)</Th>
+              <Th color="orange.800">Storage (GB)</Th>
+              <Th color="orange.800">Floating IPs</Th>
+              <Th color="orange.800">Features</Th>
+              <Th color="orange.800">Status</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {currentActiveServers.map((server) => (
+              <Tr key={server.name}>
+                <Td>{server.name}</Td>
+                <Td>{server.vCPUs}</Td>
+                <Td>{server.ramGB}</Td>
+                <Td>{server.storageSizeGB}</Td>
+                <Td>{server.hasRotatingIP ? 1 : 0}</Td>
+                <Td>
+                  <List spacing={1}>
+                    {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
+                    {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
+                    {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
+                    {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
+                    {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
+                  </List>
+                </Td>
+                <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </AccordionPanel>
+    </AccordionItem>
+    {services.map((s) => {
+      const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0 || (s.name === "Compute" && server.isTrial));
+      const total = currentTotals[s.name].total;
+      const fullTotal = fullPriceTotals[s.name].total;
+      return (
+        <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
+          <h2>
+            <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+              <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+                {s.name} - ${total.toFixed(2)} (Full: ${fullTotal.toFixed(2)}) (x {relevantServers.length} {relevantServers.length !== 1 ? "servers" : "server"})
+              </Box>
+              <AccordionIcon color="orange.600" />
+            </AccordionButton>
+          </h2>
+          <AccordionPanel pb={4}>
+            {relevantServers.length > 0 ? (
+              <Table variant="simple" size="sm">
                 <Thead bg="orange.100">
                   <Tr>
-                    <Th color="orange.800">Month</Th>
-                    <Th color="orange.800">Invoice Number</Th>
-                    <Th color="orange.800">Payment Date</Th>
-                    <Th color="orange.800">Payment Method</Th>
-                    <Th color="orange.800">Description</Th>
-                    <Th color="orange.800"></Th>
+                    <Th color="orange.800">Server Name</Th>
+                    <Th color="orange.800">Status</Th>
+                    <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+                    <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description }) => (
-                    <Tr key={invoiceId}>
-                      <Td>{month.name}</Td>
-                      <Td>{invoiceId.slice(0, 12)}...</Td>
-                      <Td>{paymentDate}</Td>
-                      <Td>{paymentMethod}</Td>
-                      <Td>{description}</Td>
-                      <Td>
-                        <Flex justify="center" gap={2}>
-                          <Button
-                            size="sm"
-                            colorScheme="orange"
-                            onClick={handleBillingClick}
-                            isLoading={isLoading}
-                            loadingText="Redirecting..."
-                            isDisabled={isLoading}
-                            leftIcon={<Icon as={FaCreditCard} />}
-                          >
-                            View Invoice
-                          </Button>
-                          <Button
-                            size="sm"
-                            colorScheme="orange"
-                            onClick={handleBillingClick}
-                            isLoading={isLoading}
-                            loadingText="Redirecting..."
-                            isDisabled={isLoading}
-                            leftIcon={<Icon as={FaCreditCard} />}
-                          >
-                            View Receipt
-                          </Button>
-                        </Flex>
+                  {relevantServers.map((server) => (
+                    <Tr key={server.name}>
+                      <Td>{server.name}</Td>
+                      <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+                      <Td isNumeric>${server.isTrial ? "0.00" : s.getMonthlyCost(server).toFixed(2)}</Td>
+                      <Td isNumeric>
+                        ${s.name === "Compute" && server.isTrial ? server.fullMonthlyComputePrice.toFixed(2) : s.getMonthlyCost(server).toFixed(2)}
                       </Td>
                     </Tr>
                   ))}
                 </Tbody>
               </Table>
-            </Box>
-            <Box mt={4}>
-              <Button
-                colorScheme="orange"
-                onClick={handleBillingClick}
-                isLoading={isLoading}
-                loadingText="Redirecting..."
-                isDisabled={isLoading}
-                leftIcon={<Icon as={FaCreditCard} />}
-              >
-                Manage Invoices in Stripe
-              </Button>
-            </Box>
-          </TabPanel>
+            ) : (
+              <Text color="orange.600">No servers using this service.</Text>
+            )}
+          </AccordionPanel>
+        </AccordionItem>
+      );
+    })}
+  </Accordion>
+</TabPanel>
+     <TabPanel>
+  <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
+  <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm" bg="white" p={4}>
+    <Text fontSize="sm" color="orange.600" mb={4}>
+      Review your billing history for our enterprise-grade services, including high-performance HTTPS proxy for large-scale web scraping and data extraction.
+    </Text>
+    <Table variant="simple" size="md">
+      <Thead bg="orange.100">
+        <Tr>
+          <Th color="orange.800" style={{ padding: "12px" }}>Month</Th>
+          <Th color="orange.800" style={{ padding: "12px" }}>Invoice Number</Th>
+          <Th color="orange.800" style={{ padding: "12px" }}>Status</Th>
+          <Th color="orange.800" style={{ padding: "12px" }}>Payment Date</Th>
+          <Th color="orange.800" style={{ padding: "12px" }}>Payment Method</Th>
+          <Th color="orange.800" style={{ padding: "12px" }}>Description</Th>
+          <Th color="orange.800" style={{ padding: "12px" }}></Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
+          <Tr key={invoiceId}>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{month.name}</Td>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoiceId.slice(0, 12)}...</Td>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0", color: status === "Succeeded" ? "#15803d" : "#dc2626" }}>{status}</Td>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{paymentDate || "Pending"}</Td>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{paymentMethod}</Td>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{description}</Td>
+            <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>
+              <Flex justify="center" gap={2}>
+                <Button
+                  size="sm"
+                  colorScheme="orange"
+                  onClick={handleBillingClick}
+                  isLoading={isLoading}
+                  loadingText="Redirecting..."
+                  isDisabled={isLoading}
+                  leftIcon={<Icon as={FaCreditCard} />}
+                >
+                  View Invoice
+                </Button>
+                <Button
+                  size="sm"
+                  colorScheme="orange"
+                  onClick={handleBillingClick}
+                  isLoading={isLoading}
+                  loadingText="Redirecting..."
+                  isDisabled={isLoading}
+                  leftIcon={<Icon as={FaCreditCard} />}
+                >
+                  View Receipt
+                </Button>
+              </Flex>
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  </Box>
+  <Box mt={4}>
+    <Button
+      colorScheme="orange"
+      onClick={handleBillingClick}
+      isLoading={isLoading}
+      loadingText="Redirecting..."
+      isDisabled={isLoading}
+      leftIcon={<Icon as={FaCreditCard} />}
+    >
+      Manage Invoices in Stripe
+    </Button>
+  </Box>
+</TabPanel>
           <TabPanel>
             <PaymentDetailsTab />
           </TabPanel>
-        </TabPanels>
+    </TabPanels>
       </Tabs>
 
       <Button as={ChakraLink} href=".." mt={6} colorScheme="orange" variant="outline" size="md">
@@ -814,7 +837,3 @@ function BillingPage() {
     </Container>
   );
 }
-
-export const Route = createFileRoute("/_layout/hosting/billing")({
-  component: BillingPage,
-});
