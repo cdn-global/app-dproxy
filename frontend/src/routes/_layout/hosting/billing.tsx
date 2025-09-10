@@ -49,7 +49,7 @@ interface Server {
   username: string;
   password: string;
   monthlyComputePrice: number;
-  fullMonthlyComputePrice: number; // Store original price for reference
+  fullMonthlyComputePrice: number; 
   storageSizeGB: number;
   activeSince: string;
   hasRotatingIP: boolean;
@@ -58,7 +58,7 @@ interface Server {
   hasManagedSupport?: boolean;
   vCPUs: number;
   ramGB: number;
-  isTrial: boolean; // Flag to indicate trial status
+  isTrial: boolean;
 }
 
 const servers: Server[] = [
