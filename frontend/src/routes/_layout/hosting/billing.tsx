@@ -27,8 +27,14 @@ import {
   AccordionIcon,
   Icon,
   useToast,
+  List,
+  ListItem,
+  ListIcon,
+  Alert,
+  AlertIcon,
+  Divider,
 } from "@chakra-ui/react";
-import { FaCreditCard } from "react-icons/fa";
+import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
 
 interface Server {
@@ -48,6 +54,9 @@ interface Server {
   hasRotatingIP: boolean;
   hasBackup: boolean;
   hasMonitoring: boolean;
+  hasManagedSupport?: boolean;
+  vCPUs?: number;
+  ramGB?: number;
 }
 
 const servers: Server[] = [
@@ -163,9 +172,10 @@ const servers: Server[] = [
 
 const ELASTIC_IP_FEE_PER_MONTH = 3.6;
 const STORAGE_COST_PER_GB_MONTH = 0.10;
-const ROTATING_IP_FEE_PER_MONTH = 10.0;
+const ROTATING_IP_FEE_PER_MONTH = 5.0;
 const BACKUP_FEE_PER_MONTH = 5.0;
 const MONITORING_FEE_PER_MONTH = 8.0;
+const MANAGED_SUPPORT_FEE_PER_MONTH = 40.0;
 
 interface Service {
   name: string;
@@ -176,9 +186,10 @@ const services: Service[] = [
   { name: "Compute", getMonthlyCost: (s) => s.monthlyComputePrice },
   { name: "Storage", getMonthlyCost: (s) => s.storageSizeGB * STORAGE_COST_PER_GB_MONTH },
   { name: "Elastic IP", getMonthlyCost: () => ELASTIC_IP_FEE_PER_MONTH },
-  { name: "Rotating IP", getMonthlyCost: (s) => (s.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH : 0) },
+  { name: "Rotating IP", getMonthlyCost: (s) => (s.hasRotatingIP ? ROTATING_IP_FEE_PER_MONTH * 2 : 0) },
   { name: "Backup", getMonthlyCost: (s) => (s.hasBackup ? BACKUP_FEE_PER_MONTH : 0) },
   { name: "Monitoring", getMonthlyCost: (s) => (s.hasMonitoring ? MONITORING_FEE_PER_MONTH : 0) },
+  { name: "Managed Support", getMonthlyCost: (s) => (s.hasManagedSupport ? MANAGED_SUPPORT_FEE_PER_MONTH : 0) },
 ];
 
 interface Month {
@@ -188,6 +199,13 @@ interface Month {
 }
 
 const months: Month[] = [
+  { name: "December 2024", start: new Date(2024, 11, 1), end: new Date(2024, 11, 31) },
+  { name: "January 2025", start: new Date(2025, 0, 1), end: new Date(2025, 0, 31) },
+  { name: "February 2025", start: new Date(2025, 1, 1), end: new Date(2025, 1, 28) },
+  { name: "March 2025", start: new Date(2025, 2, 1), end: new Date(2025, 2, 31) },
+  { name: "April 2025", start: new Date(2025, 3, 1), end: new Date(2025, 3, 30) },
+  { name: "May 2025", start: new Date(2025, 4, 1), end: new Date(2025, 4, 31) },
+  { name: "June 2025", start: new Date(2025, 5, 1), end: new Date(2025, 5, 30) },
   { name: "July 2025", start: new Date(2025, 6, 1), end: new Date(2025, 6, 31) },
   { name: "August 2025", start: new Date(2025, 7, 1), end: new Date(2025, 7, 31) },
   { name: "September 2025", start: new Date(2025, 8, 1), end: new Date(2025, 8, 30) },
@@ -209,22 +227,27 @@ function calculateTotalsForMonth(month: Month) {
 }
 
 const fetchBillingPortal = async (token: string) => {
-  const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Failed to fetch portal: ${response.status}`);
+  try {
+    const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data.portal_url) {
+      throw new Error("No portal URL received in response");
+    }
+    return data.portal_url;
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Failed to fetch billing portal: ${errorMessage}`);
   }
-  const data = await response.json();
-  if (!data.portal_url) {
-    throw new Error("No portal URL received");
-  }
-  return data.portal_url;
 };
 
 function PaymentDetailsTab() {
@@ -251,7 +274,7 @@ function PaymentDetailsTab() {
       console.error("Error accessing customer portal:", error);
       toast({
         title: "Error",
-        description: "Failed to access billing portal. Please try again later.",
+        description: error instanceof Error ? error.message : "Failed to access billing portal. Please try again later.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -264,10 +287,10 @@ function PaymentDetailsTab() {
   const hasSavedCard = true;
   const cardLast4 = "3007";
   const cardBrand = "American Express";
-  const cardExp = "12/2026";
+  const cardExp = "11/2027";
   const billingAddress = {
     name: "Nik Popov",
-    email: "apis.popov@gmail.com",
+    email: "apispopov@gmail.com",
     line1: "599 Broadway, floor 3",
     city: "New York",
     state: "NY",
@@ -278,18 +301,28 @@ function PaymentDetailsTab() {
 
   return (
     <VStack align="stretch" spacing={6}>
-      <Heading size="md" color="gray.700">Payment Method</Heading>
-      <Text color="gray.600">View or update your payment method used for billing.</Text>
+      <Heading size="md" color="orange.700">Payment Method</Heading>
+      <Text color="orange.600">View or update your payment method used for billing.</Text>
       {hasSavedCard ? (
         <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
           <Text fontWeight="bold">{cardBrand} ending in {cardLast4}</Text>
           <Text>Expires: {cardExp}</Text>
         </Box>
       ) : (
-        <Text color="gray.600">No payment method saved. Add a payment method in Stripe to continue.</Text>
+        <Text color="orange.600">No payment method saved. Add a payment method in Stripe to continue.</Text>
       )}
-      <Heading size="md" color="gray.700">Billing Address</Heading>
-      <Text color="gray.600">Manage your billing address for invoices and payments.</Text>
+      <Button
+        colorScheme="orange"
+        onClick={handleBillingClick}
+        isLoading={isLoading}
+        loadingText="Redirecting..."
+        isDisabled={isLoading}
+        leftIcon={<Icon as={FaCreditCard} />}
+      >
+        Manage Payment Method
+      </Button>
+      <Heading size="md" color="orange.700">Billing Address</Heading>
+      <Text color="orange.600">Manage your billing address for invoices and payments.</Text>
       <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
         <Text>{billingAddress.name}</Text>
         <Text>{billingAddress.email}</Text>
@@ -299,15 +332,14 @@ function PaymentDetailsTab() {
         <Text>{billingAddress.phone}</Text>
       </Box>
       <Button
-        variant="link"
+        colorScheme="orange"
         onClick={handleBillingClick}
         isLoading={isLoading}
+        loadingText="Redirecting..."
+        isDisabled={isLoading}
         leftIcon={<Icon as={FaCreditCard} />}
-        colorScheme="orange"
-        fontWeight="medium"
-        justifyContent="flex-start"
       >
-        Billing Portal
+        Manage Billing Address
       </Button>
     </VStack>
   );
@@ -322,32 +354,169 @@ function BillingPage() {
 
   const history = [
     {
-      month: months[0], // July 2025
-      total: 197.40,
-      invoiceId: "02A67775-0007",
-      paymentDate: "August 1, 2025",
+      month: months[9],
+      total: 449.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FYy",
+      paymentDate: "September 9, 2025",
       paymentMethod: "American Express •••• 3007",
+      description: "Debian Unlimited Bandwidth VPS with Floating IP (riv8-ecoast-mini9)",
     },
     {
-      month: months[1], // August 2025
-      total: 561.80,
-      invoiceId: "02A67775-0008",
-      paymentDate: "September 1, 2025",
+      month: months[8],
+      total: 318.81,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZa",
+      paymentDate: "August 15, 2025",
       paymentMethod: "American Express •••• 3007",
+      description: "HTTPs Request API - Plus Tier Subscription",
     },
     {
-      month: months[2], // September 2025
-      total: 735.20,
-      invoiceId: "02A67775-0009",
-      paymentDate: "September 5, 2025",
+      month: months[7],
+      total: 318.81,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZb",
+      paymentDate: "July 15, 2025",
       paymentMethod: "American Express •••• 3007",
+      description: "HTTPs Request API - Plus Tier Subscription",
+    },
+    {
+      month: months[6],
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZc",
+      paymentDate: "June 10, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "HTTPs Request API - Plus Tier Subscription",
+    },
+    {
+      month: months[5],
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZd",
+      paymentDate: "May 10, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "HTTPs Request API - Plus Tier Subscription",
+    },
+    {
+      month: months[4],
+      total: 322.92,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZe",
+      paymentDate: "April 10, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "HTTPs Request API - Plus Tier Subscription",
+    },
+    {
+      month: months[3],
+      total: 325.54,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZf",
+      paymentDate: "March 20, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription (Failed Payment Attempt)",
+    },
+    {
+      month: months[2],
+      total: 325.54,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZg",
+      paymentDate: "February 20, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription",
+    },
+    {
+      month: months[1],
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZi",
+      paymentDate: "January 21, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription",
+    },
+    {
+      month: months[0],
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZj",
+      paymentDate: "December 21, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription",
+    },
+    {
+      month: months[0],
+      total: 378.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZk",
+      paymentDate: "December 19, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "50,000 SERP Credits Purchase",
+    },
+    {
+      month: months[0],
+      total: 378.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZl",
+      paymentDate: "December 11, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "50,000 SERP Credits Purchase",
+    },
+    {
+      month: months[0],
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZm",
+      paymentDate: "December 8, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "General Invoice for Services",
+    },
+    {
+      month: months[0],
+      total: 189.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZn",
+      paymentDate: "December 5, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "50,000 SERP Credits Purchase",
+    },
+    {
+      month: months[0],
+      total: 297.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZo",
+      paymentDate: "December 5, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription",
+    },
+    {
+      month: months[0],
+      total: 322.92,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZp",
+      paymentDate: "December 3, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription",
+    },
+    {
+      month: months[0],
+      total: 21.60,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZq",
+      paymentDate: "December 3, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "Extended Support for Proxy Cloud Services",
+    },
+    {
+      month: months[0],
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZr",
+      paymentDate: "November 21, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "SERPAPI Subscription",
+    },
+    {
+      month: months[0],
+      total: 3.78,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZs",
+      paymentDate: "November 17, 2024",
+      paymentMethod: "American Express •••• 3007",
+      description: "Initial Support Charge for Setup",
     },
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0);
-  const averageMonthly = allTimeTotal / history.length;
-  const previousMonthTotal = history.filter(({ month }) => month.name === "August 2025").reduce((sum, { total }) => sum + total, 0);
+  const averageMonthly = allTimeTotal / months.length;
+  const previousMonthTotal = history
+    .filter(({ month }) => month.name === "August 2025")
+    .reduce((sum, { total }) => sum + total, 0);
   const monthOverMonthChange = previousMonthTotal ? ((grandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
+  const invoicedAmount = history
+    .filter(({ month }) => month.name === "September 2025")
+    .reduce((sum, { total }) => sum + total, 0);
+  const outstandingBalance = grandTotal - invoicedAmount;
 
   const handleBillingClick = async () => {
     if (!token) {
@@ -368,7 +537,7 @@ function BillingPage() {
       console.error("Error accessing customer portal:", error);
       toast({
         title: "Error",
-        description: "Failed to access billing portal. Please try again later.",
+        description: error instanceof Error ? error.message : "Failed to access billing portal. Please try again later.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -379,24 +548,54 @@ function BillingPage() {
   };
 
   return (
-    <Container maxW="container.xl" py={10}>
+    <Container maxW="container.xl" py={10} as="main">
       <Flex align="center" justify="space-between" py={6} mb={6}>
-        <Heading size="xl" color="gray.800">Manage Billing</Heading>
-        <Text fontSize="lg" color="gray.600">Manage your hosting costs and review billing history</Text>
+        <Heading as="h1" size="xl" color="orange.800">Billing</Heading>
+        <Text fontSize="lg" color="orange.600">Manage your hosting costs and review billing history</Text>
       </Flex>
 
       <Tabs variant="enclosed" colorScheme="orange" isFitted>
         <TabList>
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Current Billing</Tab>
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Service Details</Tab>
-          <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Billing History</Tab>
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Invoices</Tab>
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Payment Details</Tab>
         </TabList>
-        <TabPanels bg="gray.50" borderRadius="0 0 md md">
+        <TabPanels bg="orange.50" borderRadius="0 0 md md">
           <TabPanel>
-            <Heading size="md" mb={6} color="gray.700">Costs for {currentMonth.name}</Heading>
+            <Heading size="md" mb={6} color="orange.700">Billing Cycle - {currentMonth.name}</Heading>
             <VStack align="stretch" spacing={6}>
+              {outstandingBalance > 0 && (
+                <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
+                  <VStack align="stretch" spacing={2}>
+                    <Text fontWeight="semibold" color="orange.800">Outstanding Balance</Text>
+                    <Flex justify="space-between">
+                      <Text>Total Cost:</Text>
+                      <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
+                    </Flex>
+                    <Flex justify="space-between">
+                      <Text>Invoiced Amount:</Text>
+                      <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
+                    </Flex>
+                    <Flex justify="space-between">
+                      <Text>Outstanding Balance:</Text>
+                      <Text fontWeight="bold" color="orange.600">${outstandingBalance.toFixed(2)}</Text>
+                    </Flex>
+                    <Text fontStyle="italic" color="orange.600">
+                      Note: The outstanding balance reflects additional server costs not yet invoiced. It can take 1-3 business days for the updated balance to be reflected.
+                    </Text>
+                    <Button
+                      colorScheme="orange"
+                      onClick={handleBillingClick}
+                      isLoading={isLoading}
+                      loadingText="Redirecting..."
+                      isDisabled={isLoading}
+                    >
+                      Pay Outstanding Balance
+                    </Button>
+                  </VStack>
+                </Box>
+              )}
               <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
                 <Table variant="simple" size="md">
                   <Thead bg="orange.100">
@@ -452,8 +651,52 @@ function BillingPage() {
             </VStack>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={6} color="gray.700">Service Details for {currentMonth.name}</Heading>
-            <Accordion allowMultiple>
+            <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
+            <Accordion allowMultiple defaultIndex={[0]}>
+              <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
+                <h2>
+                  <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                    <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+                      Server Resources
+                    </Box>
+                    <AccordionIcon color="orange.600" />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  <Table variant="simple" size="sm">
+                    <Thead bg="orange.100">
+                      <Tr>
+                        <Th color="orange.800">Server Name</Th>
+                        <Th color="orange.800">vCPUs</Th>
+                        <Th color="orange.800">RAM (GB)</Th>
+                        <Th color="orange.800">Storage (GB)</Th>
+                        <Th color="orange.800">Floating IPs</Th>
+                        <Th color="orange.800">Features</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {currentActiveServers.map((server) => (
+                        <Tr key={server.name}>
+                          <Td>{server.name}</Td>
+                          <Td>{server.vCPUs || "N/A"}</Td>
+                          <Td>{server.ramGB || "N/A"}</Td>
+                          <Td>{server.storageSizeGB}</Td>
+                          <Td>{server.hasRotatingIP ? 1 : 0}</Td>
+                          <Td>
+                            <List spacing={1}>
+                              {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
+                              {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
+                              {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
+                              {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
+                              {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
+                            </List>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </AccordionPanel>
+              </AccordionItem>
               {services.map((s) => {
                 const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0);
                 const total = currentTotals[s.name].total;
@@ -486,7 +729,7 @@ function BillingPage() {
                           </Tbody>
                         </Table>
                       ) : (
-                        <Text color="gray.600">No servers using this service.</Text>
+                        <Text color="orange.600">No servers using this service.</Text>
                       )}
                     </AccordionPanel>
                   </AccordionItem>
@@ -495,44 +738,7 @@ function BillingPage() {
             </Accordion>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={6} color="gray.700">Billing History</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
-              <Table variant="simple" size="md">
-                <Thead bg="orange.100">
-                  <Tr>
-                    <Th color="orange.800">Month</Th>
-                    <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {history.map(({ month, total, invoiceId }) => (
-                    <Tr key={invoiceId}>
-                      <Td>{month.name}</Td>
-                      <Td isNumeric>${total.toFixed(2)}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </Box>
-            <Box mt={6} p={4} borderWidth="1px" borderRadius="lg" bg="orange.50" boxShadow="sm">
-              <VStack align="stretch" spacing={3}>
-                <Flex justify="space-between">
-                  <Text fontWeight="semibold" color="orange.800">Total Spent to Date</Text>
-                  <Text fontWeight="bold" color="orange.800">${allTimeTotal.toFixed(2)}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                  <Text fontWeight="semibold" color="orange.800">Average Monthly Cost</Text>
-                  <Text fontWeight="bold" color="orange.800">${averageMonthly.toFixed(2)}</Text>
-                </Flex>
-                <Flex justify="space-between">
-                  <Text fontWeight="semibold" color="orange.800">Month-over-Month Change</Text>
-                  <Text fontWeight="bold" color="orange.800">{monthOverMonthChange.toFixed(2)}%</Text>
-                </Flex>
-              </VStack>
-            </Box>
-          </TabPanel>
-          <TabPanel>
-            <Heading size="md" mb={6} color="gray.700">Invoices</Heading>
+            <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
             <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
               <Table variant="simple" size="md">
                 <Thead bg="orange.100">
@@ -541,37 +747,39 @@ function BillingPage() {
                     <Th color="orange.800">Invoice Number</Th>
                     <Th color="orange.800">Payment Date</Th>
                     <Th color="orange.800">Payment Method</Th>
+                    <Th color="orange.800">Description</Th>
                     <Th color="orange.800"></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod }) => (
+                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description }) => (
                     <Tr key={invoiceId}>
                       <Td>{month.name}</Td>
-                      <Td>{invoiceId}</Td>
+                      <Td>{invoiceId.slice(0, 12)}...</Td>
                       <Td>{paymentDate}</Td>
                       <Td>{paymentMethod}</Td>
+                      <Td>{description}</Td>
                       <Td>
                         <Flex justify="center" gap={2}>
                           <Button
                             size="sm"
-                            variant="link"
+                            colorScheme="orange"
                             onClick={handleBillingClick}
                             isLoading={isLoading}
+                            loadingText="Redirecting..."
+                            isDisabled={isLoading}
                             leftIcon={<Icon as={FaCreditCard} />}
-                            colorScheme="orange"
-                            fontWeight="medium"
                           >
                             View Invoice
                           </Button>
                           <Button
                             size="sm"
-                            variant="link"
+                            colorScheme="orange"
                             onClick={handleBillingClick}
                             isLoading={isLoading}
+                            loadingText="Redirecting..."
+                            isDisabled={isLoading}
                             leftIcon={<Icon as={FaCreditCard} />}
-                            colorScheme="orange"
-                            fontWeight="medium"
                           >
                             View Receipt
                           </Button>
@@ -581,6 +789,18 @@ function BillingPage() {
                   ))}
                 </Tbody>
               </Table>
+            </Box>
+            <Box mt={4}>
+              <Button
+                colorScheme="orange"
+                onClick={handleBillingClick}
+                isLoading={isLoading}
+                loadingText="Redirecting..."
+                isDisabled={isLoading}
+                leftIcon={<Icon as={FaCreditCard} />}
+              >
+                Manage Invoices in Stripe
+              </Button>
             </Box>
           </TabPanel>
           <TabPanel>
