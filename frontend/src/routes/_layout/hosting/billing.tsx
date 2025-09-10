@@ -575,50 +575,51 @@ function BillingPage() {
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple defaultIndex={[0]}>
-              <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
-                <h2>
-                  <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
-                    <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
-                      Server Resources
-                    </Box>
-                    <AccordionIcon color="orange.600" />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>
-                  <Table variant="simple" size="sm">
-                    <Thead bg="orange.100">
-                      <Tr>
-                        <Th color="orange.800">Server Name</Th>
-                        <Th color="orange.800">vCPUs</Th>
-                        <Th color="orange.800">RAM (GB)</Th>
-                        <Th color="orange.800">Storage (GB)</Th>
-                        <Th color="orange.800">Floating IPs</Th>
-                        <Th color="orange.800">Features</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {currentActiveServers.map((server) => (
-                        <Tr key={server.name}>
-                          <Td>{server.name}</Td>
-                          <Td>{server.vCPUs || "N/A"}</Td>
-                          <Td>{server.ramGB || "N/A"}</Td>
-                          <Td>{server.storageSizeGB}</Td>
-                          <Td>{server.hasRotatingIP ? 1 : 0}</Td>
-                          <Td>
-                            <List spacing={1}>
-                              {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
-                              {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
-                              {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
-                              {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
-                              {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
-                            </List>
-                          </Td>
-                        </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
-                </AccordionPanel>
-              </AccordionItem>
+        // Inside BillingPage, in the Service Details TabPanel
+<AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
+  <h2>
+    <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+      <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+        Server Resources
+      </Box>
+      <AccordionIcon color="orange.600" />
+    </AccordionButton>
+  </h2>
+  <AccordionPanel pb={4}>
+    <Table variant="simple" size="sm">
+      <Thead bg="orange.100">
+        <Tr>
+          <Th color="orange.800">Server Name</Th>
+          <Th color="orange.800">vCPUs</Th>
+          <Th color="orange.800">RAM (GB)</Th>
+          <Th color="orange.800">Storage (GB)</Th>
+          <Th color="orange.800">Floating IPs</Th>
+          <Th color="orange.800">Features</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {currentActiveServers.map((server) => (
+          <Tr key={server.name}>
+            <Td>{server.name}</Td>
+            <Td>{server.vCPUs}</Td> {/* Updated: No need for || "N/A" */}
+            <Td>{server.ramGB}</Td>
+            <Td>{server.storageSizeGB}</Td>
+            <Td>{server.hasRotatingIP ? 1 : 0}</Td>
+            <Td>
+              <List spacing={1}>
+                {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
+                {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
+                {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
+                {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
+                {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
+              </List>
+            </Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  </AccordionPanel>
+</AccordionItem>
               {services.map((s) => {
                 const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0);
                 const total = currentTotals[s.name].total;
