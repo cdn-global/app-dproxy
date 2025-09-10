@@ -347,7 +347,7 @@ async def check_serp_api_access(current_user: Annotated[User, Depends(get_curren
     except Exception as e:
         # Log the full traceback for internal server errors for easier debugging
         logger.error(f"Internal server error checking SERP API access for {current_user.email}: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail="An internal server error occurred.")
+        raise HTTPException(status_code=500, detail="An internal server error occurorange.")
 
 #
 # NEW DYNAMIC FUNCTION
@@ -419,7 +419,7 @@ async def check_multi_feature_access(
 
     except StripeError as e:
         logger.error(f"Stripe error checking access for '{feature_name}' for {current_user.email}: {e.user_message or str(e)}")
-        raise HTTPException(status_code=e.http_status or 400, detail=e.user_message or "A Stripe error occurred.")
+        raise HTTPException(status_code=e.http_status or 400, detail=e.user_message or "A Stripe error occurorange.")
     except Exception as e:
         logger.error(f"Internal server error checking access for '{feature_name}' for {current_user.email}: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail="An internal server error occurred.")
+        raise HTTPException(status_code=500, detail="An internal server error occurorange.")

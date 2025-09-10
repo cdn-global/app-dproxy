@@ -39,7 +39,7 @@ interface Server {
 
 const servers: Server[] = [
   {
-    name: "e-coast-nyc-lower-4core-ssd",
+    name: "08-NYC-SOH-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.100.95.59",
     version: "1.82.0",
@@ -58,7 +58,7 @@ const servers: Server[] = [
     ramGB: 4,
   },
   {
-    name: "e-coast-nyc-midtown-8core-ssd",
+    name: "09-NYC-TRB-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.114.242.51",
     version: "1.86.2",
@@ -77,7 +77,7 @@ const servers: Server[] = [
     ramGB: 16,
   },
   {
-    name: "e-coast-nyc-bk-8core-ssd",
+    name: "10-NYC-LES-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.91.158.116",
     version: "1.82.5",
@@ -96,7 +96,7 @@ const servers: Server[] = [
     ramGB: 16,
   },
   {
-    name: "e-coast-nyc-lower-4core-hdd",
+    name: "11-NYC-EVI-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.100.106.3",
     version: "1.80.2",
@@ -115,7 +115,7 @@ const servers: Server[] = [
     ramGB: 4,
   },
   {
-    name: "e-coast-nyc-midtown-16core-ssd",
+    name: "12-NYC-WVI-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.120.30.40",
     version: "1.85.0",
@@ -134,7 +134,7 @@ const servers: Server[] = [
     ramGB: 64,
   },
   {
-    name: "e-coast-nyc-bk-2core-ssd",
+    name: "13-NYC-MTW-16core-ssd",
     email: "apis.popov@gmail.com",
     ip: "100.130.40.50",
     version: "1.87.0",

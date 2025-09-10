@@ -176,7 +176,7 @@ Lots of new things! 🎁
 * 🚸 Use `useSuspenseQuery` to fetch members and show skeleton. PR [#1174](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
 * 🎨 Format Utils. PR [#1173](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
 * ✨ Use suspense for items page. PR [#1167](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
-* 🚸 Mark login field as required. PR [#1166](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
+* 🚸 Mark login field as requiorange. PR [#1166](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
 * 🚸 Improve login. PR [#1163](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
 * 🥅 Handle AxiosErrors in Login page. PR [#1162](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
 * 🎨 Format frontend. PR [#1161](https://github.com/thedataproxy/full-stack-template) by [@thedataproxy](https://github.com/thedataproxy)
