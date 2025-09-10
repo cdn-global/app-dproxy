@@ -179,8 +179,8 @@ function HostingIndexPage() {
     <Container maxW="full" py={9}>
       <Flex align="center" py={6}>
         <Flex direction="column">
-          <Text fontSize="3xl" color="black">VPS Management</Text>
-          <Text fontSize="lg" color="gray.600">Login details for hosting servers</Text>
+          <Text fontSize="3xl" color="black">VPS Access</Text>
+          <Text fontSize="lg" color="gray.600">Login Configuration for Hosting Infrastructure</Text>
         </Flex>
         <Button ml="auto" as={Link} to="billing">View Billing</Button>
       </Flex>
