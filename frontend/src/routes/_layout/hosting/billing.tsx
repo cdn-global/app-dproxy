@@ -240,6 +240,8 @@ const months: Month[] = [
   { name: "September 2025", start: new Date(2025, 8, 1), end: new Date(2025, 8, 30) },
 ];
 
+const SUBSCRIPTION_COST_PER_MONTH = 299.00;
+
 function calculateTotalsForMonth(month: Month) {
   const activeServers = servers.filter((s) => new Date(s.activeSince) <= month.end);
   const totals = services.reduce((acc, service) => {
@@ -275,8 +277,13 @@ function calculateTotalsForMonth(month: Month) {
     return acc;
   }, {} as Record<string, number>);
 
-  const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
-  const fullGrandTotal = Object.values(fullPriceTotals).reduce((sum, { total }) => sum + total, 0);
+  // Add subscription cost for months from April 2025 onward
+  const subscriptionStart = new Date(2025, 3, 1); // April 2025
+  const isSubscriptionActive = month.start >= subscriptionStart;
+  const subscriptionCost = isSubscriptionActive ? SUBSCRIPTION_COST_PER_MONTH : 0;
+
+  const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0) + subscriptionCost;
+  const fullGrandTotal = Object.values(fullPriceTotals).reduce((sum, { total }) => sum + total, 0) + subscriptionCost;
 
   return { totals, grandTotal, fullPriceTotals, fullGrandTotal, activeServers, perServerTotals, fullPricePerServerTotals };
 }
