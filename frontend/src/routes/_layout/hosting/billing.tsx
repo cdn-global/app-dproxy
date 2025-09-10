@@ -557,10 +557,6 @@ function BillingPage() {
                       <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
                     </Flex>
                     <Flex justify="space-between">
-                      <Text>Full Cost (Including Trials):</Text>
-                      <Text fontWeight="bold">${fullGrandTotal.toFixed(2)}</Text>
-                    </Flex>
-                    <Flex justify="space-between">
                       <Text>Invoiced Amount (September 2025):</Text>
                       <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
                     </Flex>
