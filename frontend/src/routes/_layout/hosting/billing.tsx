@@ -491,11 +491,11 @@ function BillingPage() {
     .reduce((sum, { total }) => sum + total, 0);
   const monthOverMonthChange = previousMonthTotal ? ((grandTotal - previousMonthTotal) / previousMonthTotal) * 100 : 0;
   const invoicedAmount = history
-  .filter(({ month, status }) => month.name === "September 2025" && status === "Succeeded")
-  .reduce((sum, { total }) => sum + total, 0);
+    .filter(({ month, status }) => month.name === "September 2025" && status === "Succeeded")
+    .reduce((sum, { total }) => sum + total, 0);
   const outstandingBalance = grandTotal + history
-  .filter(({ month, status }) => month.name === "August 2025" && status === "Pending")
-  .reduce((sum, { total }) => sum + total, 0) - invoicedAmount;
+    .filter(({ month, status }) => month.name === "August 2025" && status === "Pending")
+    .reduce((sum, { total }) => sum + total, 0) - invoicedAmount;
 
   const handleBillingClick = async () => {
     if (!token) {
@@ -553,14 +553,18 @@ function BillingPage() {
             <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
           </Flex>
           <Flex justify="space-between">
-            <Text>Invoiced Amount:</Text>
+            <Text>Full Cost (Including Trials):</Text>
+            <Text fontWeight="bold">${fullGrandTotal.toFixed(2)}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text>Invoiced Amount (September 2025):</Text>
             <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
           </Flex>
           {history
             .filter(({ month, status }) => month.name === "August 2025" && status === "Pending")
             .map((invoice) => (
               <Flex key={invoice.invoiceId} justify="space-between">
-                <Text>{invoice.description}:</Text>
+                <Text>{invoice.description} (August 2025):</Text>
                 <Text fontWeight="bold">${invoice.total.toFixed(2)}</Text>
               </Flex>
             ))}
@@ -569,7 +573,7 @@ function BillingPage() {
             <Text fontWeight="bold" color="orange.600">${outstandingBalance.toFixed(2)}</Text>
           </Flex>
           <Text fontStyle="italic" color="orange.600">
-            Note: The outstanding balance includes unpaid invoices from previous months and current server costs not yet invoiced. It can take 1-3 business days for the updated balance to be reflected.
+            Note: The outstanding balance includes unpaid invoices from previous months and current server costs not yet invoiced. Trial servers are charged $0.00.
           </Text>
           <Button
             colorScheme="orange"
@@ -589,7 +593,9 @@ function BillingPage() {
           <Tr>
             <Th color="orange.800">Server Name</Th>
             <Th color="orange.800">IP Address</Th>
-            <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
+            <Th color="orange.800">Status</Th>
+            <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+            <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -597,14 +603,17 @@ function BillingPage() {
             <Tr key={server.name}>
               <Td>{server.name}</Td>
               <Td>{server.ip}</Td>
+              <Td>{server.isTrial ? "Trial" : "Active"}</Td>
               <Td isNumeric>${perServerTotals[server.name].toFixed(2)}</Td>
+              <Td isNumeric>${fullPricePerServerTotals[server.name].toFixed(2)}</Td>
             </Tr>
           ))}
         </Tbody>
         <Tfoot bg="orange.50">
           <Tr>
-            <Th colSpan={2} color="orange.800">Total</Th>
+            <Th colSpan={3} color="orange.800">Total</Th>
             <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
+            <Th isNumeric color="orange.800">${fullGrandTotal.toFixed(2)}</Th>
           </Tr>
         </Tfoot>
       </Table>
@@ -615,7 +624,8 @@ function BillingPage() {
           <Tr>
             <Th color="orange.800">Service</Th>
             <Th color="orange.800">Quantity</Th>
-            <Th color="orange.800" isNumeric>Cost (USD)</Th>
+            <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+            <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -624,6 +634,7 @@ function BillingPage() {
               <Td>{s.name}</Td>
               <Td>x {currentTotals[s.name].count}</Td>
               <Td isNumeric>${currentTotals[s.name].total.toFixed(2)}</Td>
+              <Td isNumeric>${fullPriceTotals[s.name].total.toFixed(2)}</Td>
             </Tr>
           ))}
         </Tbody>
@@ -631,6 +642,7 @@ function BillingPage() {
           <Tr>
             <Th colSpan={2} color="orange.800">Total</Th>
             <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
+            <Th isNumeric color="orange.800">${fullGrandTotal.toFixed(2)}</Th>
           </Tr>
         </Tfoot>
       </Table>
