@@ -577,7 +577,7 @@ function BillingPage() {
                       <Text fontWeight="bold" color="orange.600">${outstandingBalance.toFixed(2)}</Text>
                     </Flex>
                     <Text fontStyle="italic" color="orange.600">
-                      Note: The outstanding balance includes unpaid invoices from previous months, current server costs, and subscription costs not yet invoiced. Trial servers are charged $0.00.
+                      Note: The outstanding balance includes unpaid invoices from previous months, current server costs, and subscription costs not yet invoiced. 
                     </Text>
                     <Button
                       colorScheme="orange"
