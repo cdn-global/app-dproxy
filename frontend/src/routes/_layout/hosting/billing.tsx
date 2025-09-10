@@ -51,6 +51,7 @@ interface Server {
   username: string;
   password: string;
   monthlyComputePrice: number;
+  fullMonthlyComputePrice: number; // Added: Store original price for reference
   storageSizeGB: number;
   activeSince: string;
   hasRotatingIP: boolean;
@@ -59,6 +60,7 @@ interface Server {
   hasManagedSupport?: boolean;
   vCPUs: number; // Changed from vCPUs?: number to make it required
   ramGB: number;
+  isTrial: boolean; // Added: Flag to indicate trial status
 }
 
 const servers: Server[] = [
@@ -74,6 +76,7 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 43.60,
+    fullMonthlyComputePrice: 43.60,
     storageSizeGB: 120,
     activeSince: "2025-07-01",
     hasRotatingIP: false,
@@ -81,6 +84,7 @@ const servers: Server[] = [
     hasMonitoring: true,
     ramGB: 4,
     vCPUs: 2, // Added: Entry-level VPS with 4GB RAM
+    isTrial: false,
   },
   {
     name: "09-NYC-TRB-16core-ssd",
@@ -94,6 +98,7 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 87.60,
+    fullMonthlyComputePrice: 87.60,
     storageSizeGB: 240,
     activeSince: "2025-07-01",
     hasRotatingIP: true,
@@ -101,6 +106,7 @@ const servers: Server[] = [
     hasMonitoring: false,
     ramGB: 16,
     vCPUs: 8, // Added: Mid-to-high tier VPS with 16GB RAM
+    isTrial: false,
   },
   {
     name: "10-NYC-LES-16core-ssd",
@@ -114,6 +120,7 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 100.60,
+    fullMonthlyComputePrice: 100.60,
     storageSizeGB: 240,
     activeSince: "2025-08-01",
     hasRotatingIP: true,
@@ -121,6 +128,7 @@ const servers: Server[] = [
     hasMonitoring: true,
     ramGB: 16,
     vCPUs: 8, // Added: Mid-to-high tier VPS with 16GB RAM
+    isTrial: false,
   },
   {
     name: "11-NYC-EVI-16core-ssd",
@@ -134,6 +142,7 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 60.60,
+    fullMonthlyComputePrice: 60.60,
     storageSizeGB: 120,
     activeSince: "2025-09-01",
     hasRotatingIP: false,
@@ -141,6 +150,7 @@ const servers: Server[] = [
     hasMonitoring: false,
     ramGB: 4,
     vCPUs: 2, // Added: Entry-level VPS with 4GB RAM
+    isTrial: false,
   },
   {
     name: "12-NYC-WVI-16core-ssd",
@@ -153,7 +163,8 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 136.60,
+    monthlyComputePrice: 0,
+    fullMonthlyComputePrice: 136.60,
     storageSizeGB: 500,
     activeSince: "2025-08-01",
     hasRotatingIP: true,
@@ -161,6 +172,7 @@ const servers: Server[] = [
     hasMonitoring: true,
     ramGB: 64,
     vCPUs: 16, // Added: High-performance VPS with 64GB RAM
+    isTrial: true,
   },
   {
     name: "13-NYC-MTW-16core-ssd",
@@ -173,7 +185,8 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 63.60,
+    monthlyComputePrice: 0,
+    fullMonthlyComputePrice: 63.60,
     storageSizeGB: 200,
     activeSince: "2025-09-01",
     hasRotatingIP: true,
@@ -181,6 +194,7 @@ const servers: Server[] = [
     hasMonitoring: false,
     ramGB: 8,
     vCPUs: 4, // Added: Mid-tier VPS with 8GB RAM
+    isTrial: true,
   },
 ];
 
@@ -231,16 +245,44 @@ const months: Month[] = [
 function calculateTotalsForMonth(month: Month) {
   const activeServers = servers.filter((s) => new Date(s.activeSince) <= month.end);
   const totals = services.reduce((acc, service) => {
-    const count = activeServers.filter((server) => service.getMonthlyCost(server) > 0).length;
-    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + service.getMonthlyCost(server), 0), count };
+    const count = activeServers.filter((server) => !server.isTrial && service.getMonthlyCost(server) > 0).length;
+    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + (server.isTrial ? 0 : service.getMonthlyCost(server)), 0), count };
     return acc;
   }, {} as Record<string, { total: number; count: number }>);
+
+  // Calculate full price totals for reference (using fullMonthlyComputePrice for Compute service, and include all costs for trials)
+  const fullPriceTotals = services.reduce((acc, service) => {
+    const getCost = (server: Server) => {
+      if (service.name === "Compute" && server.isTrial) {
+        return server.fullMonthlyComputePrice;
+      }
+      return service.getMonthlyCost(server);
+    };
+    const count = activeServers.filter((server) => getCost(server) > 0).length;
+    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + getCost(server), 0), count };
+    return acc;
+  }, {} as Record<string, { total: number; count: number }>);
+
   const perServerTotals = activeServers.reduce((acc, server) => {
-    acc[server.name] = services.reduce((sum, svc) => sum + svc.getMonthlyCost(server), 0);
+    acc[server.name] = server.isTrial ? 0 : services.reduce((sum, svc) => sum + svc.getMonthlyCost(server), 0);
     return acc;
   }, {} as Record<string, number>);
+
+  // Full price per server for reference
+  const fullPricePerServerTotals = activeServers.reduce((acc, server) => {
+    acc[server.name] = services.reduce((sum, svc) => {
+      if (svc.name === "Compute" && server.isTrial) {
+        return sum + server.fullMonthlyComputePrice;
+      }
+      return sum + svc.getMonthlyCost(server);
+    }, 0);
+    return acc;
+  }, {} as Record<string, number>);
+
   const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
-  return { totals, grandTotal, activeServers, perServerTotals };
+  const fullGrandTotal = Object.values(fullPriceTotals).reduce((sum, { total }) => sum + total, 0);
+
+  return { totals, grandTotal, fullPriceTotals, fullGrandTotal, activeServers, perServerTotals, fullPricePerServerTotals };
 }
 
 const fetchBillingPortal = async (token: string) => {
@@ -307,7 +349,7 @@ function PaymentDetailsTab() {
   const cardExp = "11/2027";
   const billingAddress = {
     name: "Nik Popov",
-    email: "apispopov@gmail.com",
+    email: "nik@iconluxurygroup.com",
     line1: "599 Broadway, floor 3",
     city: "New York",
     state: "NY",
@@ -364,12 +406,12 @@ function PaymentDetailsTab() {
 
 function BillingPage() {
   const currentMonth = months[months.length - 1];
-  const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal } = calculateTotalsForMonth(currentMonth);
+  const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal, fullPriceTotals, fullGrandTotal, fullPricePerServerTotals } = calculateTotalsForMonth(currentMonth);
   const [token] = useState<string | null>(localStorage.getItem("access_token"));
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  // Updated history array based on Stripe transactions for nik@iconluxurygroup.com
+  // Updated history array based on provided transactions
   const history = [
     {
       month: months[9], // September 2025
@@ -378,6 +420,7 @@ function BillingPage() {
       paymentDate: "September 5, 2025",
       paymentMethod: "American Express •••• 3007",
       description: "Payment for Invoice",
+      status: "Succeeded",
     },
     {
       month: months[9], // September 2025
@@ -386,6 +429,7 @@ function BillingPage() {
       paymentDate: "September 5, 2025",
       paymentMethod: "American Express •••• 3007",
       description: "Payment for Invoice",
+      status: "Succeeded",
     },
     {
       month: months[8], // August 2025
@@ -394,38 +438,61 @@ function BillingPage() {
       paymentDate: "August 22, 2025",
       paymentMethod: "American Express •••• 3007",
       description: "Payment for Invoice",
+      status: "Succeeded",
+    },
+    {
+      month: months[8], // August 2025
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZc",
+      paymentDate: "August 18, 2025",
+      paymentMethod: "Visa •••• 1001",
+      description: "Subscription update",
+      status: "Succeeded",
     },
     {
       month: months[7], // July 2025
       total: 299.00,
-      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZc",
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZd",
+      paymentDate: "July 18, 2025",
+      paymentMethod: "Visa •••• 1001",
+      description: "Subscription update",
+      status: "Canceled",
+    },
+    {
+      month: months[7], // July 2025
+      total: 299.00,
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZe",
       paymentDate: "July 17, 2025",
       paymentMethod: "Visa •••• 1001",
       description: "Subscription update",
+      status: "Succeeded",
     },
     {
       month: months[6], // June 2025
       total: 159.00,
-      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZd",
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZf",
       paymentDate: "June 23, 2025",
       paymentMethod: "Visa •••• 1001",
       description: "Subscription update",
+      status: "Succeeded",
     },
     {
       month: months[5], // May 2025
       total: 159.00,
-      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZe",
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZg",
       paymentDate: "May 22, 2025",
       paymentMethod: "American Express •••• 3007",
       description: "Subscription update",
+      status: "Succeeded",
     },
     {
       month: months[4], // April 2025
       total: 159.00,
-      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZf",
+      invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZh",
       paymentDate: "April 22, 2025",
       paymentMethod: "Visa •••• 1001",
       description: "Subscription creation",
+      status: "Succeeded",
     },
   ];
 
@@ -496,6 +563,10 @@ function BillingPage() {
                       <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
                     </Flex>
                     <Flex justify="space-between">
+                      <Text>Full Cost (Including Trials):</Text>
+                      <Text fontWeight="bold">${fullGrandTotal.toFixed(2)}</Text>
+                    </Flex>
+                    <Flex justify="space-between">
                       <Text>Invoiced Amount:</Text>
                       <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
                     </Flex>
@@ -524,7 +595,9 @@ function BillingPage() {
                     <Tr>
                       <Th color="orange.800">Server Name</Th>
                       <Th color="orange.800">IP Address</Th>
-                      <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
+                      <Th color="orange.800">Status</Th>
+                      <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+                      <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -532,14 +605,17 @@ function BillingPage() {
                       <Tr key={server.name}>
                         <Td>{server.name}</Td>
                         <Td>{server.ip}</Td>
+                        <Td>{server.isTrial ? "Trial" : "Active"}</Td>
                         <Td isNumeric>${perServerTotals[server.name].toFixed(2)}</Td>
+                        <Td isNumeric>${fullPricePerServerTotals[server.name].toFixed(2)}</Td>
                       </Tr>
                     ))}
                   </Tbody>
                   <Tfoot bg="orange.50">
                     <Tr>
-                      <Th colSpan={2} color="orange.800">Total</Th>
+                      <Th colSpan={3} color="orange.800">Total</Th>
                       <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
+                      <Th isNumeric color="orange.800">${fullGrandTotal.toFixed(2)}</Th>
                     </Tr>
                   </Tfoot>
                 </Table>
@@ -550,7 +626,8 @@ function BillingPage() {
                     <Tr>
                       <Th color="orange.800">Service</Th>
                       <Th color="orange.800">Quantity</Th>
-                      <Th color="orange.800" isNumeric>Cost (USD)</Th>
+                      <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+                      <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -559,6 +636,7 @@ function BillingPage() {
                         <Td>{s.name}</Td>
                         <Td>x {currentTotals[s.name].count}</Td>
                         <Td isNumeric>${currentTotals[s.name].total.toFixed(2)}</Td>
+                        <Td isNumeric>${fullPriceTotals[s.name].total.toFixed(2)}</Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -566,6 +644,7 @@ function BillingPage() {
                     <Tr>
                       <Th colSpan={2} color="orange.800">Total</Th>
                       <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
+                      <Th isNumeric color="orange.800">${fullGrandTotal.toFixed(2)}</Th>
                     </Tr>
                   </Tfoot>
                 </Table>
@@ -575,59 +654,62 @@ function BillingPage() {
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple defaultIndex={[0]}>
-<AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
-  <h2>
-    <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
-      <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
-        Server Resources
-      </Box>
-      <AccordionIcon color="orange.600" />
-    </AccordionButton>
-  </h2>
-  <AccordionPanel pb={4}>
-    <Table variant="simple" size="sm">
-      <Thead bg="orange.100">
-        <Tr>
-          <Th color="orange.800">Server Name</Th>
-          <Th color="orange.800">vCPUs</Th>
-          <Th color="orange.800">RAM (GB)</Th>
-          <Th color="orange.800">Storage (GB)</Th>
-          <Th color="orange.800">Floating IPs</Th>
-          <Th color="orange.800">Features</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {currentActiveServers.map((server) => (
-          <Tr key={server.name}>
-            <Td>{server.name}</Td>
-            <Td>{server.vCPUs}</Td> {/* Updated: No need for || "N/A" */}
-            <Td>{server.ramGB}</Td>
-            <Td>{server.storageSizeGB}</Td>
-            <Td>{server.hasRotatingIP ? 1 : 0}</Td>
-            <Td>
-              <List spacing={1}>
-                {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
-                {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
-                {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
-                {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
-                {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
-              </List>
-            </Td>
-          </Tr>
-        ))}
-      </Tbody>
-    </Table>
-  </AccordionPanel>
-</AccordionItem>
+              <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
+                <h2>
+                  <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                    <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+                      Server Resources
+                    </Box>
+                    <AccordionIcon color="orange.600" />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  <Table variant="simple" size="sm">
+                    <Thead bg="orange.100">
+                      <Tr>
+                        <Th color="orange.800">Server Name</Th>
+                        <Th color="orange.800">vCPUs</Th>
+                        <Th color="orange.800">RAM (GB)</Th>
+                        <Th color="orange.800">Storage (GB)</Th>
+                        <Th color="orange.800">Floating IPs</Th>
+                        <Th color="orange.800">Features</Th>
+                        <Th color="orange.800">Status</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {currentActiveServers.map((server) => (
+                        <Tr key={server.name}>
+                          <Td>{server.name}</Td>
+                          <Td>{server.vCPUs}</Td>
+                          <Td>{server.ramGB}</Td>
+                          <Td>{server.storageSizeGB}</Td>
+                          <Td>{server.hasRotatingIP ? 1 : 0}</Td>
+                          <Td>
+                            <List spacing={1}>
+                              {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
+                              {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
+                              {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
+                              {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
+                              {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
+                            </List>
+                          </Td>
+                          <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </AccordionPanel>
+              </AccordionItem>
               {services.map((s) => {
-                const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0);
+                const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0 || (s.name === "Compute" && server.isTrial));
                 const total = currentTotals[s.name].total;
+                const fullTotal = fullPriceTotals[s.name].total;
                 return (
                   <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
                     <h2>
                       <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
                         <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
-                          {s.name} - ${total.toFixed(2)} (x {relevantServers.length} {relevantServers.length !== 1 ? "servers" : "server"})
+                          {s.name} - ${total.toFixed(2)} (Full: ${fullTotal.toFixed(2)}) (x {relevantServers.length} {relevantServers.length !== 1 ? "servers" : "server"})
                         </Box>
                         <AccordionIcon color="orange.600" />
                       </AccordionButton>
@@ -638,14 +720,20 @@ function BillingPage() {
                           <Thead bg="orange.100">
                             <Tr>
                               <Th color="orange.800">Server Name</Th>
-                              <Th color="orange.800" isNumeric>Cost (USD)</Th>
+                              <Th color="orange.800">Status</Th>
+                              <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+                              <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
                             </Tr>
                           </Thead>
                           <Tbody>
                             {relevantServers.map((server) => (
                               <Tr key={server.name}>
                                 <Td>{server.name}</Td>
-                                <Td isNumeric>${s.getMonthlyCost(server).toFixed(2)}</Td>
+                                <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+                                <Td isNumeric>${server.isTrial ? "0.00" : s.getMonthlyCost(server).toFixed(2)}</Td>
+                                <Td isNumeric>
+                                  ${s.name === "Compute" && server.isTrial ? server.fullMonthlyComputePrice.toFixed(2) : s.getMonthlyCost(server).toFixed(2)}
+                                </Td>
                               </Tr>
                             ))}
                           </Tbody>
@@ -667,6 +755,7 @@ function BillingPage() {
                   <Tr>
                     <Th color="orange.800">Month</Th>
                     <Th color="orange.800">Invoice Number</Th>
+                    <Th color="orange.800">Status</Th>
                     <Th color="orange.800">Payment Date</Th>
                     <Th color="orange.800">Payment Method</Th>
                     <Th color="orange.800">Description</Th>
@@ -674,10 +763,11 @@ function BillingPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description }) => (
+                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
                     <Tr key={invoiceId}>
                       <Td>{month.name}</Td>
                       <Td>{invoiceId.slice(0, 12)}...</Td>
+                      <Td>{status}</Td>
                       <Td>{paymentDate}</Td>
                       <Td>{paymentMethod}</Td>
                       <Td>{description}</Td>
