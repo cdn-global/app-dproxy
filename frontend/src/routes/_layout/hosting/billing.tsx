@@ -37,6 +37,8 @@ import {
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
 
+// ... (previous imports remain unchanged)
+
 interface Server {
   name: string;
   email: string;
@@ -55,7 +57,7 @@ interface Server {
   hasBackup: boolean;
   hasMonitoring: boolean;
   hasManagedSupport?: boolean;
-  vCPUs?: number;
+  vCPUs: number; // Changed from vCPUs?: number to make it required
   ramGB: number;
 }
 
@@ -78,6 +80,7 @@ const servers: Server[] = [
     hasBackup: true,
     hasMonitoring: true,
     ramGB: 4,
+    vCPUs: 2, // Added: Entry-level VPS with 4GB RAM
   },
   {
     name: "09-NYC-TRB-16core-ssd",
@@ -97,6 +100,7 @@ const servers: Server[] = [
     hasBackup: false,
     hasMonitoring: false,
     ramGB: 16,
+    vCPUs: 8, // Added: Mid-to-high tier VPS with 16GB RAM
   },
   {
     name: "10-NYC-LES-16core-ssd",
@@ -116,7 +120,7 @@ const servers: Server[] = [
     hasBackup: true,
     hasMonitoring: true,
     ramGB: 16,
-
+    vCPUs: 8, // Added: Mid-to-high tier VPS with 16GB RAM
   },
   {
     name: "11-NYC-EVI-16core-ssd",
@@ -136,6 +140,7 @@ const servers: Server[] = [
     hasBackup: false,
     hasMonitoring: false,
     ramGB: 4,
+    vCPUs: 2, // Added: Entry-level VPS with 4GB RAM
   },
   {
     name: "12-NYC-WVI-16core-ssd",
@@ -155,6 +160,7 @@ const servers: Server[] = [
     hasBackup: true,
     hasMonitoring: true,
     ramGB: 64,
+    vCPUs: 16, // Added: High-performance VPS with 64GB RAM
   },
   {
     name: "13-NYC-MTW-16core-ssd",
@@ -174,8 +180,11 @@ const servers: Server[] = [
     hasBackup: false,
     hasMonitoring: false,
     ramGB: 8,
+    vCPUs: 4, // Added: Mid-tier VPS with 8GB RAM
   },
 ];
+
+// ... (rest of the code, including services, months, calculateTotalsForMonth, fetchBillingPortal, PaymentDetailsTab, and BillingPage, remains unchanged)
 
 
 const ELASTIC_IP_FEE_PER_MONTH = 3.6;
