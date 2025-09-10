@@ -37,8 +37,6 @@ import {
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
 
-// ... (previous imports remain unchanged)
-
 interface Server {
   name: string;
   email: string;
