@@ -547,24 +547,7 @@ function BillingPage() {
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Billing Cycle - {currentMonth.name}</Heading>
             <VStack align="stretch" spacing={6}>
-              <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
-                <VStack align="stretch" spacing={2}>
-                  <Text fontWeight="semibold" color="orange.800">Current Subscription</Text>
-                  <Text>Unlimited HTTPS API Request - Plus Tier</Text>
-                  <Text fontWeight="bold">${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)} per month</Text>
-                  <Text>Your subscription renews on September 17, 2025.</Text>
-                  <Button
-                    size="sm"
-                    colorScheme="orange"
-                    onClick={handleBillingClick}
-                    isLoading={isLoading}
-                    loadingText="Redirecting..."
-                    isDisabled={isLoading}
-                  >
-                    View Details
-                  </Button>
-                </VStack>
-              </Box>
+        
               {outstandingBalance > 0 && (
                 <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
                   <VStack align="stretch" spacing={2}>
@@ -683,6 +666,24 @@ function BillingPage() {
                     </Tr>
                   </Tfoot>
                 </Table>
+              </Box>
+                  <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
+                <VStack align="stretch" spacing={2}>
+                  <Text fontWeight="semibold" color="orange.800">Current Subscription</Text>
+                  <Text>Unlimited HTTPS API Request - Plus Tier</Text>
+                  <Text fontWeight="bold">${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)} per month</Text>
+                  <Text>Your subscription renews on September 17, 2025.</Text>
+                  <Button
+                    size="sm"
+                    colorScheme="orange"
+                    onClick={handleBillingClick}
+                    isLoading={isLoading}
+                    loadingText="Redirecting..."
+                    isDisabled={isLoading}
+                  >
+                    View Details
+                  </Button>
+                </VStack>
               </Box>
             </VStack>
           </TabPanel>
