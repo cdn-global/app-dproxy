@@ -404,6 +404,51 @@ function PaymentDetailsTab() {
   );
 }
 
+// ... (keep all existing imports, interfaces, servers, services, months, calculateTotalsForMonth, fetchBillingPortal, and PaymentDetailsTab unchanged)
+
+function InvoiceRow({ invoice }: { invoice: { month: Month; total: number; invoiceId: string; paymentDate: string; paymentMethod: string; description: string; status: string } }) {
+  return (
+    <Tr>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoice.month.name}</Td>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoice.invoiceId.slice(0, 12)}...</Td>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0", color: invoice.status === "Succeeded" ? "#15803d" : "#dc2626" }}>{invoice.status}</Td>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoice.paymentDate}</Td>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoice.paymentMethod}</Td>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>
+        {invoice.description === "Subscription update" && invoice.total === 299.00
+          ? "Unlimited Requests Subscription - Enterprise-grade HTTPS proxy for massive-scale web scraping, data extraction, and API automation"
+          : invoice.description}
+      </Td>
+      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>
+        <Flex justify="center" gap={2}>
+          <Button
+            size="sm"
+            colorScheme="orange"
+            onClick={handleBillingClick}
+            isLoading={isLoading}
+            loadingText="Redirecting..."
+            isDisabled={isLoading}
+            leftIcon={<Icon as={FaCreditCard} />}
+          >
+            View Invoice
+          </Button>
+          <Button
+            size="sm"
+            colorScheme="orange"
+            onClick={handleBillingClick}
+            isLoading={isLoading}
+            loadingText="Redirecting..."
+            isDisabled={isLoading}
+            leftIcon={<Icon as={FaCreditCard} />}
+          >
+            View Receipt
+          </Button>
+        </Flex>
+      </Td>
+    </Tr>
+  );
+}
+
 function BillingPage() {
   const currentMonth = months[months.length - 1];
   const { totals: currentTotals, activeServers: currentActiveServers, perServerTotals, grandTotal, fullPriceTotals, fullGrandTotal, fullPricePerServerTotals } = calculateTotalsForMonth(currentMonth);
@@ -411,7 +456,7 @@ function BillingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  // Updated history array based on provided transactions
+  // History array (unchanged from your provided version)
   const history = [
     {
       month: months[9], // September 2025
@@ -575,7 +620,7 @@ function BillingPage() {
                       <Text fontWeight="bold" color="orange.600">${outstandingBalance.toFixed(2)}</Text>
                     </Flex>
                     <Text fontStyle="italic" color="orange.600">
-                      Note: The outstanding balance reflects additional server costs not yet invoiced. It can take 1-3 business days for the updated balance to be reflected.
+                      Note: The outstanding balance reflects additional server costs not yet invoiced. Trial servers are charged $0.00.
                     </Text>
                     <Button
                       colorScheme="orange"
@@ -749,55 +794,25 @@ function BillingPage() {
           </TabPanel>
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm" bg="white" p={4}>
+              <Text fontSize="sm" color="orange.600" mb={4}>
+                Review your billing history for our enterprise-grade services, including high-performance HTTPS proxy for large-scale web scraping and data extraction.
+              </Text>
               <Table variant="simple" size="md">
                 <Thead bg="orange.100">
                   <Tr>
-                    <Th color="orange.800">Month</Th>
-                    <Th color="orange.800">Invoice Number</Th>
-                    <Th color="orange.800">Status</Th>
-                    <Th color="orange.800">Payment Date</Th>
-                    <Th color="orange.800">Payment Method</Th>
-                    <Th color="orange.800">Description</Th>
-                    <Th color="orange.800"></Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Month</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Invoice Number</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Status</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Payment Date</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Payment Method</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Description</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
-                    <Tr key={invoiceId}>
-                      <Td>{month.name}</Td>
-                      <Td>{invoiceId.slice(0, 12)}...</Td>
-                      <Td>{status}</Td>
-                      <Td>{paymentDate}</Td>
-                      <Td>{paymentMethod}</Td>
-                      <Td>{description}</Td>
-                      <Td>
-                        <Flex justify="center" gap={2}>
-                          <Button
-                            size="sm"
-                            colorScheme="orange"
-                            onClick={handleBillingClick}
-                            isLoading={isLoading}
-                            loadingText="Redirecting..."
-                            isDisabled={isLoading}
-                            leftIcon={<Icon as={FaCreditCard} />}
-                          >
-                            View Invoice
-                          </Button>
-                          <Button
-                            size="sm"
-                            colorScheme="orange"
-                            onClick={handleBillingClick}
-                            isLoading={isLoading}
-                            loadingText="Redirecting..."
-                            isDisabled={isLoading}
-                            leftIcon={<Icon as={FaCreditCard} />}
-                          >
-                            View Receipt
-                          </Button>
-                        </Flex>
-                      </Td>
-                    </Tr>
+                  {history.map((invoice) => (
+                    <InvoiceRow key={invoice.invoiceId} invoice={invoice} />
                   ))}
                 </Tbody>
               </Table>
