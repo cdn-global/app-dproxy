@@ -443,7 +443,7 @@ function BillingPage() {
     invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZc",
     paymentDate: "", // Unpaid, contributes to outstanding balance
     paymentMethod: "Visa •••• 1001",
-    description: "Unlimited Requests Subscription",
+    description: "Unlimited Requests Subscription - Enterprise-grade HTTPS proxy for massive-scale web scraping, data extraction, and API automation",
     status: "Pending",
   },
   {
