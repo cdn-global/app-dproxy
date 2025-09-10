@@ -419,8 +419,8 @@ function BillingPage() {
   const history = [
   {
     month: months[9], // September 2025
-    total: 246.30,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FYy",
+    total: 246.3,
+    invoiceId: "in_1S3rEQQ4QUFhozjpjdqNn81b",
     paymentDate: "September 5, 2025",
     paymentMethod: "American Express •••• 3007",
     description: "Payment for Invoice",
@@ -428,8 +428,8 @@ function BillingPage() {
   },
   {
     month: months[9], // September 2025
-    total: 122.00,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZa",
+    total: 122.0,
+    invoiceId: "in_1S3pkTQ4QUFhozjpto0souFo",
     paymentDate: "September 5, 2025",
     paymentMethod: "American Express •••• 3007",
     description: "Payment for Invoice",
@@ -437,35 +437,35 @@ function BillingPage() {
   },
   {
     month: months[8], // August 2025
-    total: 246.40,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZb",
+    total: 246.4,
+    invoiceId: "in_1RykEAQ4QUFhozjpSfp13wEy",
     paymentDate: "August 22, 2025",
     paymentMethod: "American Express •••• 3007",
     description: "Payment for Invoice",
     status: "Succeeded",
   },
   {
-    month: months[8], // August 2025
-    total: 299.00,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZc",
-    paymentDate: "", // Unpaid, contributes to outstanding balance
-    paymentMethod: "Visa •••• 1001",
-    description: "Unlimited Requests Subscription - Enterprise-grade HTTPS proxy for massive-scale web scraping, data extraction, and API automation",
-    status: "Pending",
-  },
-  {
     month: months[7], // July 2025
-    total: 299.00,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZd",
+    total: 299.0,
+    invoiceId: "in_1RxFkfQ4QUFhozjptnM5cAln",
     paymentDate: "July 17, 2025",
     paymentMethod: "Visa •••• 1001",
     description: "Subscription update",
     status: "Succeeded",
   },
   {
+    month: months[7], // July 2025
+    total: 299.0,
+    invoiceId: "in_1Rm0xmQ4QUFhozjpK9vIuC87",
+    paymentDate: "July 1, 2025",
+    paymentMethod: "Visa •••• 1001",
+    description: "Subscription update",
+    status: "Succeeded",
+  },
+  {
     month: months[6], // June 2025
-    total: 159.00,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZe",
+    total: 159.0,
+    invoiceId: "in_1RcEvcQ4QUFhozjpXYYwsGj7",
     paymentDate: "June 23, 2025",
     paymentMethod: "Visa •••• 1001",
     description: "Subscription update",
@@ -473,8 +473,8 @@ function BillingPage() {
   },
   {
     month: months[5], // May 2025
-    total: 159.00,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZf",
+    total: 159.0,
+    invoiceId: "in_1RR06SQ4QUFhozjps3d0MT7M",
     paymentDate: "May 22, 2025",
     paymentMethod: "American Express •••• 3007",
     description: "Subscription update",
@@ -482,8 +482,8 @@ function BillingPage() {
   },
   {
     month: months[4], // April 2025
-    total: 159.00,
-    invoiceId: "in_1S5MosLqozOkbqR8Bx8H7FZg",
+    total: 159.0,
+    invoiceId: "in_1RG7nPQ4QUFhozjpFFRKiXMC",
     paymentDate: "April 22, 2025",
     paymentMethod: "Visa •••• 1001",
     description: "Subscription creation",
