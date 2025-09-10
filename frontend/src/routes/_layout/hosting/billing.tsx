@@ -51,14 +51,16 @@ interface Server {
   username: string;
   password: string;
   monthlyComputePrice: number;
+  fullMonthlyComputePrice: number; // Store original price for reference
   storageSizeGB: number;
   activeSince: string;
   hasRotatingIP: boolean;
   hasBackup: boolean;
   hasMonitoring: boolean;
   hasManagedSupport?: boolean;
-  vCPUs: number; // Changed from vCPUs?: number to make it required
+  vCPUs: number;
   ramGB: number;
+  isTrial: boolean; // Flag to indicate trial status
 }
 
 const servers: Server[] = [
@@ -74,13 +76,15 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 43.60,
+    fullMonthlyComputePrice: 43.60,
     storageSizeGB: 120,
     activeSince: "2025-07-01",
     hasRotatingIP: false,
     hasBackup: true,
     hasMonitoring: true,
     ramGB: 4,
-    vCPUs: 2, // Added: Entry-level VPS with 4GB RAM
+    vCPUs: 2,
+    isTrial: false,
   },
   {
     name: "09-NYC-TRB-16core-ssd",
@@ -94,13 +98,15 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 87.60,
+    fullMonthlyComputePrice: 87.60,
     storageSizeGB: 240,
     activeSince: "2025-07-01",
     hasRotatingIP: true,
     hasBackup: false,
     hasMonitoring: false,
     ramGB: 16,
-    vCPUs: 8, // Added: Mid-to-high tier VPS with 16GB RAM
+    vCPUs: 8,
+    isTrial: false,
   },
   {
     name: "10-NYC-LES-16core-ssd",
@@ -114,13 +120,15 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 100.60,
+    fullMonthlyComputePrice: 100.60,
     storageSizeGB: 240,
     activeSince: "2025-08-01",
     hasRotatingIP: true,
     hasBackup: true,
     hasMonitoring: true,
     ramGB: 16,
-    vCPUs: 8, // Added: Mid-to-high tier VPS with 16GB RAM
+    vCPUs: 8,
+    isTrial: false,
   },
   {
     name: "11-NYC-EVI-16core-ssd",
@@ -134,13 +142,15 @@ const servers: Server[] = [
     username: "user",
     password: "5660",
     monthlyComputePrice: 60.60,
+    fullMonthlyComputePrice: 60.60,
     storageSizeGB: 120,
     activeSince: "2025-09-01",
     hasRotatingIP: false,
     hasBackup: false,
     hasMonitoring: false,
     ramGB: 4,
-    vCPUs: 2, // Added: Entry-level VPS with 4GB RAM
+    vCPUs: 2,
+    isTrial: false,
   },
   {
     name: "12-NYC-WVI-16core-ssd",
@@ -153,14 +163,16 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 136.60,
+    monthlyComputePrice: 0,
+    fullMonthlyComputePrice: 136.60,
     storageSizeGB: 500,
     activeSince: "2025-08-01",
     hasRotatingIP: true,
     hasBackup: true,
     hasMonitoring: true,
     ramGB: 64,
-    vCPUs: 16, // Added: High-performance VPS with 64GB RAM
+    vCPUs: 16,
+    isTrial: true,
   },
   {
     name: "13-NYC-MTW-16core-ssd",
@@ -173,14 +185,16 @@ const servers: Server[] = [
     os: "ubuntu",
     username: "user",
     password: "5660",
-    monthlyComputePrice: 63.60,
+    monthlyComputePrice: 0,
+    fullMonthlyComputePrice: 63.60,
     storageSizeGB: 200,
     activeSince: "2025-09-01",
     hasRotatingIP: true,
     hasBackup: false,
     hasMonitoring: false,
     ramGB: 8,
-    vCPUs: 4, // Added: Mid-tier VPS with 8GB RAM
+    vCPUs: 4,
+    isTrial: true,
   },
 ];
 
