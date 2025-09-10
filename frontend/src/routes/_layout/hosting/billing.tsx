@@ -49,7 +49,7 @@ interface Server {
   username: string;
   password: string;
   monthlyComputePrice: number;
-  fullMonthlyComputePrice: number; 
+  fullMonthlyComputePrice: number; // Store original price for reference
   storageSizeGB: number;
   activeSince: string;
   hasRotatingIP: boolean;
@@ -58,7 +58,7 @@ interface Server {
   hasManagedSupport?: boolean;
   vCPUs: number;
   ramGB: number;
-  isTrial: boolean;
+  isTrial: boolean; // Flag to indicate trial status
 }
 
 const servers: Server[] = [
@@ -357,7 +357,6 @@ function PaymentDetailsTab() {
   return (
     <VStack align="stretch" spacing={6}>
       <Heading size="md" color="orange.700">Payment Method</Heading>
-      <Text color="orange.600">View or update your payment method used for billing.</Text>
       {hasSavedCard ? (
         <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
           <Text fontWeight="bold">{cardBrand} ending in {cardLast4}</Text>
@@ -377,7 +376,6 @@ function PaymentDetailsTab() {
         Manage Payment Method
       </Button>
       <Heading size="md" color="orange.700">Billing Address</Heading>
-      <Text color="orange.600">Manage your billing address for invoices and payments.</Text>
       <Box borderWidth="1px" borderRadius="lg" p={4} boxShadow="sm">
         <Text>{billingAddress.name}</Text>
         <Text>{billingAddress.email}</Text>
@@ -692,8 +690,6 @@ return (
                 <Td>
                   <List spacing={1}>
                     {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
-                    {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />DDoS Protection</ListItem>}
-                    {server.name === "riv8-ecoast-mini9" && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />1-Hour Response Support</ListItem>}
                     {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
                     {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
                   </List>
@@ -714,7 +710,7 @@ return (
           <h2>
             <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
               <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
-                {s.name} - ${total.toFixed(2)} (Full: ${fullTotal.toFixed(2)}) (x {relevantServers.length} {relevantServers.length !== 1 ? "servers" : "server"})
+                {s.name} - ${total.toFixed(2)} (x {relevantServers.length})
               </Box>
               <AccordionIcon color="orange.600" />
             </AccordionButton>
@@ -755,9 +751,6 @@ return (
      <TabPanel>
   <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
   <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm" bg="white" p={4}>
-    <Text fontSize="sm" color="orange.600" mb={4}>
-      Review your billing history for our enterprise-grade services, including high-performance HTTPS proxy for large-scale web scraping and data extraction.
-    </Text>
     <Table variant="simple" size="md">
       <Thead bg="orange.100">
         <Tr>
