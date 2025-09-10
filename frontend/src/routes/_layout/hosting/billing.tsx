@@ -684,7 +684,7 @@ function BillingPage() {
             </VStack>
           </TabPanel>
           <TabPanel>
-            <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
+            <Heading size="md" mb={6} color="orange.700">{currentMonth.name} - Service Details</Heading>
             <Accordion allowMultiple defaultIndex={[0]}>
               <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
                 <h2>
