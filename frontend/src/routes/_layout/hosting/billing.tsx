@@ -30,8 +30,6 @@ import {
   List,
   ListItem,
   ListIcon,
-  Alert,
-  AlertIcon,
   Divider,
 } from "@chakra-ui/react";
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
@@ -49,7 +47,7 @@ interface Server {
   username: string;
   password: string;
   monthlyComputePrice: number;
-  fullMonthlyComputePrice: number; // Store original price for reference
+  fullMonthlyComputePrice: number;
   storageSizeGB: number;
   activeSince: string;
   hasRotatingIP: boolean;
@@ -58,7 +56,7 @@ interface Server {
   hasManagedSupport?: boolean;
   vCPUs: number;
   ramGB: number;
-  isTrial: boolean; // Flag to indicate trial status
+  isTrial: boolean;
 }
 
 const servers: Server[] = [
@@ -196,15 +194,13 @@ const servers: Server[] = [
   },
 ];
 
-// ... (rest of the code, including services, months, calculateTotalsForMonth, fetchBillingPortal, PaymentDetailsTab, and BillingPage, remains unchanged)
-
-
 const ELASTIC_IP_FEE_PER_MONTH = 3.6;
 const STORAGE_COST_PER_GB_MONTH = 0.10;
 const ROTATING_IP_FEE_PER_MONTH = 5.0;
 const BACKUP_FEE_PER_MONTH = 5.0;
 const MONITORING_FEE_PER_MONTH = 8.0;
 const MANAGED_SUPPORT_FEE_PER_MONTH = 40.0;
+const SUBSCRIPTION_COST_PER_MONTH = 299.00;
 
 interface Service {
   name: string;
@@ -239,8 +235,6 @@ const months: Month[] = [
   { name: "August 2025", start: new Date(2025, 7, 1), end: new Date(2025, 7, 31) },
   { name: "September 2025", start: new Date(2025, 8, 1), end: new Date(2025, 8, 30) },
 ];
-
-const SUBSCRIPTION_COST_PER_MONTH = 299.00;
 
 function calculateTotalsForMonth(month: Month) {
   const activeServers = servers.filter((s) => new Date(s.activeSince) <= month.end);
@@ -277,7 +271,6 @@ function calculateTotalsForMonth(month: Month) {
     return acc;
   }, {} as Record<string, number>);
 
-  // Add subscription cost for months from April 2025 onward
   const subscriptionStart = new Date(2025, 3, 1); // April 2025
   const isSubscriptionActive = month.start >= subscriptionStart;
   const subscriptionCost = isSubscriptionActive ? SUBSCRIPTION_COST_PER_MONTH : 0;
@@ -439,7 +432,60 @@ function BillingPage() {
       description: "Payment for Invoice",
       status: "Succeeded",
     },
-    // ... (other history entries unchanged)
+    {
+      month: months[8], // August 2025
+      total: 246.4,
+      invoiceId: "in_1RykEAQ4QUFhozjpSfp13wEy",
+      paymentDate: "August 22, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "Payment for Invoice",
+      status: "Succeeded",
+    },
+    {
+      month: months[7], // July 2025
+      total: 299.0,
+      invoiceId: "in_1RxFkfQ4QUFhozjptnM5cAln",
+      paymentDate: "July 17, 2025",
+      paymentMethod: "Visa •••• 1001",
+      description: "Subscription update",
+      status: "Succeeded",
+    },
+    {
+      month: months[7], // July 2025
+      total: 299.0,
+      invoiceId: "in_1Rm0xmQ4QUFhozjpK9vIuC87",
+      paymentDate: "July 1, 2025",
+      paymentMethod: "Visa •••• 1001",
+      description: "Subscription update",
+      status: "Succeeded",
+    },
+    {
+      month: months[6], // June 2025
+      total: 159.0,
+      invoiceId: "in_1RcEvcQ4QUFhozjpXYYwsGj7",
+      paymentDate: "June 23, 2025",
+      paymentMethod: "Visa •••• 1001",
+      description: "Subscription update",
+      status: "Succeeded",
+    },
+    {
+      month: months[5], // May 2025
+      total: 159.0,
+      invoiceId: "in_1RR06SQ4QUFhozjps3d0MT7M",
+      paymentDate: "May 22, 2025",
+      paymentMethod: "American Express •••• 3007",
+      description: "Subscription update",
+      status: "Succeeded",
+    },
+    {
+      month: months[4], // April 2025
+      total: 159.0,
+      invoiceId: "in_1RG7nPQ4QUFhozjpFFRKiXMC",
+      paymentDate: "April 22, 2025",
+      paymentMethod: "Visa •••• 1001",
+      description: "Subscription creation",
+      status: "Succeeded",
+    },
   ];
 
   const allTimeTotal = history.reduce((sum, { total }) => sum + total, 0) + (SUBSCRIPTION_COST_PER_MONTH * 6); // 6 months (April to September)
@@ -640,11 +686,98 @@ function BillingPage() {
               </Box>
             </VStack>
           </TabPanel>
-          {/* Other TabPanels (Service Details, Invoices, Payment Details) unchanged */}
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple defaultIndex={[0]}>
-              {/* Server Resources and other services unchanged */}
+              <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
+                <h2>
+                  <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                    <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+                      Server Resources
+                    </Box>
+                    <AccordionIcon color="orange.600" />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  <Table variant="simple" size="sm">
+                    <Thead bg="orange.100">
+                      <Tr>
+                        <Th color="orange.800">Server Name</Th>
+                        <Th color="orange.800">vCPUs</Th>
+                        <Th color="orange.800">RAM (GB)</Th>
+                        <Th color="orange.800">Storage (GB)</Th>
+                        <Th color="orange.800">Floating IPs</Th>
+                        <Th color="orange.800">Features</Th>
+                        <Th color="orange.800">Status</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {currentActiveServers.map((server) => (
+                        <Tr key={server.name}>
+                          <Td>{server.name}</Td>
+                          <Td>{server.vCPUs}</Td>
+                          <Td>{server.ramGB}</Td>
+                          <Td>{server.storageSizeGB}</Td>
+                          <Td>{server.hasRotatingIP ? 1 : 0}</Td>
+                          <Td>
+                            <List spacing={1}>
+                              {server.hasManagedSupport && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Managed Services (OS updates, security, backups)</ListItem>}
+                              {server.hasBackup && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Backup</ListItem>}
+                              {server.hasMonitoring && <ListItem><ListIcon as={FaCheckCircle} color="green.500" />Monitoring</ListItem>}
+                            </List>
+                          </Td>
+                          <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </AccordionPanel>
+              </AccordionItem>
+              {services.map((s) => {
+                const relevantServers = currentActiveServers.filter((server) => s.getMonthlyCost(server) > 0 || (s.name === "Compute" && server.isTrial));
+                const total = currentTotals[s.name].total;
+                const fullTotal = fullPriceTotals[s.name].total;
+                return (
+                  <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
+                    <h2>
+                      <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                        <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
+                          {s.name} - ${total.toFixed(2)} (x {relevantServers.length})
+                        </Box>
+                        <AccordionIcon color="orange.600" />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                      {relevantServers.length > 0 ? (
+                        <Table variant="simple" size="sm">
+                          <Thead bg="orange.100">
+                            <Tr>
+                              <Th color="orange.800">Server Name</Th>
+                              <Th color="orange.800">Status</Th>
+                              <Th color="orange.800" isNumeric>Charged Cost (USD)</Th>
+                              <Th color="orange.800" isNumeric>Full Cost (USD)</Th>
+                            </Tr>
+                          </Thead>
+                          <Tbody>
+                            {relevantServers.map((server) => (
+                              <Tr key={server.name}>
+                                <Td>{server.name}</Td>
+                                <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+                                <Td isNumeric>${server.isTrial ? "0.00" : s.getMonthlyCost(server).toFixed(2)}</Td>
+                                <Td isNumeric>
+                                  ${s.name === "Compute" && server.isTrial ? server.fullMonthlyComputePrice.toFixed(2) : s.getMonthlyCost(server).toFixed(2)}
+                                </Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      ) : (
+                        <Text color="orange.600">No servers using this service.</Text>
+                      )}
+                    </AccordionPanel>
+                  </AccordionItem>
+                );
+              })}
               <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
                 <h2>
                   <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
@@ -655,14 +788,125 @@ function BillingPage() {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  <Text>Subscription for Unlimited HTTPS API Requests (Plus Tier).</Text>
-                  <Text>Cost: ${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)} per month</Text>
-                  <Text>Renews on: September 17, 2025</Text>
+                  <VStack align="stretch" spacing={4}>
+                    <Text>Subscription for Unlimited HTTPS API Requests (Plus Tier).</Text>
+                    <Text>Cost: ${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)} per month</Text>
+                    <Text>Renews on: September 17, 2025</Text>
+                    <Divider />
+                    <Text fontWeight="semibold" color="orange.800">Compute Costs Under Subscription</Text>
+                    <Table variant="simple" size="sm">
+                      <Thead bg="orange.100">
+                        <Tr>
+                          <Th color="orange.800">Server Name</Th>
+                          <Th color="orange.800">Status</Th>
+                          <Th color="orange.800" isNumeric>Charged Compute Cost (USD)</Th>
+                          <Th color="orange.800" isNumeric>Full Compute Cost (USD)</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {currentActiveServers.map((server) => {
+                          const computeService = services.find((s) => s.name === "Compute");
+                          const chargedCost = computeService ? (server.isTrial ? 0 : computeService.getMonthlyCost(server)) : 0;
+                          const fullCost = computeService ? (server.isTrial ? server.fullMonthlyComputePrice : computeService.getMonthlyCost(server)) : 0;
+                          return (
+                            <Tr key={server.name}>
+                              <Td>{server.name}</Td>
+                              <Td>{server.isTrial ? "Trial" : "Active"}</Td>
+                              <Td isNumeric>${chargedCost.toFixed(2)}</Td>
+                              <Td isNumeric>${fullCost.toFixed(2)}</Td>
+                            </Tr>
+                          );
+                        })}
+                      </Tbody>
+                      <Tfoot bg="orange.50">
+                        <Tr>
+                          <Th colSpan={2} color="orange.800">Total Compute Cost</Th>
+                          <Th isNumeric color="orange.800">${currentTotals["Compute"].total.toFixed(2)}</Th>
+                          <Th isNumeric color="orange.800">${fullPriceTotals["Compute"].total.toFixed(2)}</Th>
+                        </Tr>
+                        <Tr>
+                          <Th colSpan={2} color="orange.800">Subscription Cost</Th>
+                          <Th isNumeric color="orange.800">${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)}</Th>
+                          <Th isNumeric color="orange.800">${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)}</Th>
+                        </Tr>
+                      </Tfoot>
+                    </Table>
+                  </VStack>
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>
           </TabPanel>
-          {/* Invoices and Payment Details tabs unchanged */}
+          <TabPanel>
+            <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm" bg="white" p={4}>
+              <Table variant="simple" size="md">
+                <Thead bg="orange.100">
+                  <Tr>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Month</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Invoice Number</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Status</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Payment Date</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Payment Method</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}>Description</Th>
+                    <Th color="orange.800" style={{ padding: "12px" }}></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
+                    <Tr key={invoiceId}>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{month.name}</Td>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoiceId.slice(0, 12)}...</Td>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0", color: status === "Succeeded" ? "#15803d" : "#dc2626" }}>{status}</Td>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{paymentDate || "Pending"}</Td>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{paymentMethod}</Td>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{description}</Td>
+                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>
+                        <Flex justify="center" gap={2}>
+                          <Button
+                            size="sm"
+                            colorScheme="orange"
+                            onClick={handleBillingClick}
+                            isLoading={isLoading}
+                            loadingText="Redirecting..."
+                            isDisabled={isLoading}
+                            leftIcon={<Icon as={FaCreditCard} />}
+                          >
+                            View Invoice
+                          </Button>
+                          <Button
+                            size="sm"
+                            colorScheme="orange"
+                            onClick={handleBillingClick}
+                            isLoading={isLoading}
+                            loadingText="Redirecting..."
+                            isDisabled={isLoading}
+                            leftIcon={<Icon as={FaCreditCard} />}
+                          >
+                            View Receipt
+                          </Button>
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Box>
+            <Box mt={4}>
+              <Button
+                colorScheme="orange"
+                onClick={handleBillingClick}
+                isLoading={isLoading}
+                loadingText="Redirecting..."
+                isDisabled={isLoading}
+                leftIcon={<Icon as={FaCreditCard} />}
+              >
+                Manage Invoices in Stripe
+              </Button>
+            </Box>
+          </TabPanel>
+          <TabPanel>
+            <PaymentDetailsTab />
+          </TabPanel>
         </TabPanels>
       </Tabs>
       <Button as={ChakraLink} href=".." mt={6} colorScheme="orange" variant="outline" size="md">
