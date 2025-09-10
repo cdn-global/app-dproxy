@@ -514,14 +514,14 @@ function BillingPage() {
             <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
           </Flex>
           <Flex justify="space-between">
-            <Text>Invoiced Amount (September 2025):</Text>
+            <Text>Invoiced Amount:</Text>
             <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
           </Flex>
           {history
             .filter(({ month, status }) => month.name === "August 2025" && status === "Pending")
             .map((invoice) => (
               <Flex key={invoice.invoiceId} justify="space-between">
-                <Text>{invoice.description} (August 2025):</Text>
+                <Text>{invoice.description}:</Text>
                 <Text fontWeight="bold">${invoice.total.toFixed(2)}</Text>
               </Flex>
             ))}
