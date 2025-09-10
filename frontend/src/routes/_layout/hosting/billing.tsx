@@ -502,94 +502,102 @@ function BillingPage() {
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Payment Details</Tab>
         </TabList>
         <TabPanels bg="orange.50" borderRadius="0 0 md md">
-          <TabPanel>
-            <Heading size="md" mb={6} color="orange.700">Billing Cycle - {currentMonth.name}</Heading>
-            <VStack align="stretch" spacing={6}>
-              {outstandingBalance > 0 && (
-                <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
-                  <VStack align="stretch" spacing={2}>
-                    <Text fontWeight="semibold" color="orange.800">Outstanding Balance</Text>
-                    <Flex justify="space-between">
-                      <Text>Total Cost:</Text>
-                      <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
-                    </Flex>
-                    <Flex justify="space-between">
-                      <Text>Invoiced Amount:</Text>
-                      <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
-                    </Flex>
-                    <Flex justify="space-between">
-                      <Text>Outstanding Balance:</Text>
-                      <Text fontWeight="bold" color="orange.600">${outstandingBalance.toFixed(2)}</Text>
-                    </Flex>
-                    <Text fontStyle="italic" color="orange.600">
-                      Note: The outstanding balance reflects additional server costs not yet invoiced. It can take 1-3 business days for the updated balance to be reflected.
-                    </Text>
-                    <Button
-                      colorScheme="orange"
-                      onClick={handleBillingClick}
-                      isLoading={isLoading}
-                      loadingText="Redirecting..."
-                      isDisabled={isLoading}
-                    >
-                      Pay Outstanding Balance
-                    </Button>
-                  </VStack>
-                </Box>
-              )}
-              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
-                <Table variant="simple" size="md">
-                  <Thead bg="orange.100">
-                    <Tr>
-                      <Th color="orange.800">Server Name</Th>
-                      <Th color="orange.800">IP Address</Th>
-                      <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {currentActiveServers.map((server) => (
-                      <Tr key={server.name}>
-                        <Td>{server.name}</Td>
-                        <Td>{server.ip}</Td>
-                        <Td isNumeric>${perServerTotals[server.name].toFixed(2)}</Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                  <Tfoot bg="orange.50">
-                    <Tr>
-                      <Th colSpan={2} color="orange.800">Total</Th>
-                      <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
-                    </Tr>
-                  </Tfoot>
-                </Table>
-              </Box>
-              <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
-                <Table variant="simple" size="md">
-                  <Thead bg="orange.100">
-                    <Tr>
-                      <Th color="orange.800">Service</Th>
-                      <Th color="orange.800">Quantity</Th>
-                      <Th color="orange.800" isNumeric>Cost (USD)</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {services.map((s) => (
-                      <Tr key={s.name}>
-                        <Td>{s.name}</Td>
-                        <Td>x {currentTotals[s.name].count}</Td>
-                        <Td isNumeric>${currentTotals[s.name].total.toFixed(2)}</Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                  <Tfoot bg="orange.50">
-                    <Tr>
-                      <Th colSpan={2} color="orange.800">Total</Th>
-                      <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
-                    </Tr>
-                  </Tfoot>
-                </Table>
-              </Box>
-            </VStack>
-          </TabPanel>
+<TabPanel>
+  <Heading size="md" mb={6} color="orange.700">Billing Cycle - {currentMonth.name}</Heading>
+  <VStack align="stretch" spacing={6}>
+    {outstandingBalance > 0 && (
+      <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
+        <VStack align="stretch" spacing={2}>
+          <Text fontWeight="semibold" color="orange.800">Outstanding Balance</Text>
+          <Flex justify="space-between">
+            <Text>Current Month Cost:</Text>
+            <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
+          </Flex>
+          <Flex justify="space-between">
+            <Text>Invoiced Amount (September 2025):</Text>
+            <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
+          </Flex>
+          {history
+            .filter(({ month, status }) => month.name === "August 2025" && status === "Pending")
+            .map((invoice) => (
+              <Flex key={invoice.invoiceId} justify="space-between">
+                <Text>{invoice.description} (August 2025):</Text>
+                <Text fontWeight="bold">${invoice.total.toFixed(2)}</Text>
+              </Flex>
+            ))}
+          <Flex justify="space-between">
+            <Text>Outstanding Balance:</Text>
+            <Text fontWeight="bold" color="orange.600">${outstandingBalance.toFixed(2)}</Text>
+          </Flex>
+          <Text fontStyle="italic" color="orange.600">
+            Note: The outstanding balance includes unpaid invoices from previous months and current server costs not yet invoiced. It can take 1-3 business days for the updated balance to be reflected.
+          </Text>
+          <Button
+            colorScheme="orange"
+            onClick={handleBillingClick}
+            isLoading={isLoading}
+            loadingText="Redirecting..."
+            isDisabled={isLoading}
+          >
+            Pay Outstanding Balance
+          </Button>
+        </VStack>
+      </Box>
+    )}
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
+      <Table variant="simple" size="md">
+        <Thead bg="orange.100">
+          <Tr>
+            <Th color="orange.800">Server Name</Th>
+            <Th color="orange.800">IP Address</Th>
+            <Th color="orange.800" isNumeric>Total Cost (USD)</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {currentActiveServers.map((server) => (
+            <Tr key={server.name}>
+              <Td>{server.name}</Td>
+              <Td>{server.ip}</Td>
+              <Td isNumeric>${perServerTotals[server.name].toFixed(2)}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+        <Tfoot bg="orange.50">
+          <Tr>
+            <Th colSpan={2} color="orange.800">Total</Th>
+            <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
+          </Tr>
+        </Tfoot>
+      </Table>
+    </Box>
+    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm">
+      <Table variant="simple" size="md">
+        <Thead bg="orange.100">
+          <Tr>
+            <Th color="orange.800">Service</Th>
+            <Th color="orange.800">Quantity</Th>
+            <Th color="orange.800" isNumeric>Cost (USD)</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {services.map((s) => (
+            <Tr key={s.name}>
+              <Td>{s.name}</Td>
+              <Td>x {currentTotals[s.name].count}</Td>
+              <Td isNumeric>${currentTotals[s.name].total.toFixed(2)}</Td>
+            </Tr>
+          ))}
+        </Tbody>
+        <Tfoot bg="orange.50">
+          <Tr>
+            <Th colSpan={2} color="orange.800">Total</Th>
+            <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
+          </Tr>
+        </Tfoot>
+      </Table>
+    </Box>
+  </VStack>
+</TabPanel>
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Service Details for {currentMonth.name}</Heading>
             <Accordion allowMultiple defaultIndex={[0]}>
