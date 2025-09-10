@@ -835,3 +835,8 @@ return (
     </Container>
   );
 }
+
+// Define and export the Route
+export const Route = createFileRoute("/_layout/hosting/billing")({
+  component: BillingPage,
+});
