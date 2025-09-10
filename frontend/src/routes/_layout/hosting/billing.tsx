@@ -381,7 +381,7 @@ function BillingPage() {
   return (
     <Container maxW="container.xl" py={10}>
       <Flex align="center" justify="space-between" py={6} mb={6}>
-        <Heading size="xl" color="gray.800">VPS Details</Heading>
+        <Heading size="xl" color="gray.800">Manage Billing</Heading>
         <Text fontSize="lg" color="gray.600">Manage your hosting costs and review billing history</Text>
       </Flex>
 
