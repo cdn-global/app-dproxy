@@ -245,18 +245,43 @@ const months: Month[] = [
 function calculateTotalsForMonth(month: Month) {
   const activeServers = servers.filter((s) => new Date(s.activeSince) <= month.end);
   const totals = services.reduce((acc, service) => {
-    const count = activeServers.filter((server) => service.getMonthlyCost(server) > 0).length;
-    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + service.getMonthlyCost(server), 0), count };
+    const count = activeServers.filter((server) => !server.isTrial && service.getMonthlyCost(server) > 0).length;
+    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + (server.isTrial ? 0 : service.getMonthlyCost(server)), 0), count };
     return acc;
   }, {} as Record<string, { total: number; count: number }>);
+
+  const fullPriceTotals = services.reduce((acc, service) => {
+    const getCost = (server: Server) => {
+      if (service.name === "Compute" && server.isTrial) {
+        return server.fullMonthlyComputePrice;
+      }
+      return service.getMonthlyCost(server);
+    };
+    const count = activeServers.filter((server) => getCost(server) > 0).length;
+    acc[service.name] = { total: activeServers.reduce((sum, server) => sum + getCost(server), 0), count };
+    return acc;
+  }, {} as Record<string, { total: number; count: number }>);
+
   const perServerTotals = activeServers.reduce((acc, server) => {
-    acc[server.name] = services.reduce((sum, svc) => sum + svc.getMonthlyCost(server), 0);
+    acc[server.name] = server.isTrial ? 0 : services.reduce((sum, svc) => sum + svc.getMonthlyCost(server), 0);
     return acc;
   }, {} as Record<string, number>);
-  const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
-  return { totals, grandTotal, activeServers, perServerTotals };
-}
 
+  const fullPricePerServerTotals = activeServers.reduce((acc, server) => {
+    acc[server.name] = services.reduce((sum, svc) => {
+      if (svc.name === "Compute" && server.isTrial) {
+        return sum + server.fullMonthlyComputePrice;
+      }
+      return sum + svc.getMonthlyCost(server);
+    }, 0);
+    return acc;
+  }, {} as Record<string, number>);
+
+  const grandTotal = Object.values(totals).reduce((sum, { total }) => sum + total, 0);
+  const fullGrandTotal = Object.values(fullPriceTotals).reduce((sum, { total }) => sum + total, 0);
+
+  return { totals, grandTotal, fullPriceTotals, fullGrandTotal, activeServers, perServerTotals, fullPricePerServerTotals };
+}
 const fetchBillingPortal = async (token: string) => {
   try {
     const response = await fetch("https://api.thedataproxy.com/v2/customer-portal", {
