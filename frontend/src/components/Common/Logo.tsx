@@ -31,7 +31,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
             fontWeight="600"
             fontSize={{ base: 'md', md: 'xl' }}
             display={{ base: 'inline', md: 'inline' }}
-            bgGradient="linear(to-r, orange.500, orange.400)"
+            bgGradient="linear(to-r, orange.500, orange.300)"
             bgClip="text"
           >
             DATA
@@ -41,7 +41,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
             fontWeight="800"
             fontSize={{ base: 'md', md: 'xl' }}
             display={{ base: 'inline', md: 'inline' }}
-            bgGradient="linear(to-r, orange.300, orange.200)"
+            bgGradient="linear(to-r, orange.300, orange.400)"
             bgClip="text"
             letterSpacing="tighter"
           >
