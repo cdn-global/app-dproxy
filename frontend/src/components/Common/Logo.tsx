@@ -23,7 +23,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           p={{ base: 1, md: 2 }}
 
         >
-          <Icon as={Layers} boxSize={{ base: '20px', md: '24px' }} aria-hidden />
+          <Icon as={Layers} boxSize={{ base: '20px', md: '28px' }} aria-hidden />
         </Box>
 
         <Box lineHeight={1} color="gray.800" display={{ base: 'flex', md: 'flex' }} alignItems="center">
