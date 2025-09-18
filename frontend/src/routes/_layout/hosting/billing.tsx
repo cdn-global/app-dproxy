@@ -561,7 +561,7 @@ const history = [
               {outstandingBalance > 0 && (
                 <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
                   <VStack align="stretch" spacing={2}>
-                    <Text fontWeight="semibold" color="orange.800">Outstanding Balance</Text>
+                    <Text fontWeight="semibold" color="orange.800">Balance</Text>
                     {/* <Flex justify="space-between">
                       <Text>Current Month Cost (Servers + Subscription):</Text>
                       <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
