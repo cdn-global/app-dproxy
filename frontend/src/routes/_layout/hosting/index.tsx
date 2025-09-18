@@ -200,19 +200,19 @@ function HostingIndexPage() {
       </Flex>
 
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
-        <Table variant="simple" size="md" colorScheme="gray">
+        <Table variant="simple" size="md" colorScheme="gray" borderWidth="1px" borderColor="gray.200">
           <Thead bg="ui.main">
             <Tr>
-              <Th {...vpsTableStyles.header}>Server Name</Th>
-              <Th {...vpsTableStyles.header}>IP</Th>
-              <Th {...vpsTableStyles.header}>Username</Th>
-              <Th {...vpsTableStyles.header}>Password</Th>
-              <Th isNumeric {...vpsTableStyles.header}>Actions</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Server Name</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">IP</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Username</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Password</Th>
+              <Th isNumeric {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
             {servers.map((server) => (
-              <Tr key={server.name}>
+              <Tr key={server.name} borderBottomWidth="1px" borderColor="gray.200">
                 <Td {...vpsTableStyles.cell(theme)}>{server.name}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>{server.ip}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>{server.username}</Td>
