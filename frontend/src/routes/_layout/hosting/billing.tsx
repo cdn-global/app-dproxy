@@ -562,14 +562,14 @@ const history = [
                 <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
                   <VStack align="stretch" spacing={2}>
                     <Text fontWeight="semibold" color="orange.800">Outstanding Balance</Text>
-                    <Flex justify="space-between">
+                    {/* <Flex justify="space-between">
                       <Text>Current Month Cost (Servers + Subscription):</Text>
                       <Text fontWeight="bold">${grandTotal.toFixed(2)}</Text>
                     </Flex>
                     <Flex justify="space-between">
                       <Text>Invoiced Amount (September 2025):</Text>
                       <Text fontWeight="bold">${invoicedAmount.toFixed(2)}</Text>
-                    </Flex>
+                    </Flex> */}
                     {history
                       .filter(({ month, status }) => month.name === "August 2025" && status === "Pending")
                       .map((invoice) => (
