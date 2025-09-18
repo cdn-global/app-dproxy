@@ -413,7 +413,7 @@ function UserAgentsPage() {
         </Flex>
 
         <Tabs isLazy variant="enclosed-colored" colorScheme="orange" onChange={(index) => setTabIndex(index)}>
-            <TabList>
+            <TabList bg="ui.light">
                 {[
                   { label: "All", count: allAgents.length, color: "orange" },
                   { label: "Desktop", count: desktopAgents.length, color: "orange" },
@@ -422,7 +422,7 @@ function UserAgentsPage() {
                 ].map((tab, idx) => (
                     <Tab
                       key={idx}
-                      bg="white"
+                      bg="ui.light"
                       fontWeight="semibold"
                       fontSize="lg"
                       color="gray.400"
@@ -513,8 +513,8 @@ function UserAgentsPage() {
         {error && (
           <Alert status="error" borderRadius="md"><AlertIcon />{error.message}</Alert>
         )}
-        {data && (
-          <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+          {data && (
+          <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
             <UserAgentTable
                 agents={displayedAgents}
                 isSuperuser={currentUser?.is_superuser || false}

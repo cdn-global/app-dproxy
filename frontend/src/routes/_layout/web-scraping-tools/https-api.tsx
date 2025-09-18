@@ -312,7 +312,7 @@ const HttpsProxyApiPage = () => {
                 {pageTabsData.map((tab) => (
                   <Tab
                     key={tab.id}
-                    bg="white"
+                    bg="ui.light"
                     fontWeight="semibold"
                     fontSize="lg"
                     color="gray.400"

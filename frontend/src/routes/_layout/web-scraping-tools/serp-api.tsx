@@ -365,7 +365,7 @@ const SerpApiPage = () => {
                     key={tab.id}
                     fontSize="lg"
                     fontWeight="semibold"
-                    bg="white"
+                    bg="ui.light"
                     color="gray.400"
                     _selected={{
                       bg: "gray.50",

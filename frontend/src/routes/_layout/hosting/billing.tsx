@@ -848,7 +848,7 @@ const history = [
           </TabPanel>
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">Invoices</Heading>
-            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm" bg="white" p={4}>
+            <Box borderWidth="1px" borderRadius="lg" overflow="hidden" boxShadow="sm" bg="ui.light" p={4}>
               <Table variant="simple" size="md">
                 <Thead bg="orange.100">
                   <Tr>
