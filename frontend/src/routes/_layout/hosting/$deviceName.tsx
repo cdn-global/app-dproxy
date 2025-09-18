@@ -172,7 +172,7 @@ function DeviceDetailsPage() {
   if (!server) {
     return (
       <Container maxW="container.xl" py={8}>
-        <Text fontSize="xl" color="orange.500">Server not found</Text>
+        <Text fontSize="xl" color="ui.main">Server not found</Text>
       </Container>
     );
   }
@@ -183,7 +183,7 @@ function DeviceDetailsPage() {
     <Container maxW="container.xl" py={8}>
       <Flex align="center" justify="space-between" mb={6}>
         <HStack>
-          <Heading size="lg">Server: {server.name}</Heading>
+          <Heading size="lg" color="ui.dark">Server: {server.name}</Heading>
           <Badge colorScheme={statusColor} fontSize="md" px={2} py={1}>
             {server.status}
           </Badge>
@@ -191,10 +191,11 @@ function DeviceDetailsPage() {
         <Button
           as={Link}
           to=".."
-          colorScheme="blue"
-          variant="outline"
+          bg="ui.main"
+          color="ui.light"
+          _hover={{ bg: "ui.secondary" }}
+          _active={{ bg: "ui.darkSlate" }}
           size="md"
-          _hover={{ bg: "blue.50" }}
         >
           Back to List
         </Button>
@@ -203,22 +204,22 @@ function DeviceDetailsPage() {
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
         {/* Basic Information */}
         <Box
-          bg="white"
+          bg="ui.light"
           p={6}
           borderRadius="lg"
-          boxShadow="sm"
+          boxShadow="lg"
           borderWidth="1px"
         >
-          <Heading size="md" mb={4}>Basic Information</Heading>
+          <Heading size="md" mb={4} color="ui.dark">Basic Information</Heading>
           <VStack align="stretch" spacing={3}>
             <Flex justify="space-between" align="center">
-              <Text fontWeight="medium">Name:</Text>
-              <Text>{server.name}</Text>
+              <Text fontWeight="medium" color="ui.dim">Name:</Text>
+              <Text color="ui.dark">{server.name}</Text>
             </Flex>
             <Flex justify="space-between" align="center">
-              <Text fontWeight="medium">Email:</Text>
+              <Text fontWeight="medium" color="ui.dim">Email:</Text>
               <HStack>
-                <Text>{server.email}</Text>
+                <Text color="ui.dark">{server.email}</Text>
                 <IconButton
                   aria-label="Copy email"
                   icon={<CopyIcon />}
@@ -229,9 +230,9 @@ function DeviceDetailsPage() {
               </HStack>
             </Flex>
             <Flex justify="space-between" align="center">
-              <Text fontWeight="medium">IP:</Text>
+              <Text fontWeight="medium" color="ui.dim">IP:</Text>
               <HStack>
-                <Text>{server.ip}</Text>
+                <Text color="ui.dark">{server.ip}</Text>
                 <IconButton
                   aria-label="Copy IP"
                   icon={<CopyIcon />}
@@ -241,64 +242,56 @@ function DeviceDetailsPage() {
                 />
               </HStack>
             </Flex>
-            <Flex justify="space-between">
-              <Text fontWeight="medium">Type:</Text>
-              <Text>{server.type}</Text>
-            </Flex>
-            <Flex justify="space-between">
-              <Text fontWeight="medium">OS:</Text>
-              <Text>{server.os}</Text>
-            </Flex>
           </VStack>
         </Box>
 
         {/* System Specifications */}
         <Box
-          bg="white"
+          bg="ui.light"
           p={6}
           borderRadius="lg"
-          boxShadow="sm"
+          boxShadow="lg"
           borderWidth="1px"
         >
-          <Heading size="md" mb={4}>System Specifications</Heading>
+          <Heading size="md" mb={4} color="ui.dark">System Specifications</Heading>
           <VStack align="stretch" spacing={3}>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Version:</Text>
-              <Text>{server.version}</Text>
+              <Text fontWeight="medium" color="ui.dim">Version:</Text>
+              <Text color="ui.dark">{server.version}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Kernel:</Text>
-              <Text>{server.kernel}</Text>
+              <Text fontWeight="medium" color="ui.dim">Kernel:</Text>
+              <Text color="ui.dark">{server.kernel}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">vCPUs:</Text>
-              <Text>{server.vCPUs ?? "N/A"}</Text>
+              <Text fontWeight="medium" color="ui.dim">vCPUs:</Text>
+              <Text color="ui.dark">{server.vCPUs ?? "N/A"}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">RAM:</Text>
-              <Text>{server.ramGB} GB</Text>
+              <Text fontWeight="medium" color="ui.dim">RAM:</Text>
+              <Text color="ui.dark">{server.ramGB} GB</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Storage Size:</Text>
-              <Text>{server.storageSizeGB} GB</Text>
+              <Text fontWeight="medium" color="ui.dim">Storage Size:</Text>
+              <Text color="ui.dark">{server.storageSizeGB} GB</Text>
             </Flex>
           </VStack>
         </Box>
 
         {/* Credentials */}
         <Box
-          bg="white"
+          bg="ui.light"
           p={6}
           borderRadius="lg"
-          boxShadow="sm"
+          boxShadow="lg"
           borderWidth="1px"
         >
-          <Heading size="md" mb={4}>Credentials</Heading>
+          <Heading size="md" mb={4} color="ui.dark">Credentials</Heading>
           <VStack align="stretch" spacing={3}>
             <Flex justify="space-between" align="center">
-              <Text fontWeight="medium">Username:</Text>
+              <Text fontWeight="medium" color="ui.dim">Username:</Text>
               <HStack>
-                <Text>{server.username}</Text>
+                <Text color="ui.dark">{server.username}</Text>
                 <IconButton
                   aria-label="Copy username"
                   icon={<CopyIcon />}
@@ -309,9 +302,9 @@ function DeviceDetailsPage() {
               </HStack>
             </Flex>
             <Flex justify="space-between" align="center">
-              <Text fontWeight="medium">Password:</Text>
+              <Text fontWeight="medium" color="ui.dim">Password:</Text>
               <HStack>
-                <Text>****</Text>
+                <Text color="ui.dark">****</Text>
                 <IconButton
                   aria-label="Copy password"
                   icon={<CopyIcon />}
@@ -326,37 +319,37 @@ function DeviceDetailsPage() {
 
         {/* Billing & Features */}
         <Box
-          bg="white"
+          bg="ui.light"
           p={6}
           borderRadius="lg"
-          boxShadow="sm"
+          boxShadow="lg"
           borderWidth="1px"
         >
-          <Heading size="md" mb={4}>Billing & Features</Heading>
+          <Heading size="md" mb={4} color="ui.dark">Billing & Features</Heading>
           <VStack align="stretch" spacing={3}>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Monthly Compute Price:</Text>
-              <Text>${server.monthlyComputePrice.toFixed(2)}</Text>
+              <Text fontWeight="medium" color="ui.dim">Monthly Compute Price:</Text>
+              <Text color="ui.dark">${server.monthlyComputePrice.toFixed(2)}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Active Since:</Text>
-              <Text>{server.activeSince}</Text>
+              <Text fontWeight="medium" color="ui.dim">Active Since:</Text>
+              <Text color="ui.dark">{server.activeSince}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Rotating IP:</Text>
-              <Text>{server.hasRotatingIP ? "Yes" : "No"}</Text>
+              <Text fontWeight="medium" color="ui.dim">Rotating IP:</Text>
+              <Text color="ui.dark">{server.hasRotatingIP ? "Yes" : "No"}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Backup:</Text>
-              <Text>{server.hasBackup ? "Yes" : "No"}</Text>
+              <Text fontWeight="medium" color="ui.dim">Backup:</Text>
+              <Text color="ui.dark">{server.hasBackup ? "Yes" : "No"}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Monitoring:</Text>
-              <Text>{server.hasMonitoring ? "Yes" : "No"}</Text>
+              <Text fontWeight="medium" color="ui.dim">Monitoring:</Text>
+              <Text color="ui.dark">{server.hasMonitoring ? "Yes" : "No"}</Text>
             </Flex>
             <Flex justify="space-between">
-              <Text fontWeight="medium">Managed Support:</Text>
-              <Text>{server.hasManagedSupport ?? "N/A"}</Text>
+              <Text fontWeight="medium" color="ui.dim">Managed Support:</Text>
+              <Text color="ui.dark">{server.hasManagedSupport ?? "N/A"}</Text>
             </Flex>
           </VStack>
         </Box>

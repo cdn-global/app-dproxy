@@ -179,35 +179,55 @@ function HostingIndexPage() {
     <Container maxW="full" py={9}>
       <Flex align="center" py={6}>
         <Flex direction="column">
-          <Text fontSize="3xl" color="black">VPS Access</Text>
-          <Text fontSize="lg" color="gray.600">Login Configuration for Hosting Infrastructure</Text>
+          <Text fontSize="3xl" color="ui.dark">VPS Access</Text>
+          <Text fontSize="lg" color="ui.dim">Login Configuration for Hosting Infrastructure</Text>
         </Flex>
-        <Button ml="auto" as={Link} to="billing">View Billing</Button>
+        <Button
+          ml="auto"
+          bg="ui.main"
+          color="ui.light"
+          _hover={{ bg: "ui.secondary" }}
+          _active={{ bg: "ui.darkSlate" }}
+          as={Link}
+          to="billing"
+        >
+          View Billing
+        </Button>
       </Flex>
 
-      <Box borderWidth="1px" borderRadius="lg" overflow="hidden">
+      <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
         <Table variant="simple" size="md">
-          <Thead>
+          <Thead bg="ui.main">
             <Tr>
-              <Th>Server Name</Th>
-              <Th>IP</Th>
-              <Th>Username</Th>
-              <Th>Password</Th>
-              <Th isNumeric>Actions</Th>
+              <Th color="ui.light">Server Name</Th>
+              <Th color="ui.light">IP</Th>
+              <Th color="ui.light">Username</Th>
+              <Th color="ui.light">Password</Th>
+              <Th isNumeric color="ui.light">Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
             {servers.map((server) => (
               <Tr key={server.name}>
-                <Td>{server.name}</Td>
-                <Td>{server.ip}</Td>
-                <Td>{server.username}</Td>
-                <Td>****</Td>
+                <Td color="ui.dark">{server.name}</Td>
+                <Td color="ui.dark">{server.ip}</Td>
+                <Td color="ui.dark">{server.username}</Td>
+                <Td color="ui.dark">****</Td>
                 <Td isNumeric>
                   <HStack spacing={2} justify="flex-end">
                     <CopyCell textToCopy={server.username} label="Username" />
                     <CopyCell textToCopy={server.password} label="Password" />
-                    <Button size="sm" as={Link} to={server.name}>View Details</Button>
+                    <Button
+                      size="sm"
+                      bg="ui.main"
+                      color="ui.light"
+                      _hover={{ bg: "ui.secondary" }}
+                      _active={{ bg: "ui.darkSlate" }}
+                      as={Link}
+                      to={server.name}
+                    >
+                      View Details
+                    </Button>
                   </HStack>
                 </Td>
               </Tr>
