@@ -307,7 +307,7 @@ const HttpsProxyApiPage = () => {
                 </Text>
               </Alert>
             )}
-            <Tabs isLazy variant="enclosed-colored" colorScheme="orange">
+            <Tabs isLazy variant="enclosed" colorScheme="orange" isFitted>
               <TabList>
                 {pageTabsData.map((tab) => (
                   <Tab

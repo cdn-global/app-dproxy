@@ -253,7 +253,7 @@ const GetStartedTab = () => {
         To get started, create an API key in the API Keys tab and use it in your requests. Remember to replace <Code fontSize="sm">YOUR_API_KEY</Code> with your actual key.
       </Text>
       <Divider mb={4}></Divider>
-      <Tabs variant="enclosed" colorScheme="orange" isFitted>
+      <Tabs variant="enclosed" colorScheme="orange">
         <TabList>
           {codeTabs.map((tab) => (
             <Tab 
