@@ -20,11 +20,11 @@ const theme = extendTheme({
   },
   colors: {
     ui: {
-      main: "#C2410C", // Darker, richer orange for primary
-      secondary: "#EA580C", // Slightly lighter but still bold for secondary
+      main: "#A33609", // Darker, rich orange for vibrant yet deep button background
+      secondary: "#F97316", // Bright, vibrant orange for hover and accents
       success: "#00CC88",
       danger: "#FF2D2D",
-      light: "#F8FAFC",
+      light: "#FFFFFF", // Pure white for maximum text/icon contrast
       dark: "#0F172A",
       darkSlate: "#1E293B",
       dim: "#64748B",
@@ -68,32 +68,34 @@ const theme = extendTheme({
     },
     Button: {
       baseStyle: {
-        fontWeight: "bold",
+        fontWeight: "extrabold", // Bolder text for better visibility
         borderRadius: "0", // Square, rigid corners
-        px: 6, // Reduced padding for a tighter, rigid feel
+        px: 6,
         py: 3,
         transition: "all 0.2s ease-in-out",
-        _focus: { boxShadow: "0 0 0 3px rgba(194, 65, 12, 0.4)" }, // Darker orange focus ring
+        _focus: { boxShadow: "0 0 0 3px rgba(163, 54, 9, 0.4)" }, // Darker orange focus ring
         background: "ui.main !important", // Force background visibility
+        color: "ui.light !important", // Pure white for text/icon clarity
       },
       variants: {
         primary: {
-          background: "ui.main !important", // Explicit background to prevent overrides
-          color: "ui.light",
+          background: "ui.main !important", // Darker orange, enforced
+          color: "ui.light !important", // White for high contrast
           _hover: {
-            background: "#A3340A !important", // Darker orange on hover
+            background: "ui.secondary !important", // Vibrant orange on hover
             transform: "translateY(-2px)",
-            boxShadow: "0 4px 12px rgba(194, 65, 12, 0.4)",
+            boxShadow: "0 4px 12px rgba(249, 115, 22, 0.4)", // Vibrant shadow
           },
           _active: { transform: "translateY(0)" },
           _disabled: {
             background: "ui.main !important",
             opacity: 0.3,
+            color: "ui.light !important",
           },
         },
         danger: {
           background: "ui.danger !important",
-          color: "ui.light",
+          color: "ui.light !important",
           _hover: {
             background: "#E51A1A !important",
             transform: "translateY(-2px)",
