@@ -12,21 +12,21 @@ const theme = extendTheme({
       "html, body": {
         fontFamily: '"Poppins", sans-serif',
         lineHeight: "1.5",
-        bg: "gray.50",
-        color: "gray.900",
+        bg: "ui.darkSlate", // Dark slate background for high contrast
+        color: "gray.100", // Light text for readability on dark background
         transition: "all 0.3s ease-in-out",
       },
     }),
   },
   colors: {
     ui: {
-      main: "#A33609", // Darker, rich orange for vibrant yet deep button background
-      secondary: "#F97316", // Bright, vibrant orange for hover and accents
+      main: "#FF6B00", // Brighter, vivid orange for buttons
+      secondary: "#F97316", // Vibrant orange for hover and accents
       success: "#00CC88",
       danger: "#FF2D2D",
-      light: "#FFFFFF", // Pure white for maximum text/icon contrast
+      light: "#FFFFFF", // Pure white for text/icon contrast
       dark: "#0F172A",
-      darkSlate: "#1E293B",
+      darkSlate: "#1A202C", // Darker slate for page background
       dim: "#64748B",
     },
   },
@@ -38,7 +38,7 @@ const theme = extendTheme({
   components: {
     Heading: {
       baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.50" : "ui.dark",
+        color: props.colorMode === "dark" ? "gray.50" : "gray.100",
         fontWeight: "black",
         letterSpacing: "-0.03em",
       }),
@@ -49,14 +49,14 @@ const theme = extendTheme({
     },
     Text: {
       baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.100" : "gray.800",
+        color: props.colorMode === "dark" ? "gray.100" : "gray.200",
         fontWeight: "medium",
         letterSpacing: "-0.01em",
       }),
     },
     Code: {
       baseStyle: (props) => ({
-        bg: props.colorMode === "dark" ? "ui.darkSlate" : "ui.light",
+        bg: props.colorMode === "dark" ? "ui.dark" : "ui.light",
         color: props.colorMode === "dark" ? "gray.50" : "ui.dark",
         fontSize: "sm",
         p: 4,
@@ -68,23 +68,23 @@ const theme = extendTheme({
     },
     Button: {
       baseStyle: {
-        fontWeight: "extrabold", // Bolder text for better visibility
+        fontWeight: "extrabold",
         borderRadius: "0", // Square, rigid corners
         px: 6,
         py: 3,
         transition: "all 0.2s ease-in-out",
-        _focus: { boxShadow: "0 0 0 3px rgba(163, 54, 9, 0.4)" }, // Darker orange focus ring
-        background: "ui.main !important", // Force background visibility
+        _focus: { boxShadow: "0 0 0 3px rgba(255, 107, 0, 0.4)" }, // Brighter orange focus ring
+        background: "ui.main !important", // Force vibrant orange background
         color: "ui.light !important", // Pure white for text/icon clarity
       },
       variants: {
         primary: {
-          background: "ui.main !important", // Darker orange, enforced
-          color: "ui.light !important", // White for high contrast
+          background: "ui.main !important", // Bright orange, enforced
+          color: "ui.light !important",
           _hover: {
-            background: "ui.secondary !important", // Vibrant orange on hover
+            background: "ui.secondary !important", // Slightly less bright for hover
             transform: "translateY(-2px)",
-            boxShadow: "0 4px 12px rgba(249, 115, 22, 0.4)", // Vibrant shadow
+            boxShadow: "0 4px 12px rgba(249, 115, 22, 0.4)",
           },
           _active: { transform: "translateY(0)" },
           _disabled: {
@@ -122,17 +122,17 @@ const theme = extendTheme({
               borderBottomColor: "ui.main",
               borderBottomWidth: "4px",
               bg: "ui.light",
-              boxShadow: "0 2px 8px rgba(255, 98, 0, 0.2)",
+              boxShadow: "0 2px 8px rgba(255, 107, 0, 0.2)",
             },
             _hover: {
               color: "ui.secondary",
-              bg: "gray.100",
+              bg: "gray.800",
               borderRadius: "md",
             },
           },
           tablist: {
             borderBottom: "2px solid",
-            borderColor: "gray.100",
+            borderColor: "gray.700",
           },
         },
       },
