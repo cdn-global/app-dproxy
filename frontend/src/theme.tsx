@@ -220,11 +220,9 @@ export const vpsTableStyles = {
   },
   cell: (theme) => ({
     padding: "12px",
-    borderBottom: `1px solid ${theme.colors.ui.dim}`,
   }),
   status: (theme, status) => ({
     padding: "12px",
-    borderBottom: `1px solid ${theme.colors.ui.dim}`,
     color: status === "Succeeded" ? theme.colors.ui.success : theme.colors.ui.danger,
   }),
 };
