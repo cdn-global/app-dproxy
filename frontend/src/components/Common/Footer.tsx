@@ -23,17 +23,6 @@ const Footer = () => {
             >
                 {/* Company Info */}
                 <VStack spacing={2} align={{ base: "center", md: "start" }}>
-                    <Link
-                        href="https://theDATAPROXY.com"
-                        isExternal
-                        color="ui.light"
-                        _hover={{ color: "ui.secondary" }}
-                    >
-                        
-                        
-                            theDATAPROXY.com
-                    
-                    </Link>
                     <Text color="ui.dim" fontSize="xs" maxW="200px">
                         Enterprise proxy and scraping solutions for web data.
                     </Text>
