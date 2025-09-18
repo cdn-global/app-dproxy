@@ -107,15 +107,15 @@ const UserMenu = () => {
   // Handle unauthorized error (e.g., session expired)
   if (error?.message.includes("Unauthorized")) {
     return (
-      <Box position="fixed" top={4} right={4}>
+        <Box position="fixed" top={4} right={4}>
         <IconButton
           aria-label="Log in"
-          icon={<FaUserSecret color="gray.800" fontSize="18px" />}
-          bg="gray.50"
-          border="1px solid"
-          borderColor="orange.300"
-          _hover={{ bg: "orange.100", borderColor: "orange.400" }}
-          _active={{ bg: "orange.200", borderColor: "orange.500" }}
+            icon={<FaUserSecret color="ui.dark" fontSize="18px" />}
+            bg="ui.light"
+            border="1px solid"
+            borderColor="orange.300"
+            _hover={{ bg: "orange.100", borderColor: "orange.400" }}
+            _active={{ bg: "orange.200", borderColor: "orange.500" }}
           isRound
           onClick={() => navigate({ to: "/login" })}
           data-testid="login-button"
@@ -137,8 +137,8 @@ const UserMenu = () => {
           <MenuButton
             as={IconButton}
             aria-label="User menu"
-            icon={<FaUserSecret color="gray.800" fontSize="18px" />}
-            bg="gray.50"
+            icon={<FaUserSecret color="ui.dark" fontSize="18px" />}
+            bg="ui.light"
             border="1px solid"
             borderColor="orange.300"
             _hover={{ bg: "orange.100", borderColor: "orange.400" }}
@@ -147,9 +147,9 @@ const UserMenu = () => {
             data-testid="user-menu-button"
           />
           <MenuList
-            bg="gray.50"
-            borderColor="gray.200"
-            color="gray.800"
+            bg="ui.light"
+            borderColor="ui.border"
+            color="ui.dark"
             boxShadow="md"
           >
             <MenuItem
@@ -198,8 +198,8 @@ const UserMenu = () => {
           <MenuButton
             as={IconButton}
             aria-label="User menu"
-            icon={<FaUserSecret color="gray.800" fontSize="16px" />}
-            bg="gray.50"
+            icon={<FaUserSecret color="ui.dark" fontSize="16px" />}
+            bg="ui.light"
             border="1px solid"
             borderColor="orange.300"
             _hover={{ bg: "orange.100", borderColor: "orange.400" }}
@@ -209,15 +209,15 @@ const UserMenu = () => {
             data-testid="user-menu-button-mobile"
           />
           <MenuList
-            bg="gray.50"
-            borderColor="gray.200"
-            color="gray.800"
+            bg="ui.light"
+            borderColor="ui.border"
+            color="ui.dark"
             boxShadow="md"
           >
             <MenuItem
               as={Link}
               to="/settings"
-              icon={<FiUser fontSize="16px" color="gray.600" />}
+              icon={<FiUser fontSize="16px" color="ui.dim" />}
               _hover={{ bg: "orange.100", color: "orange.500" }}
               data-testid="settings-menu-item-mobile"
             >
@@ -227,7 +227,7 @@ const UserMenu = () => {
               <MenuItem
                 as={Link}
                 to="/proxies/pricing"
-                icon={<FiCreditCard fontSize="16px" color="gray.600" />}
+                icon={<FiCreditCard fontSize="16px" color="ui.dim" />}
                 _hover={{ bg: "orange.100", color: "orange.500" }}
                 data-testid="subscription-menu-item-mobile"
               >

@@ -122,7 +122,7 @@ function RecoverPassword() {
           </Text>
           <Text 
             fontSize={{ base: "sm", md: "md" }} 
-            color="gray.500"
+            color="ui.dim"
           >
             Need assistance? Our support team and documentation are here to help.
           </Text>

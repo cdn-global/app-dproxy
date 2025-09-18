@@ -119,7 +119,7 @@ function Login() {
           </Text>
           <Text 
             fontSize={{ base: "sm", md: "md" }} 
-            color="gray.500"
+            color="ui.dim"
           >
             Need a Boost? Our expert support team and comprehensive documentation are here to fuel your success.
           </Text>

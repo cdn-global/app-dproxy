@@ -105,7 +105,7 @@ function SignUp() {
           </Text>
           <Text 
             fontSize={{ base: "sm", md: "md" }} 
-            color="gray.500"
+            color="ui.dim"
           >
             Curious how far you can go? Our expert crew and secret knowledge base are your launchpad to greatness.
           </Text>

@@ -167,7 +167,7 @@ function ActivateAccount() {
           </Text>
           <Text 
             fontSize={{ base: "sm", md: "md" }} 
-            color="gray.500"
+            color="ui.dim"
           >
             Need assistance? Our expert support team and comprehensive documentation are here to help.
           </Text>

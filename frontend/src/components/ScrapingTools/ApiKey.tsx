@@ -268,7 +268,7 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
           </ModalBody>
           <ModalFooter>
              <Flex justify="space-between" align="center" width="100%">
-                <Text fontSize="sm" color="gray.500">
+                <Text fontSize="sm" color="ui.dim">
                     Auto-closing in {countdown}s...
                 </Text>
             </Flex>
@@ -329,7 +329,7 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
                 {apiKeys.length === 0 && !loading && (
                     <Tr>
                         <Td colSpan={6}>
-                            <Text textAlign="center" color="gray.500" py={10}>
+                            <Text textAlign="center" color="ui.dim" py={10}>
                                 No API keys found. Generate one to get started.
                             </Text>
                         </Td>

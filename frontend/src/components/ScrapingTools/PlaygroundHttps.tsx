@@ -118,7 +118,7 @@ const ResultsModal: React.FC<ResultsModalProps> = ({ isOpen, onClose, data }) =>
     width: "100%",
     height: "65vh",
     border: "1px solid",
-    borderColor: "var(--chakra-colors-gray-200)",
+  borderColor: "var(--chakra-colors-ui-border)",
     borderRadius: "var(--chakra-radii-md)",
   };
 
@@ -126,7 +126,7 @@ const ResultsModal: React.FC<ResultsModalProps> = ({ isOpen, onClose, data }) =>
     <Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered motionPreset="slideInBottom">
       <ModalOverlay bg="blackAlpha.600" />
       <ModalContent mx={4} maxH="90vh" borderRadius="lg">
-        <ModalHeader bg="gray.50" borderBottomWidth="1px" fontWeight="semibold" borderTopRadius="lg"> 
+  <ModalHeader bg="ui.light" borderBottomWidth="1px" fontWeight="semibold" borderTopRadius="lg"> 
           API Call Results
         </ModalHeader>
         <ModalCloseButton />

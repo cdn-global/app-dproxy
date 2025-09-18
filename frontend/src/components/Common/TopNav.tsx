@@ -143,7 +143,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
               <Flex align="flex-start" w="100%">
                 <VStack align="flex-start" spacing={0}>
                   <Text fontWeight="600" color="gray.800">{subItem.title}</Text>
-                  <Text fontSize="sm" color="gray.500" whiteSpace="normal">{subItem.description}</Text>
+                  <Text fontSize="sm" color="ui.dim" whiteSpace="normal">{subItem.description}</Text>
                 </VStack>
               </Flex>
             </MenuItem>

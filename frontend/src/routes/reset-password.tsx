@@ -131,7 +131,7 @@ function ResetPassword() {
           </Text>
           <Text 
             fontSize={{ base: "sm", md: "md" }} 
-            color="gray.500"
+            color="ui.dim"
           >
             Need help? Our support team and documentation are ready to assist you.
           </Text>
