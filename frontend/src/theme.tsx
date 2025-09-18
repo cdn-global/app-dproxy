@@ -60,6 +60,12 @@ const theme = extendTheme({
         boxShadow: "0 -2px 8px rgba(255, 107, 0, 0.3)", // Subtle orange shadow
       },
     },
+    Box: {
+      baseStyle: {
+        bg: "ui.light",
+        color: "ui.dark",
+      },
+    },
     Heading: {
       baseStyle: (props) => ({
         color: props.colorMode === "dark" ? "gray.50" : "gray.900",
