@@ -21,8 +21,6 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
         >
           <Box position="relative" aria-hidden>
             <Cloud size={useBreakpointValue({ base: 12, md: 16 })} strokeWidth={2.2} />
-            <Box position="absolute" right={-1} top={-1} boxSize={2} bg="whiteAlpha.700" borderRadius="full" />
-            <Box position="absolute" left={-1} bottom={0} boxSize={1.5} bg="whiteAlpha.600" borderRadius="full" />
           </Box>
         </Box>
 
