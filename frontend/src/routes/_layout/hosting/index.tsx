@@ -200,7 +200,7 @@ function HostingIndexPage() {
       </Flex>
 
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
-        <Table variant="striped" size="md" colorScheme="orange">
+        <Table variant="simple" size="md" colorScheme="gray">
           <Thead bg="ui.main">
             <Tr>
               <Th {...vpsTableStyles.header}>Server Name</Th>
