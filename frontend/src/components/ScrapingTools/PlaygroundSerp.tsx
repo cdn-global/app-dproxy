@@ -378,7 +378,7 @@ fetch(url, {
                   value={generateCurlCommand()}
                   readOnly
                   height="300px"
-                  bg="gray.50"
+                  bg="ui.light"
                   fontFamily="monospace"
                   size="sm"
                 />
@@ -388,7 +388,7 @@ fetch(url, {
                   value={generatePythonCode()}
                   readOnly
                   height="300px"
-                  bg="gray.50"
+                  bg="ui.light"
                   fontFamily="monospace"
                   size="sm"
                 />
@@ -398,7 +398,7 @@ fetch(url, {
                   value={generateJsCode()}
                   readOnly
                   height="300px"
-                  bg="gray.50"
+                  bg="ui.light"
                   fontFamily="monospace"
                   size="sm"
                 />

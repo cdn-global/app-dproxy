@@ -205,8 +205,8 @@ const theme = extendTheme({
         },
         info: {
           container: {
-            bg: "orange.50",
-            color: "orange.900",
+            bg: "ui.surface",
+            color: "ui.dark",
             borderColor: "ui.main",
           },
         },

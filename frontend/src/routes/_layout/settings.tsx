@@ -84,10 +84,10 @@ function UserSettings() {
               fontSize="lg"
               color="ui.dim"
               _selected={{
-                bg: "gray.50",
+                bg: "ui.surface",
                 color: "orange.600",
                 borderColor: "inherit",
-                borderBottomColor: "gray.50",
+                borderBottomColor: "ui.surface",
                 borderTopWidth: "2px",
                 borderTopColor: "orange.400",
                 marginTop: "-1px",
@@ -97,7 +97,7 @@ function UserSettings() {
             </Tab>
           ))}
         </TabList>
-        <TabPanels bg="gray.50" pt={6} pb={6} borderRadius="0 0 md md">
+  <TabPanels bg="ui.light" pt={6} pb={6} borderRadius="0 0 md md">
           {finalTabs.map((tab, index) => (
             <TabPanel key={index}>
               {React.createElement(tab.component)}

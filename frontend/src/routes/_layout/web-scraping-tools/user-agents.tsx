@@ -522,7 +522,7 @@ function UserAgentsPage() {
                 handleOpenDeleteAlert={handleOpenDeleteAlert}
                 isPlaceholderData={isPlaceholderData}
             />
-            <Flex justify="space-between" p={4} align="center" borderTopWidth="1px" bg="gray.50">
+            <Flex justify="space-between" p={4} align="center" borderTopWidth="1px" bg="ui.light">
                 <Text fontSize="sm" color="ui.dim">
                     Showing <strong>{displayedAgents.length}</strong> results on this page
                 </Text>
