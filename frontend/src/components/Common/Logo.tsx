@@ -12,19 +12,19 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           display="inline-flex"
           alignItems="center"
           justifyContent="center"
-          boxSize={{ base: 10, md: 14 }}
-          borderRadius="md"
+          boxSize={{ base: 12, md: 18 }}
+          borderRadius={0}
           bgGradient="linear(to-br, orange.400, yellow.300)"
           color="white"
-          boxShadow="sm"
-          p={{ base: 1, md: 2 }}
+          boxShadow="md"
+          p={{ base: 2, md: 3 }}
         >
           <Box position="relative" aria-hidden>
-            <Cloud size={useBreakpointValue({ base: 14, md: 20 })} strokeWidth={2.6} />
+            <Cloud size={useBreakpointValue({ base: 16, md: 24 })} strokeWidth={2.8} />
           </Box>
         </Box>
 
-        <Box lineHeight={1} color="gray.800" display={{ base: 'block', md: 'flex' }} alignItems="baseline">
+        <Box lineHeight={1} color="gray.800" display={{ base: 'block', md: 'flex' }} alignItems="center">
           <Text as="span" fontWeight="600" fontSize={{ base: 'sm', md: 'md' }} display={{ base: 'block', md: 'inline' }} mr={{ base: 0, md: 3 }}>
             DATA
           </Text>
