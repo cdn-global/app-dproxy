@@ -45,7 +45,6 @@ interface NavGroupDropdownProps {
 interface NavItemsProps {
   onClose?: () => void;
   isMobile?: boolean;
-  isOnBrandBg?: boolean;
 }
 
 const navStructure: NavItem[] = [ {
@@ -150,12 +149,12 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
   );
 };
 
-const NavItems = ({ onClose, isMobile = false, isOnBrandBg = false }: NavItemsProps) => {
+const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   const queryClient = useQueryClient();
-  const textColor = isOnBrandBg ? 'ui.light' : 'gray.800';
-  const disabledColor = isOnBrandBg ? 'whiteAlpha.600' : 'gray.300';
-  const hoverColor = isOnBrandBg ? 'ui.light' : 'orange.600';
-  const activeTextColor = isOnBrandBg ? 'ui.light' : 'orange.800';
+  const textColor = 'gray.800';
+  const disabledColor = 'gray.300';
+  const hoverColor = 'orange.600';
+  const activeTextColor = 'orange.800';
   const currentUser = queryClient.getQueryData<UserPublic>(['currentUser']);
   const { logout } = useAuth();
 
@@ -368,8 +367,7 @@ const TopNav = () => {
 
   return (
     <Box
-      bg={colorMode === 'light' ? 'ui.main' : 'gray.800'}
-      color={colorMode === 'light' ? 'ui.light' : undefined}
+      bg={colorMode === 'light' ? 'gray.50' : 'gray.800'}
       px={4}
       py={2}
       position="sticky"
@@ -378,17 +376,16 @@ const TopNav = () => {
       boxShadow="sm"
       w="100%"
       borderBottomWidth="1px"
-      borderBottomColor={colorMode === 'light' ? 'ui.secondary' : 'gray.600'}
+      borderBottomColor={colorMode === 'light' ? 'gray.300' : 'gray.600'}
     >
       <Flex align="center" maxW="1200px" mx="auto" w="100%" justify="space-between">
         <Logo
           href="/"
           width={{ base: '80px', md: '110px' }}
-          color={colorMode === 'light' ? 'ui.light' : undefined}
         />
         <Flex align="center" gap={4}>
           <Box display={{ base: 'none', md: 'block' }}>
-            <NavItems isOnBrandBg={colorMode === 'light'} />
+            <NavItems />
           </Box>
           <IconButton
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
@@ -398,13 +395,12 @@ const TopNav = () => {
             variant="ghost"
             size="lg"
             ref={btnRef}
-            color={colorMode === 'light' ? 'ui.light' : undefined}
           />
         </Flex>
       </Flex>
       <Collapse in={isOpen} animateOpacity>
         <Box display={{ base: 'block', md: 'none' }} mt={4}>
-          <NavItems isMobile onClose={onClose} isOnBrandBg={colorMode === 'light'} />
+          <NavItems isMobile onClose={onClose} />
         </Box>
       </Collapse>
     </Box>
