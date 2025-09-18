@@ -556,13 +556,13 @@ const history = [
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Invoices</Tab>
           <Tab fontWeight="semibold" _selected={{ color: "orange.600", borderTopColor: "orange.400" }}>Payment Details</Tab>
         </TabList>
-        <TabPanels bg="orange.50" borderRadius="0 0 md md">
+  <TabPanels bg="ui.light" borderRadius="0 0 md md">
           <TabPanel>
             <Heading size="md" mb={6} color="orange.700">{currentMonth.name} - Billing Cycle</Heading>
             <VStack align="stretch" spacing={6}>
         
               {outstandingBalance > 0 && (
-                <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
+                <Box borderWidth="1px" borderRadius="lg" p={4} bg="ui.light" boxShadow="sm">
                   <VStack align="stretch" spacing={2}>
                     <Text fontWeight="semibold" color="orange.800">Balance</Text>
                     {/* <Flex justify="space-between">
@@ -622,7 +622,7 @@ const history = [
                       </Tr>
                     ))}
                   </Tbody>
-                  <Tfoot bg="orange.50">
+                  <Tfoot bg="ui.light">
                     <Tr>
                       <Th colSpan={3} color="orange.800">Server Total</Th>
                       <Th isNumeric color="orange.800">${(grandTotal - SUBSCRIPTION_COST_PER_MONTH).toFixed(2)}</Th>
@@ -667,7 +667,7 @@ const history = [
                       <Td isNumeric>${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)}</Td>
                     </Tr>
                   </Tbody>
-                  <Tfoot bg="orange.50">
+                  <Tfoot bg="ui.light">
                     <Tr>
                       <Th colSpan={2} color="orange.800">Total</Th>
                       <Th isNumeric color="orange.800">${grandTotal.toFixed(2)}</Th>
@@ -676,7 +676,7 @@ const history = [
                   </Tfoot>
                 </Table>
               </Box>
-                  <Box borderWidth="1px" borderRadius="lg" p={4} bg="orange.50" boxShadow="sm">
+                  <Box borderWidth="1px" borderRadius="lg" p={4} bg="ui.light" boxShadow="sm">
                 <VStack align="stretch" spacing={2}>
                   <Text fontWeight="semibold" color="orange.800">Current Subscription</Text>
                   <Text>Unlimited HTTPS API Request - Plus Tier</Text>
@@ -701,7 +701,7 @@ const history = [
             <Accordion allowMultiple defaultIndex={[0]}>
               <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
                 <h2>
-                  <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                  <AccordionButton bg="ui.light" _hover={{ bg: "ui.surface" }}>
                     <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
                       Server Resources
                     </Box>
@@ -750,7 +750,7 @@ const history = [
                 return (
                   <AccordionItem key={s.name} borderWidth="1px" borderRadius="md" mb={4}>
                     <h2>
-                      <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                      <AccordionButton bg="ui.light" _hover={{ bg: "ui.surface" }}>
                         <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
                           {s.name} - ${total.toFixed(2)} (x {relevantServers.length})
                         </Box>
@@ -790,7 +790,7 @@ const history = [
               })}
               <AccordionItem borderWidth="1px" borderRadius="md" mb={4}>
                 <h2>
-                  <AccordionButton bg="orange.50" _hover={{ bg: "orange.100" }}>
+                  <AccordionButton bg="ui.light" _hover={{ bg: "ui.surface" }}>
                     <Box as="span" flex="1" textAlign="left" fontWeight="semibold" color="orange.800">
                       Unlimited HTTPS API Request - Plus Tier - ${SUBSCRIPTION_COST_PER_MONTH.toFixed(2)} (x 1)
                     </Box>
@@ -828,7 +828,7 @@ const history = [
                           );
                         })}
                       </Tbody>
-                      <Tfoot bg="orange.50">
+                      <Tfoot bg="ui.light">
                         <Tr>
                           <Th colSpan={2} color="orange.800">Total Compute Cost</Th>
                           <Th isNumeric color="orange.800">${currentTotals["Compute"].total.toFixed(2)}</Th>
