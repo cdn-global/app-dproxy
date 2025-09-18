@@ -346,7 +346,7 @@ fetch(url, {
               readOnly
               height="360px"
               bg="orange.50"
-              color="black"
+              color="ui.dark"
               placeholder="Response will appear here after testing"
               size="sm"
               resize="vertical"

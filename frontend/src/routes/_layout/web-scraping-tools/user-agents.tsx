@@ -407,8 +407,8 @@ function UserAgentsPage() {
   return (
     <>
       <Container maxW="full" py={9}>
-        <Flex align="center" justify="space-between" py={6}>
-            <Text fontSize="3xl" color="black">User Agents</Text>
+    <Flex align="center" justify="space-between" py={6}>
+      <Text fontSize="3xl" color="ui.dark">User Agents</Text>
             <Text fontSize="lg" color="gray.600">A dynamic list of user agents for web scraping</Text>
         </Flex>
 
@@ -450,10 +450,10 @@ function UserAgentsPage() {
             py={6}
         >
             <Box p={4} mb={{ base: 4, md: 0 }}>
-                <Text fontSize="lg" mb={2} color="gray.700">
+                <Text fontSize="lg" mb={2} color="ui.dim">
                   Reflect the most prevalent browsers and devices.
                 </Text>
-                <Text fontSize="lg" mb={4} color="gray.700">
+                <Text fontSize="lg" mb={4} color="ui.dim">
                 Updated Daily
                 </Text>
             </Box>

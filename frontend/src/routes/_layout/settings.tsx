@@ -66,7 +66,7 @@ function UserSettings() {
   return (
     <Container maxW="full" py={9}>
       <Flex align="center" justify="space-between" py={6}>
-        <Text fontSize="3xl" color="black">
+  <Text fontSize="3xl" color="ui.dark">
           Settings
         </Text>
         <Text fontSize="lg" color="gray.600">

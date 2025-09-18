@@ -22,6 +22,7 @@ const theme = extendTheme({
     ui: {
       main: "#FF6B00", // Bright, vibrant orange for buttons, header, footer
       secondary: "#F97316", // Vibrant orange for hover
+      surface: "#FFE5D0",
       success: "#00CC88",
       danger: "#FF2D2D",
       light: "#FFFFFF", // Pure white for text/icon contrast
@@ -156,13 +157,13 @@ const theme = extendTheme({
             },
             _hover: {
               color: "ui.secondary",
-              bg: "#FFE5D0",
+              bg: "ui.surface",
               borderRadius: "md",
             },
           },
           tablist: {
             borderBottom: "2px solid",
-            borderColor: "#FFE5D0",
+            borderColor: "ui.surface",
           },
         },
       },

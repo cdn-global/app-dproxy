@@ -246,10 +246,10 @@ const codeTabs = [
 const GetStartedTab = () => {
   return (
     <Box>
-      <Text fontSize="lg" mb={2} color="gray.700">
+  <Text fontSize="lg" mb={2} color="ui.dim">
         This tool allows you to programmatically fetch search engine results pages.
       </Text>
-      <Text fontSize="lg" mb={4} color="gray.700">
+  <Text fontSize="lg" mb={4} color="ui.dim">
         To get started, create an API key in the API Keys tab and use it in your requests. Remember to replace <Code fontSize="sm">YOUR_API_KEY</Code> with your actual key.
       </Text>
       <Divider mb={4}></Divider>
@@ -279,7 +279,7 @@ const GetStartedTab = () => {
       <Box pt={8}>
         <Box p={4} borderWidth="1px" borderRadius="md" bg="orange.50" borderColor="orange.200">
             <Heading size="md" mb={2} color="gray.800">Need Help?</Heading>
-            <Text fontSize="md" color="gray.700">
+            <Text fontSize="md" color="ui.dim">
               Check our detailed{" "}
               <Link color="orange.600" fontWeight="bold" href="/documentation/serp-api" isExternal>
                 API Documentation
@@ -329,8 +329,8 @@ const SerpApiPage = () => {
   return (
       <ProtectedComponent>
           <Container maxW="full" py={9}>
-             <Flex align="center" justify="space-between" py={6}>
-                 <Text fontSize="3xl" color="black" >SERP API</Text>
+        <Flex align="center" justify="space-between" py={6}>
+          <Text fontSize="3xl" color="ui.dark" >SERP API</Text>
                  <Text fontSize="lg" color="gray.600">Search Engine Results Page</Text>
            </Flex>
 

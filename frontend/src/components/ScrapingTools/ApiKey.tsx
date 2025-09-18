@@ -280,10 +280,10 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
       <VStack spacing={2} align="stretch">
         <Flex direction={{ base: "column", md: "row" }} justify="space-between" align="center">
           <Box>
-            <Text fontSize="lg" mb={2} color="gray.700">
+            <Text fontSize="lg" mb={2} color="ui.dim">
             Manage and generate API keys for programmatic access
             </Text>
-            <Text fontSize="lg" mb={4} color="gray.700">
+            <Text fontSize="lg" mb={4} color="ui.dim">
               Expiration is set to 365 days by default
             </Text>
           </Box>
@@ -317,12 +317,12 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
               
               <Thead bg="gray.50">
                 <Tr>
-                  <Th color="black">Key Preview</Th>
-                  <Th color="black">Created At</Th>
-                  <Th color="black">Expires At</Th>
-                  <Th color="black">Requests</Th>
-                  <Th color="black">Status</Th>
-                  <Th color="black" isNumeric>Actions</Th>
+                  <Th color="ui.dark">Key Preview</Th>
+                  <Th color="ui.dark">Created At</Th>
+                  <Th color="ui.dark">Expires At</Th>
+                  <Th color="ui.dark">Requests</Th>
+                  <Th color="ui.dark">Status</Th>
+                  <Th color="ui.dark" isNumeric>Actions</Th>
                 </Tr>
               </Thead>
               <Tbody>
