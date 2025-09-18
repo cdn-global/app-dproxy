@@ -26,15 +26,13 @@ const Footer = () => {
                     <Link
                         href="https://theDATAPROXY.com"
                         isExternal
-                        color="white"
+                        color="ui.light"
                         _hover={{ color: "ui.secondary" }}
                     >
-                        <Text
-                            fontWeight="bold"
-                            fontSize="sm"
-                        >
+                        
+                        
                             theDATAPROXY.com
-                        </Text>
+                    
                     </Link>
                     <Text color="ui.dim" fontSize="xs" maxW="200px">
                         Enterprise proxy and scraping solutions for web data.
