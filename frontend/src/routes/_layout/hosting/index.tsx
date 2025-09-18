@@ -196,7 +196,7 @@ function HostingIndexPage() {
       </Flex>
 
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
-        <Table variant="simple" size="md">
+        <Table variant="striped" size="md" colorScheme="orange">
           <Thead bg="ui.main">
             <Tr>
               <Th color="ui.light">Server Name</Th>
