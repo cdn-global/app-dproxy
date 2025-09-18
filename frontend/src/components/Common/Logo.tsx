@@ -17,7 +17,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           minW={{ base: '48px', md: '48px' }}
           minH={{ base: '48px', md: '48px' }}
           borderRadius="lg"
-          bgGradient="linear(to-br, orange.500, orange.300)"
+          bgGradient="linear(to-br, orange.500, orange.200)"
           color="white"
           boxShadow="lg"
           p={{ base: 1, md: 2 }}
