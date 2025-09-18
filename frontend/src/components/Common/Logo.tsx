@@ -12,15 +12,18 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           display="inline-flex"
           alignItems="center"
           justifyContent="center"
-          boxSize={{ base: 12, md: 26 }}
+          w={{ base: 48, md: 104 }}
+          h={{ base: 48, md: 104 }}
+          minW={{ base: 48, md: 104 }}
+          minH={{ base: 48, md: 104 }}
           borderRadius="lg"
           bgGradient="linear(to-br, orange.500, orange.300)"
           color="white"
           boxShadow="lg"
-          p={{ base: 1.5, md: 4 }}
+          p={{ base: 1, md: 4 }}
         >
           <Box position="relative" aria-hidden>
-            <Layers size={useBreakpointValue({ base: 14, md: 26 })} />
+            <Layers size={useBreakpointValue({ base: 16, md: 26 })} />
           </Box>
         </Box>
 
