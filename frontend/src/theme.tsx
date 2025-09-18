@@ -12,16 +12,16 @@ const theme = extendTheme({
       "html, body": {
         fontFamily: '"Poppins", sans-serif',
         lineHeight: "1.5",
-        bg: "#FFF7ED", // Soft peach, warm to match orange and light elements
-        color: "gray.900", // Dark text for readability
+        bg: "#FFF7ED", // Soft peach background
+        color: "gray.900",
         transition: "all 0.3s ease-in-out",
       },
     }),
   },
   colors: {
     ui: {
-      main: "#FF6B00", // Bright, vibrant orange for buttons
-      secondary: "#F97316", // Slightly less bright for hover
+      main: "#FF6B00", // Bright, vibrant orange for buttons, header, footer
+      secondary: "#F97316", // Vibrant orange for hover
       success: "#00CC88",
       danger: "#FF2D2D",
       light: "#FFFFFF", // Pure white for text/icon contrast
@@ -36,6 +36,30 @@ const theme = extendTheme({
     mono: '"JetBrains Mono", monospace',
   },
   components: {
+    Header: {
+      baseStyle: {
+        bg: "ui.main !important", // Bright orange background
+        color: "ui.light !important", // White for text/icon visibility
+        fontWeight: "bold",
+        fontSize: "lg",
+        px: 6,
+        py: 4,
+        transition: "all 0.2s ease-in-out",
+        boxShadow: "0 2px 8px rgba(255, 107, 0, 0.3)", // Subtle orange shadow
+      },
+    },
+    Footer: {
+      baseStyle: {
+        bg: "ui.main !important", // Bright orange background
+        color: "ui.light !important", // White for text/icon visibility
+        fontWeight: "bold",
+        fontSize: "md",
+        px: 6,
+        py: 4,
+        transition: "all 0.2s ease-in-out",
+        boxShadow: "0 -2px 8px rgba(255, 107, 0, 0.3)", // Subtle orange shadow
+      },
+    },
     Heading: {
       baseStyle: (props) => ({
         color: props.colorMode === "dark" ? "gray.50" : "gray.900",
@@ -73,16 +97,16 @@ const theme = extendTheme({
         px: 6,
         py: 3,
         transition: "all 0.2s ease-in-out",
-        _focus: { boxShadow: "0 0 0 3px rgba(255, 107, 0, 0.4)" }, // Orange focus ring
-        background: "ui.main !important", // Force vibrant orange background
-        color: "ui.light !important", // Pure white for text/icon clarity
+        _focus: { boxShadow: "0 0 0 3px rgba(255, 107, 0, 0.4)" },
+        background: "ui.main !important",
+        color: "ui.light !important",
       },
       variants: {
         primary: {
-          background: "ui.main !important", // Bright orange, enforced
+          background: "ui.main !important",
           color: "ui.light !important",
           _hover: {
-            background: "ui.secondary !important", // Vibrant hover
+            background: "ui.secondary !important",
             transform: "translateY(-2px)",
             boxShadow: "0 4px 12px rgba(249, 115, 22, 0.4)",
           },
@@ -126,13 +150,13 @@ const theme = extendTheme({
             },
             _hover: {
               color: "ui.secondary",
-              bg: "#FFE5D0", // Light peach hover to match background
+              bg: "#FFE5D0",
               borderRadius: "md",
             },
           },
           tablist: {
             borderBottom: "2px solid",
-            borderColor: "#FFE5D0", // Light peach for cohesion
+            borderColor: "#FFE5D0",
           },
         },
       },
