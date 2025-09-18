@@ -213,4 +213,20 @@ const theme = extendTheme({
   },
 });
 
+export const vpsTableStyles = {
+  header: {
+    color: "orange.800",
+    padding: "12px",
+  },
+  cell: (theme) => ({
+    padding: "12px",
+    borderBottom: `1px solid ${theme.colors.ui.dim}`,
+  }),
+  status: (theme, status) => ({
+    padding: "12px",
+    borderBottom: `1px solid ${theme.colors.ui.dim}`,
+    color: status === "Succeeded" ? theme.colors.ui.success : theme.colors.ui.danger,
+  }),
+};
+
 export default theme;

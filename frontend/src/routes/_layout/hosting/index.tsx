@@ -15,8 +15,10 @@ import {
   useToast,
   HStack,
   Button,
+  useTheme,
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
+import { vpsTableStyles } from "../../../theme";
 
 interface Server {
   name: string;
@@ -175,6 +177,8 @@ const CopyCell = ({ textToCopy, label }: { textToCopy: string; label: string }) 
 };
 
 function HostingIndexPage() {
+  const theme = useTheme();
+
   return (
     <Container maxW="full" py={9}>
       <Flex align="center" py={6}>
@@ -199,20 +203,20 @@ function HostingIndexPage() {
         <Table variant="striped" size="md" colorScheme="orange">
           <Thead bg="ui.main">
             <Tr>
-              <Th color="ui.light">Server Name</Th>
-              <Th color="ui.light">IP</Th>
-              <Th color="ui.light">Username</Th>
-              <Th color="ui.light">Password</Th>
-              <Th isNumeric color="ui.light">Actions</Th>
+              <Th {...vpsTableStyles.header}>Server Name</Th>
+              <Th {...vpsTableStyles.header}>IP</Th>
+              <Th {...vpsTableStyles.header}>Username</Th>
+              <Th {...vpsTableStyles.header}>Password</Th>
+              <Th isNumeric {...vpsTableStyles.header}>Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
             {servers.map((server) => (
               <Tr key={server.name}>
-                <Td color="ui.dark">{server.name}</Td>
-                <Td color="ui.dark">{server.ip}</Td>
-                <Td color="ui.dark">{server.username}</Td>
-                <Td color="ui.dark">****</Td>
+                <Td {...vpsTableStyles.cell(theme)}>{server.name}</Td>
+                <Td {...vpsTableStyles.cell(theme)}>{server.ip}</Td>
+                <Td {...vpsTableStyles.cell(theme)}>{server.username}</Td>
+                <Td {...vpsTableStyles.cell(theme)}>****</Td>
                 <Td isNumeric>
                   <HStack spacing={2} justify="flex-end">
                     <CopyCell textToCopy={server.username} label="Username" />
