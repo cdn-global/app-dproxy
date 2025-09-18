@@ -31,6 +31,7 @@ import {
   ListItem,
   ListIcon,
   Divider,
+  useTheme,
 } from "@chakra-ui/react";
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
@@ -195,12 +196,12 @@ const servers: Server[] = [
 ];
 
 const ELASTIC_IP_FEE_PER_MONTH = 3.6;
-const STORAGE_COST_PER_GB_MONTH = 0.10;
+const STORAGE_COST_PER_GB_MONTH = 0.1;
 const ROTATING_IP_FEE_PER_MONTH = 5.0;
 const BACKUP_FEE_PER_MONTH = 5.0;
 const MONITORING_FEE_PER_MONTH = 8.0;
 const MANAGED_SUPPORT_FEE_PER_MONTH = 40.0;
-const SUBSCRIPTION_COST_PER_MONTH = 299.00;
+const SUBSCRIPTION_COST_PER_MONTH = 299.0;
 
 interface Service {
   name: string;
@@ -399,6 +400,7 @@ function PaymentDetailsTab() {
 }
 
 function BillingPage() {
+  const theme = useTheme();
   const currentMonth = months[months.length - 1];
   const {
     totals: currentTotals,
@@ -861,13 +863,13 @@ const history = [
                 <Tbody>
                   {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
                     <Tr key={invoiceId}>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{month.name}</Td>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{invoiceId.slice(0, 12)}...</Td>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0", color: status === "Succeeded" ? "#15803d" : "#dc2626" }}>{status}</Td>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{paymentDate || "Pending"}</Td>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{paymentMethod}</Td>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>{description}</Td>
-                      <Td style={{ padding: "12px", borderBottom: "1px solid #e0e0e0" }}>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{month.name}</Td>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{invoiceId.slice(0, 12)}...</Td>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}`, color: status === "Succeeded" ? theme.colors.ui.success : theme.colors.ui.danger }}>{status}</Td>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{paymentDate || "Pending"}</Td>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{paymentMethod}</Td>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{description}</Td>
+                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}`}}>
                         <Flex justify="center" gap={2}>
                           <Button
                             size="sm"

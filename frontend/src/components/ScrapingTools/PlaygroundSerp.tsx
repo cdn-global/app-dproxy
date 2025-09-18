@@ -22,6 +22,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  useTheme,
 } from "@chakra-ui/react";
 import { CopyIcon, DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import { FiSend } from "react-icons/fi";
@@ -67,6 +68,8 @@ const PlaygroundSerpApi: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [responseTime, setResponseTime] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<number>(0);
+
+  const theme = useTheme();
 
   const generateCurlCommand = () => {
     const params = new URLSearchParams({
@@ -191,7 +194,17 @@ fetch(url, {
           <html>
             <head>
               <title>Formatted Response</title>
-              <style>body { font-family: monospace; padding: 20px; } pre { background: #f4f4f4; padding: 20px; border-radius: 8px; }</style>
+              <style>
+                body {
+                  font-family: ${theme.fonts.mono};
+                  padding: 20px;
+                }
+                pre {
+                  background: ${theme.colors.ui.light};
+                  padding: 20px;
+                  border-radius: ${theme.radii.md};
+                }
+              </style>
             </head>
             <body>
               <pre>${JSON.stringify(JSON.parse(response), null, 2)}</pre>
