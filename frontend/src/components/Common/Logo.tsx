@@ -30,7 +30,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           <Text as="span" fontWeight="600" fontSize={{ base: 'sm', md: 'lg' }} display={{ base: 'inline', md: 'inline' }}>
             DATA
           </Text>
-          <Text as="span" fontWeight="800" fontSize={{ base: 'sm', md: 'lg' }} display={{ base: 'inline', md: 'inline' }} color="orange.500" letterSpacing="tighter">
+          <Text as="span" fontWeight="800" fontSize={{ base: 'sm', md: 'lg' }} display={{ base: 'inline', md: 'inline' }} color="orange.400" letterSpacing="tighter">
             PROXY
           </Text>
         </Box>
