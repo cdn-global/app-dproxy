@@ -350,4 +350,39 @@ export const Route = createFileRoute("/_layout/web-scraping-tools/https-api")({
   component: HttpsProxyApiPage,
 });
 
-export default HttpsProxyApiPage;
+const HttpsApi = () => {
+  const toast = useToast();
+  const { hasCopied, onCopy } = useClipboard("Sample API Key");
+
+  return (
+    <Box bg="ui.light" p={6} borderRadius="md" boxShadow="lg">
+      <Heading fontSize="2xl" color="ui.dark" mb={4}>
+        HTTPS API Access
+      </Heading>
+      <Divider mb={4} />
+      <Text color="ui.dim" mb={4}>
+        Manage your HTTPS API access and keys.
+      </Text>
+      <Button
+        bg="ui.main"
+        color="ui.light"
+        _hover={{ bg: "ui.secondary" }}
+        _active={{ bg: "ui.darkSlate" }}
+        onClick={() => {
+          toast({
+            title: "API Key Copied",
+            description: "Your API key has been copied to the clipboard.",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+          onCopy();
+        }}
+      >
+        Copy API Key
+      </Button>
+    </Box>
+  );
+};
+
+export default HttpsApi;

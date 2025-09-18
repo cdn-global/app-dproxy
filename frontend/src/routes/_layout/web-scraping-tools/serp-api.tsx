@@ -403,3 +403,62 @@ export const Route = createFileRoute("/_layout/web-scraping-tools/serp-api")({
 });
 
 export default SerpApiPage;
+
+const SerpApi = () => {
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <Box bg="ui.light" p={6} borderRadius="md" boxShadow="lg">
+      <Heading fontSize="2xl" color="ui.dark" mb={4}>
+        SERP API Access
+      </Heading>
+      <Divider mb={4} />
+      <Text color="ui.dim" mb={4}>
+        Manage your SERP API access and configurations.
+      </Text>
+      <Button
+        bg="ui.main"
+        color="ui.light"
+        _hover={{ bg: "ui.secondary" }}
+        _active={{ bg: "ui.darkSlate" }}
+        onClick={onOpen}
+      >
+        Configure API
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Configure SERP API</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text color="ui.dim">Adjust your API settings below:</Text>
+            <Textarea placeholder="Enter configuration..." mt={4} />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              bg="ui.main"
+              color="ui.light"
+              _hover={{ bg: "ui.secondary" }}
+              _active={{ bg: "ui.darkSlate" }}
+              onClick={() => {
+                toast({
+                  title: "Configuration Saved",
+                  description: "Your API settings have been updated.",
+                  status: "success",
+                  duration: 5000,
+                  isClosable: true,
+                });
+                onClose();
+              }}
+            >
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Box>
+  );
+};
+
+export { SerpApi };
