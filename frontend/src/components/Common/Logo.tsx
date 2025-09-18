@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, LinkProps, HStack, Box, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Link, LinkProps, HStack, Box, Text, Icon } from '@chakra-ui/react';
 import { Layers } from 'react-feather';
 
 interface LogoProps extends LinkProps {}
@@ -12,19 +12,17 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           display="inline-flex"
           alignItems="center"
           justifyContent="center"
-          w={{ base: 48, md: 104 }}
-          h={{ base: 48, md: 104 }}
-          minW={{ base: 48, md: 104 }}
-          minH={{ base: 48, md: 104 }}
+          w={{ base: '48px', md: '104px' }}
+          h={{ base: '48px', md: '104px' }}
+          minW={{ base: '48px', md: '104px' }}
+          minH={{ base: '48px', md: '104px' }}
           borderRadius="lg"
           bgGradient="linear(to-br, orange.500, orange.300)"
           color="white"
           boxShadow="lg"
           p={{ base: 1, md: 4 }}
         >
-          <Box position="relative" aria-hidden>
-            <Layers size={useBreakpointValue({ base: 16, md: 26 })} />
-          </Box>
+          <Icon as={Layers} boxSize={{ base: '20px', md: '32px' }} strokeWidth={3} aria-hidden />
         </Box>
 
         <Box lineHeight={1} color="gray.800" display={{ base: 'flex', md: 'flex' }} alignItems="center">
