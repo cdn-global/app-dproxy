@@ -1,36 +1,44 @@
 import React from 'react';
-import { Link, LinkProps, HStack } from '@chakra-ui/react';
-import { Layers } from 'react-feather';
+import { Link, LinkProps, HStack, Box, Text } from '@chakra-ui/react';
+import { Layers, Database } from 'react-feather';
 
-// Props interface remains the same, which is great.
 interface LogoProps extends LinkProps {}
 
-// By destructuring, we make it explicit that `href` is a prop we are aware of.
-// We provide a default value of "/" for it.
-// All other props are collected into the `...rest` object.
-const Logo: React.FC<LogoProps> = ({ href = "/", ...rest }) => {
+const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
   return (
     <Link
-      // We now explicitly use the `href` variable.
       href={href}
-      // --- Style Props ---
-      color="orange.400"
-      fontWeight="bold"
-      fontSize="2xl"
+      display="inline-flex"
+      alignItems="center"
       transition="color 0.2s ease-in-out"
-      _hover={{
-        textDecoration: 'none',
-        color: 'orange.200',
-      }}
-      // Spread the rest of the props. This is cleaner because we know
-      // `href` is not in this object, avoiding any potential confusion.
+      _hover={{ textDecoration: 'none', color: 'orange.300' }}
       {...rest}
     >
-      <HStack spacing={1} align="center">
-        <Layers size={28} strokeWidth={2.5} />
-        <span>
-          DATAPROXY
-        </span>
+      <HStack spacing={3} align="center">
+        <Box
+          display="inline-flex"
+          alignItems="center"
+          justifyContent="center"
+          boxSize={10}
+          borderRadius="md"
+          bgGradient="linear(to-br, orange.400, yellow.300)"
+          color="white"
+          boxShadow="sm"
+        >
+          <Box position="relative">
+            <Layers size={18} strokeWidth={2.2} />
+            <Database size={10} strokeWidth={2} style={{ position: 'absolute', right: -6, bottom: -6, opacity: 0.9 }} />
+          </Box>
+        </Box>
+
+        <Box lineHeight={1}>
+          <Text as="span" fontWeight="700" fontSize="lg" color="gray.800" display="block">
+            DATA
+          </Text>
+          <Text as="span" fontWeight="600" fontSize="sm" color="orange.400" display="block" letterSpacing="wide">
+            PROXY
+          </Text>
+        </Box>
       </HStack>
     </Link>
   );
