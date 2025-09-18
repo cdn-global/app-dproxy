@@ -74,7 +74,7 @@ function UserSettings() {
         </Text>
       </Flex>
 
-      <Tabs isLazy variant="enclosed-colored" colorScheme="orange">
+      <Tabs isLazy variant="enclosed" colorScheme="orange" isFitted>
         <TabList>
           {finalTabs.map((tab, index) => (
             <Tab
