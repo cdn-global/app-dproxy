@@ -45,6 +45,7 @@ interface NavGroupDropdownProps {
 interface NavItemsProps {
   onClose?: () => void;
   isMobile?: boolean;
+  isOnBrandBg?: boolean;
 }
 
 const navStructure: NavItem[] = [ {
@@ -87,13 +88,13 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
 
   const hoverStyles: CSSProperties = {
     color: hoverColor,
-    background: 'whiteAlpha.100',
+    background: 'gray.100',
     textDecoration: 'none',
   };
 
   const activeStyles: CSSProperties = {
     color: activeTextColor,
-    background: 'whiteAlpha.200',
+    background: 'orange.100',
   };
 
   return (
@@ -122,8 +123,6 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           minW="320px"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          bg="ui.light"
-          color="ui.dark"
         >
           {subItems?.map((subItem) => (
             <MenuItem
@@ -139,7 +138,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
             >
               <Flex align="flex-start" w="100%">
                 <VStack align="flex-start" spacing={0}>
-                  <Text fontWeight="600" color="ui.dark">{subItem.title}</Text>
+                  <Text fontWeight="600" color="gray.800">{subItem.title}</Text>
                   <Text fontSize="sm" color="ui.dim" whiteSpace="normal">{subItem.description}</Text>
                 </VStack>
               </Flex>
@@ -151,12 +150,12 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
   );
 };
 
-const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
+const NavItems = ({ onClose, isMobile = false, isOnBrandBg = false }: NavItemsProps) => {
   const queryClient = useQueryClient();
-  const textColor = 'ui.light';
-  const disabledColor = 'whiteAlpha.600';
-  const hoverColor = 'ui.light';
-  const activeTextColor = 'ui.light';
+  const textColor = isOnBrandBg ? 'ui.light' : 'gray.800';
+  const disabledColor = isOnBrandBg ? 'whiteAlpha.600' : 'gray.300';
+  const hoverColor = isOnBrandBg ? 'ui.light' : 'orange.600';
+  const activeTextColor = isOnBrandBg ? 'ui.light' : 'orange.800';
   const currentUser = queryClient.getQueryData<UserPublic>(['currentUser']);
   const { logout } = useAuth();
 
@@ -202,17 +201,17 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
 
   const hoverStyles: CSSProperties = {
     color: hoverColor,
-    background: 'whiteAlpha.100',
+    background: 'gray.100',
     textDecoration: 'none',
   };
 
   const activeStyles: CSSProperties = {
     color: activeTextColor,
-    background: 'whiteAlpha.200',
+    background: 'orange.100',
   };
 
   const disabledHoverStyles: CSSProperties = {
-    background: 'whiteAlpha.050',
+    background: 'gray.100',
   };
 
   const renderNavItems = (items: NavItem[]) =>
@@ -240,7 +239,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               py={2}
               color={textColor}
               align="center"
-              _hover={{ color: hoverColor, background: 'whiteAlpha.100' }}
+              _hover={{ color: hoverColor, background: 'gray.100' }}
               borderRadius="md"
               transition="all 0.2s"
             >
@@ -301,14 +300,14 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
       const isLink = !!path;
       if (isLink) {
         return (
-            <Flex
+          <Flex
             key={title}
             as={RouterLink}
             to={path}
             px={4}
             py={2}
-              color={textColor}
-              _hover={hoverStyles}
+            color={textColor}
+            _hover={hoverStyles}
             activeProps={{ style: activeStyles }}
             align="center"
             onClick={onClose}
@@ -317,7 +316,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             transition="all 0.2s"
             aria-label={title}
           >
-            {icon && <Icon as={icon} mr={2} boxSize={5} color={textColor as any} />}
+            {icon && <Icon as={icon} mr={2} boxSize={5} />}
             <Text fontWeight="500">{title}</Text>
           </Flex>
         );
@@ -369,8 +368,8 @@ const TopNav = () => {
 
   return (
     <Box
-      bg="ui.main"
-      color="ui.light"
+      bg={colorMode === 'light' ? 'ui.main' : 'gray.800'}
+      color={colorMode === 'light' ? 'ui.light' : undefined}
       px={4}
       py={2}
       position="sticky"
@@ -379,17 +378,17 @@ const TopNav = () => {
       boxShadow="sm"
       w="100%"
       borderBottomWidth="1px"
-      borderBottomColor="ui.secondary"
+      borderBottomColor={colorMode === 'light' ? 'ui.secondary' : 'gray.600'}
     >
       <Flex align="center" maxW="1200px" mx="auto" w="100%" justify="space-between">
         <Logo
           href="/"
           width={{ base: '80px', md: '110px' }}
-          color="ui.light"
+          color={colorMode === 'light' ? 'ui.light' : undefined}
         />
         <Flex align="center" gap={4}>
           <Box display={{ base: 'none', md: 'block' }}>
-            <NavItems />
+            <NavItems isOnBrandBg={colorMode === 'light'} />
           </Box>
           <IconButton
             aria-label={isOpen ? 'Close menu' : 'Open menu'}
@@ -399,13 +398,13 @@ const TopNav = () => {
             variant="ghost"
             size="lg"
             ref={btnRef}
-            color="ui.light"
+            color={colorMode === 'light' ? 'ui.light' : undefined}
           />
         </Flex>
       </Flex>
       <Collapse in={isOpen} animateOpacity>
         <Box display={{ base: 'block', md: 'none' }} mt={4}>
-          <NavItems isMobile onClose={onClose} />
+          <NavItems isMobile onClose={onClose} isOnBrandBg={colorMode === 'light'} />
         </Box>
       </Collapse>
     </Box>
