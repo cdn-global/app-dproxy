@@ -99,7 +99,7 @@ function ResetPassword() {
         direction={{ base: "column", md: "row" }} 
         width="100%"
         maxW={{ base: "100%", md: "container.xl" }}
-        bg="white"
+  bg="ui.light"
         boxShadow={{ base: "sm", md: "md" }}
         borderRadius={{ base: "lg", md: "md" }}
         overflow="hidden"

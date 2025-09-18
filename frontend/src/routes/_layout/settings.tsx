@@ -79,7 +79,7 @@ function UserSettings() {
           {finalTabs.map((tab, index) => (
             <Tab
               key={index}
-              bg="white"
+              bg="ui.light"
               fontWeight="semibold"
               fontSize="lg"
               color="gray.400"
