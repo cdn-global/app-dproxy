@@ -12,21 +12,21 @@ const theme = extendTheme({
       "html, body": {
         fontFamily: '"Poppins", sans-serif',
         lineHeight: "1.5",
-        bg: "ui.darkSlate", // Dark slate background for high contrast
-        color: "gray.100", // Light text for readability on dark background
+        bg: "#FFF7ED", // Soft peach, warm to match orange and light elements
+        color: "gray.900", // Dark text for readability
         transition: "all 0.3s ease-in-out",
       },
     }),
   },
   colors: {
     ui: {
-      main: "#FF6B00", // Brighter, vivid orange for buttons
-      secondary: "#F97316", // Vibrant orange for hover and accents
+      main: "#FF6B00", // Bright, vibrant orange for buttons
+      secondary: "#F97316", // Slightly less bright for hover
       success: "#00CC88",
       danger: "#FF2D2D",
       light: "#FFFFFF", // Pure white for text/icon contrast
       dark: "#0F172A",
-      darkSlate: "#1A202C", // Darker slate for page background
+      darkSlate: "#1A202C",
       dim: "#64748B",
     },
   },
@@ -38,7 +38,7 @@ const theme = extendTheme({
   components: {
     Heading: {
       baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.50" : "gray.100",
+        color: props.colorMode === "dark" ? "gray.50" : "gray.900",
         fontWeight: "black",
         letterSpacing: "-0.03em",
       }),
@@ -49,7 +49,7 @@ const theme = extendTheme({
     },
     Text: {
       baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.100" : "gray.200",
+        color: props.colorMode === "dark" ? "gray.100" : "gray.800",
         fontWeight: "medium",
         letterSpacing: "-0.01em",
       }),
@@ -73,7 +73,7 @@ const theme = extendTheme({
         px: 6,
         py: 3,
         transition: "all 0.2s ease-in-out",
-        _focus: { boxShadow: "0 0 0 3px rgba(255, 107, 0, 0.4)" }, // Brighter orange focus ring
+        _focus: { boxShadow: "0 0 0 3px rgba(255, 107, 0, 0.4)" }, // Orange focus ring
         background: "ui.main !important", // Force vibrant orange background
         color: "ui.light !important", // Pure white for text/icon clarity
       },
@@ -82,7 +82,7 @@ const theme = extendTheme({
           background: "ui.main !important", // Bright orange, enforced
           color: "ui.light !important",
           _hover: {
-            background: "ui.secondary !important", // Slightly less bright for hover
+            background: "ui.secondary !important", // Vibrant hover
             transform: "translateY(-2px)",
             boxShadow: "0 4px 12px rgba(249, 115, 22, 0.4)",
           },
@@ -126,13 +126,13 @@ const theme = extendTheme({
             },
             _hover: {
               color: "ui.secondary",
-              bg: "gray.800",
+              bg: "#FFE5D0", // Light peach hover to match background
               borderRadius: "md",
             },
           },
           tablist: {
             borderBottom: "2px solid",
-            borderColor: "gray.700",
+            borderColor: "#FFE5D0", // Light peach for cohesion
           },
         },
       },
