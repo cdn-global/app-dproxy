@@ -592,7 +592,7 @@ const history = [
                       loadingText="Redirecting..."
                       isDisabled={isLoading}
                     >
-                      Pay Outstanding Balance
+                      Manage Billing
                     </Button>
                   </VStack>
                 </Box>
