@@ -48,7 +48,7 @@ const BillingTab = () => {
       console.error("Error accessing customer portal:", error);
       toast({
         title: "Error",
-        description: "Failed to access billing portal. Please try again later.",
+        description: "Unable to access the billing portal. Please try again later.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -71,35 +71,29 @@ const BillingTab = () => {
   }
 
   return (
-    <Box>
-      <VStack spacing={2} align="stretch">
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          justify="space-between"
-          align="center"
+    <Box bg="ui.light" p={6} borderRadius="md" boxShadow="lg">
+      <Text fontSize="xl" fontWeight="bold" color="ui.dark" mb={4}>
+        Billing Information
+      </Text>
+      <Divider mb={4} />
+      <VStack spacing={4} align="stretch">
+        <Text color="ui.dim">
+          Manage your billing details and access the customer portal.
+        </Text>
+        <Button
+          bg="ui.main"
+          color="ui.light"
+          _hover={{ bg: "ui.secondary" }}
+          _active={{ bg: "ui.darkSlate" }}
+          isLoading={isLoading}
+          onClick={handleBillingClick}
         >
-          <Box>
-            <Text fontSize="lg" mb={2} color="gray.700">
-              Manage your subscriptions, view invoices, and update payment methods.
-            </Text>
-            <Text fontSize="lg" mb={4} color="gray.700">
-              You will be securely redirected to our customer portal.
-            </Text>
-          </Box>
-       <Flex direction={{ base: "column", md: "row" }} gap={2}>
-            <Button
-              colorScheme="blue"
-              onClick={handleBillingClick}
-              isLoading={isLoading}
-              loadingText="Redirecting..."
-              isDisabled={isLoading}
-            >
-              Manage Billing
-            </Button>
-            <Button as={Link} to="/hosting/billing" colorScheme="orange" variant="outline">See Details</Button>
-          </Flex>
-        </Flex>
-        <Divider mb={4} />
+          Access Billing Portal
+        </Button>
+        <Alert status="info" borderRadius="md" boxShadow="md">
+          <AlertIcon />
+          Ensure your payment details are up to date.
+        </Alert>
       </VStack>
     </Box>
   );

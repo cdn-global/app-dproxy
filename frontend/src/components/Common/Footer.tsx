@@ -9,12 +9,8 @@ import {
 import { FiPhone, FiMail, FiTwitter, FiGithub, FiGlobe, FiBook } from "react-icons/fi";
 
 const Footer = () => {
-    const textColor = "gray.800";
-    const accentColor = "orange.400";
-    const hoverColor = "orange.600";
-
     return (
-        <Box bg="white" py={3} px={4} boxShadow="sm" w="100%">
+        <Box bg="ui.darkSlate" py={6} px={4} w="100%">
             <Flex
                 maxW="1200px"
                 mx="auto"
@@ -26,150 +22,135 @@ const Footer = () => {
                 flexWrap={{ base: "wrap", md: "nowrap" }}
             >
                 {/* Company Info */}
-                <VStack spacing={1} align={{ base: "center", md: "start" }}>
+                <VStack spacing={2} align={{ base: "center", md: "start" }}>
                     <Link
                         href="https://theDATAPROXY.com"
                         isExternal
-                        color={textColor}
-                        _hover={{ color: accentColor }}
+                        color="ui.light"
+                        _hover={{ color: "ui.secondary" }}
                     >
                         <Text
                             fontWeight="bold"
-                            color={textColor}
                             fontSize="sm"
                         >
                             theDATAPROXY.com
                         </Text>
                     </Link>
-                    <Text color={textColor} fontSize="xs" maxW="200px">
+                    <Text color="ui.dim" fontSize="xs" maxW="200px">
                         Enterprise proxy and scraping solutions for web data.
                     </Text>
                 </VStack>
 
                 {/* Contact Info */}
-                <VStack spacing={1} align={{ base: "center", md: "start" }}>
-                    <Flex align="center" gap={1}>
-                        <Icon as={FiPhone} color={textColor} boxSize="0.9em" />
-                        <Link
-                            href="tel:+18334353873"
-                            color={textColor}
-                            fontSize="xs"
-                            _hover={{ color: hoverColor }}
-                        >
-                            +1 (833) 435-3873
-                        </Link>
+                <VStack spacing={2} align={{ base: "center", md: "start" }}>
+                    <Flex align="center" gap={2}>
+                        <Icon as={FiPhone} color="ui.light" />
+                        <Text color="ui.light" fontSize="sm">+1-800-123-4567</Text>
                     </Flex>
-                    <Flex align="center" gap={1}>
-                        <Icon as={FiMail} color={textColor} boxSize="0.9em" />
-                        <Link
-                            href="mailto:info@theDATAPROXY.com"
-                            color={textColor}
-                            fontSize="xs"
-                            _hover={{ color: hoverColor }}
-                        >
-                            info@theDATAPROXY.com
-                        </Link>
+                    <Flex align="center" gap={2}>
+                        <Icon as={FiMail} color="ui.light" />
+                        <Text color="ui.light" fontSize="sm">support@thedataproxy.com</Text>
                     </Flex>
                 </VStack>
 
                 {/* Support Links */}
-                <VStack spacing={1} align={{ base: "center", md: "start" }}>
+                <VStack spacing={2} align={{ base: "center", md: "start" }}>
                     <Link
                         href="https://theDATAPROXY.com/resources/faq"
                         isExternal
-                        color={textColor}
+                        color="ui.light"
                         fontSize="xs"
-                        _hover={{ color: hoverColor }}
+                        _hover={{ color: "ui.secondary" }}
                     >
                         FAQ
                     </Link>
                     <Link
                         href="https://theDATAPROXY.com/contact"
                         isExternal
-                        color={textColor}
+                        color="ui.light"
                         fontSize="xs"
-                        _hover={{ color: hoverColor }}
+                        _hover={{ color: "ui.secondary" }}
                     >
                         Help & Support
                     </Link>
                 </VStack>
 
                 {/* Legal Links */}
-                <VStack spacing={1} align={{ base: "center", md: "start" }}>
+                <VStack spacing={2} align={{ base: "center", md: "start" }}>
                     <Link
                         href="https://theDATAPROXY.com/privacy"
                         isExternal
-                        color={textColor}
+                        color="ui.light"
                         fontSize="xs"
-                        _hover={{ color: hoverColor }}
+                        _hover={{ color: "ui.secondary" }}
                     >
                         Privacy Policy
                     </Link>
                     <Link
                         href="https://theDATAPROXY.com/terms"
                         isExternal
-                        color={textColor}
+                        color="ui.light"
                         fontSize="xs"
-                        _hover={{ color: hoverColor }}
+                        _hover={{ color: "ui.secondary" }}
                     >
                         Terms of Service
                     </Link>
                 </VStack>
 
                 {/* Additional Legal Links */}
-                <VStack spacing={1} align={{ base: "center", md: "start" }}>
+                <VStack spacing={2} align={{ base: "center", md: "start" }}>
                     <Link
                         href="https://theDATAPROXY.com/cookie"
                         isExternal
-                        color={textColor}
+                        color="ui.light"
                         fontSize="xs"
-                        _hover={{ color: hoverColor }}
+                        _hover={{ color: "ui.secondary" }}
                     >
                         Cookie Policy
                     </Link>
                     <Link
                         href="https://theDATAPROXY.com/compliance"
                         isExternal
-                        color={textColor}
+                        color="ui.light"
                         fontSize="xs"
-                        _hover={{ color: hoverColor }}
+                        _hover={{ color: "ui.secondary" }}
                     >
                         Compliance
                     </Link>
                 </VStack>
 
                 {/* Cobalt Data Section */}
-                <VStack spacing={1} align={{ base: "center", md: "start" }}>
+                <VStack spacing={2} align={{ base: "center", md: "start" }}>
                     <Flex gap={3}>
                         <Link href="https://x.com/cobaltdata" isExternal>
                             <Icon
                                 as={FiTwitter}
-                                color={textColor}
-                                _hover={{ color: hoverColor }}
+                                color="ui.light"
+                                _hover={{ color: "ui.secondary" }}
                                 boxSize="1em"
                             />
                         </Link>
                         <Link href="https://github.com/cdn-global" isExternal>
                             <Icon
                                 as={FiGithub}
-                                color={textColor}
-                                _hover={{ color: hoverColor }}
+                                color="ui.light"
+                                _hover={{ color: "ui.secondary" }}
                                 boxSize="1em"
                             />
                         </Link>
                         <Link href="https://cobaltdata.net" isExternal>
                             <Icon
                                 as={FiGlobe}
-                                color={textColor}
-                                _hover={{ color: hoverColor }}
+                                color="ui.light"
+                                _hover={{ color: "ui.secondary" }}
                                 boxSize="1em"
                             />
                         </Link>
                         <Link href="https://docs.theDATAPROXY.com/" isExternal>
                             <Icon
                                 as={FiBook}
-                                color={textColor}
-                                _hover={{ color: hoverColor }}
+                                color="ui.light"
+                                _hover={{ color: "ui.secondary" }}
                                 boxSize="1em"
                             />
                         </Link>
@@ -179,7 +160,7 @@ const Footer = () => {
 
             {/* Copyright and Links */}
             <Text
-                color={textColor}
+                color="ui.light"
                 fontSize="xs"
                 textAlign="center"
                 mt={{ base: 3, md: 2 }}
@@ -188,8 +169,8 @@ const Footer = () => {
                 <Link
                     href="https://theDATAPROXY.com"
                     isExternal
-                    color={textColor}
-                    _hover={{ color: accentColor }}
+                    color="ui.light"
+                    _hover={{ color: "ui.secondary" }}
                 >
                     theDATAPROXY.com
                 </Link>
@@ -197,8 +178,8 @@ const Footer = () => {
                 <Link
                     href="https://tradevaultllc.com/"
                     isExternal
-                    color={textColor}
-                    _hover={{ color: hoverColor }}
+                    color="ui.light"
+                    _hover={{ color: "ui.secondary" }}
                 >
                     Trade Vault LLC
                 </Link>
