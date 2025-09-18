@@ -413,7 +413,17 @@ function BillingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  const history = [
+const history = [
+  {
+    month: "September", // September 2025
+    total: 299.0,
+    invoiceId: "02A67775-0010",
+    paymentDate: "September 18, 2025",
+    paymentMethod: "American Express •••• 1001",
+    description: "Payment for Invoice",
+    status: "Succeeded",
+  },
+
     {
       month: months[9], // September 2025
       total: 246.3,
