@@ -26,7 +26,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
         </Box>
 
         <Box lineHeight={1} color="gray.800" display={{ base: 'flex', md: 'flex' }} alignItems="center">
-          <Text as="span" fontWeight="600" fontSize={{ base: 'md', md: 'xl' }} display={{ base: 'inline', md: 'inline' }} color="white">
+          <Text as="span" fontWeight="600" fontSize={{ base: 'md', md: 'xl' }} display={{ base: 'inline', md: 'inline' }} color="gray.600">
             DATA
           </Text>
           <Text as="span" fontWeight="800" fontSize={{ base: 'md', md: 'xl' }} display={{ base: 'inline', md: 'inline' }} color="orange.400" letterSpacing="tighter">
