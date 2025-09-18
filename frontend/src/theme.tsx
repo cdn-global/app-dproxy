@@ -217,6 +217,10 @@ export const vpsTableStyles = {
   header: {
     color: "orange.800",
     padding: "12px",
+    fontWeight: "semibold",
+    textTransform: "uppercase",
+    letterSpacing: "0.06em",
+    fontSize: "sm",
   },
   cell: (theme) => ({
     padding: "12px",

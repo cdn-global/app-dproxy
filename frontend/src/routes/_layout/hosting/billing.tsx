@@ -851,25 +851,25 @@ const history = [
               <Table variant="simple" size="md">
                 <Thead bg="orange.100">
                   <Tr>
-                    <Th color="orange.800" style={{ padding: "12px" }}>Month</Th>
-                    <Th color="orange.800" style={{ padding: "12px" }}>Invoice Number</Th>
-                    <Th color="orange.800" style={{ padding: "12px" }}>Status</Th>
-                    <Th color="orange.800" style={{ padding: "12px" }}>Payment Date</Th>
-                    <Th color="orange.800" style={{ padding: "12px" }}>Payment Method</Th>
-                    <Th color="orange.800" style={{ padding: "12px" }}>Description</Th>
-                    <Th color="orange.800" style={{ padding: "12px" }}></Th>
+                    <Th {...vpsTableStyles.header}>Month</Th>
+                    <Th {...vpsTableStyles.header}>Invoice Number</Th>
+                    <Th {...vpsTableStyles.header}>Status</Th>
+                    <Th {...vpsTableStyles.header}>Payment Date</Th>
+                    <Th {...vpsTableStyles.header}>Payment Method</Th>
+                    <Th {...vpsTableStyles.header}>Description</Th>
+                    <Th {...vpsTableStyles.header}></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
                     <Tr key={invoiceId}>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{month.name}</Td>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{invoiceId.slice(0, 12)}...</Td>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}`, color: status === "Succeeded" ? theme.colors.ui.success : theme.colors.ui.danger }}>{status}</Td>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{paymentDate || "Pending"}</Td>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{paymentMethod}</Td>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}` }}>{description}</Td>
-                      <Td style={{ padding: "12px", borderBottom: `1px solid ${theme.colors.ui.dim}`}}>
+                      <Td {...vpsTableStyles.cell(theme)}>{month.name}</Td>
+                      <Td {...vpsTableStyles.cell(theme)}>{invoiceId.slice(0, 12)}...</Td>
+                      <Td {...vpsTableStyles.status(theme, status)}>{status}</Td>
+                      <Td {...vpsTableStyles.cell(theme)}>{paymentDate || "Pending"}</Td>
+                      <Td {...vpsTableStyles.cell(theme)}>{paymentMethod}</Td>
+                      <Td {...vpsTableStyles.cell(theme)}>{description}</Td>
+                      <Td {...vpsTableStyles.cell(theme)}>
                         <Flex justify="center" gap={2}>
                           <Button
                             size="sm"
