@@ -26,10 +26,25 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
         </Box>
 
         <Box lineHeight={1} color="gray.800" display={{ base: 'flex', md: 'flex' }} alignItems="center">
-          <Text as="span" fontWeight="600" fontSize={{ base: 'md', md: 'xl' }} display={{ base: 'inline', md: 'inline' }} color="orange.600">
+          <Text
+            as="span"
+            fontWeight="600"
+            fontSize={{ base: 'md', md: 'xl' }}
+            display={{ base: 'inline', md: 'inline' }}
+            bgGradient="linear(to-r, orange.500, orange.300)"
+            bgClip="text"
+          >
             DATA
           </Text>
-          <Text as="span" fontWeight="800" fontSize={{ base: 'md', md: 'xl' }} display={{ base: 'inline', md: 'inline' }} color="orange.400" letterSpacing="tighter">
+          <Text
+            as="span"
+            fontWeight="800"
+            fontSize={{ base: 'md', md: 'xl' }}
+            display={{ base: 'inline', md: 'inline' }}
+            bgGradient="linear(to-r, orange.400, orange.200)"
+            bgClip="text"
+            letterSpacing="tighter"
+          >
             PROXY
           </Text>
         </Box>
