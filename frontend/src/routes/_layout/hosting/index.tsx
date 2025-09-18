@@ -200,25 +200,25 @@ function HostingIndexPage() {
       </Flex>
 
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
-        <Table variant="simple" size="md" colorScheme="gray" borderWidth="1px" borderColor="gray.300">
+        <Table variant="simple" size="md" colorScheme="gray">
           <Thead bg="ui.main">
             <Tr>
-              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Server Name</Th>
-              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">IP</Th>
-              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Username</Th>
-              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Password</Th>
-              <Th isNumeric {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Actions</Th>
+              <Th {...vpsTableStyles.header}>Server Name</Th>
+              <Th {...vpsTableStyles.header}>IP</Th>
+              <Th {...vpsTableStyles.header}>Username</Th>
+              <Th {...vpsTableStyles.header}>Password</Th>
+              <Th isNumeric {...vpsTableStyles.header}>Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
             {servers.map((server) => (
-              <Tr key={server.name} borderBottomWidth="1px" borderColor="gray.200">
+              <Tr key={server.name}>
                 <Td {...vpsTableStyles.cell(theme)}>{server.name}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>{server.ip}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>{server.username}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>****</Td>
                 <Td isNumeric>
-                  <HStack spacing={2} justify="flex-end" borderWidth="1px" borderColor="gray.300" borderRadius="md" p={1}>
+                  <HStack spacing={2} justify="flex-end">
                     <CopyCell textToCopy={server.username} label="Username" />
                     <CopyCell textToCopy={server.password} label="Password" />
                     <Button
