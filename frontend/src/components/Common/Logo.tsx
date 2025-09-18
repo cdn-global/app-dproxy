@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, LinkProps, HStack, Box, Text, useBreakpointValue } from '@chakra-ui/react';
-import { Cloud } from 'react-feather';
+import { Layers } from 'react-feather';
 
 interface LogoProps extends LinkProps {}
 
@@ -20,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           p={{ base: 3, md: 4 }}
         >
           <Box position="relative" aria-hidden>
-            <Cloud size={useBreakpointValue({ base: 20, md: 32 })} strokeWidth={3.2} />
+            <Layers size={useBreakpointValue({ base: 20, md: 32 })} strokeWidth={3.2} />
           </Box>
         </Box>
 
