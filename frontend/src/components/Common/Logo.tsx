@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, LinkProps, HStack, Box, Text } from '@chakra-ui/react';
-import { Database } from 'react-feather';
+import { Cloud } from 'react-feather';
 
 interface LogoProps extends LinkProps {}
 
@@ -14,25 +14,25 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
       _hover={{ textDecoration: 'none', color: 'orange.300' }}
       {...rest}
     >
-      <HStack spacing={3} align="center">
+      <HStack spacing={2} align="center">
         <Box
           display="inline-flex"
           alignItems="center"
           justifyContent="center"
-          boxSize={10}
+          boxSize={9}
           borderRadius="md"
-          bgGradient="linear(to-br, orange.500, orange.300)"
+          bgGradient="linear(to-br, orange.400, yellow.300)"
           color="white"
           boxShadow="sm"
         >
-          <Database size={20} strokeWidth={2} />
+          <Cloud size={18} strokeWidth={2.2} />
         </Box>
 
         <Box lineHeight={1}>
           <Text as="span" fontWeight="600" fontSize="sm" color="gray.700" display="block">
             DATA
           </Text>
-          <Text as="span" fontWeight="800" fontSize="lg" color="orange.500" display="block" letterSpacing="wide">
+          <Text as="span" fontWeight="700" fontSize="md" color="orange.500" display="block" letterSpacing="wide">
             PROXY
           </Text>
         </Box>
