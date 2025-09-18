@@ -330,7 +330,7 @@ const HomePage = () => {
             {/* Row 1: Usage */}
             <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={6}>
               <GridItem>
-                <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
+                <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%" bg="ui.light">
                   <VStack align="start" spacing={3}>
                     <Heading size="xs">VPS Status</Heading>
                     <Flex alignItems="baseline">
@@ -352,7 +352,7 @@ const HomePage = () => {
                 </Box>
               </GridItem>
                <GridItem>
-                <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%">
+                <Box shadow="md" borderWidth="1px" borderRadius="md" p={4} height="100%" bg="ui.light">
                   <VStack align="start" spacing={3}>
                     <Heading size="xs">HTTPs API Usage</Heading>
                     <Flex alignItems="baseline">
@@ -371,7 +371,7 @@ const HomePage = () => {
 {displayedFeatures.length > 0 && (
   <VStack align="stretch" spacing={4} pt={4}>
     <Heading size="md">Your Services</Heading>
-    <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
+            <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
       {displayedFeatures.map((featureSlug) => {
         const details = featureDetails[featureSlug];
         if (!details) return null;
@@ -388,6 +388,7 @@ const HomePage = () => {
                 flexDirection="column"
                 transition="all 0.2s ease-in-out"
                 _hover={{ shadow: "xl", transform: "translateY(-4px)" }}
+                bg="ui.light"
               >
                 <Box flex="1">
                   <Flex justifyContent="space-between" alignItems="flex-start" mb={3}>
@@ -424,7 +425,7 @@ const HomePage = () => {
             {/* Quick Links */}
             <VStack align="stretch" spacing={4} pt={4}>
               <Heading size="md">Quick Links</Heading>
-              <Box p={5} shadow="md" borderWidth="1px" borderRadius="lg">
+              <Box p={5} shadow="md" borderWidth="1px" borderRadius="lg" bg="ui.light">
                 <VStack align="start" spacing={3}>
                   <Link as={RouterLink} to="/settings" display="flex" alignItems="center" color="orange.500" fontWeight="medium">
                     <Icon as={FaKey} mr={2} /> Manage API Keys
