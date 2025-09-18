@@ -50,16 +50,19 @@ interface NavItemsProps {
 const navStructure: NavItem[] = [{
   
         title: 'SERP API',
+        icon: FaGlobe,
         path: '/web-scraping-tools/serp-api',
         description: 'Structured data extraction with our powerful rotating proxy network.',
       }, {
 
         title: 'HTTPs API',
+        icon: FaSitemap,
         path: '/web-scraping-tools/https-api',
         description: 'Access any webpage with our powerful rotating proxy network.',
       },
       {
         title: 'VPS',
+        icon: FaServer,
         path: 'https://cloud.thedataproxy.com/hosting',
         description: 'Fully managed virtual private servers for your needs.',
       },     
