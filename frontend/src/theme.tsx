@@ -1,7 +1,7 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
-  initialColorMode: "light", // Changed to light mode as the default
+  initialColorMode: "light",
   useSystemColorMode: false,
 };
 
@@ -10,68 +10,90 @@ const theme = extendTheme({
   styles: {
     global: () => ({
       "html, body": {
-        fontFamily: '"Figtree", sans-serif',
-        lineHeight: "1.7",
-        bg: "gray.50", // Hardcoded light gray background for light mode
-        color: "gray.900", // Hardcoded dark text for readability in light mode
-
+        fontFamily: '"Inter", sans-serif', // Modern, clean font
+        lineHeight: "1.6",
+        bg: "gray.100", // Slightly lighter gray for a cleaner look
+        color: "gray.900",
+        transition: "all 0.2s ease", // Smooth transitions
       },
     }),
   },
   colors: {
     ui: {
-      main: "#F28C28", // orange as the primary accent color
-      secondary: "#FFA500", // Orange for secondary elements (or "#FFFF00" for yellow if preferred)
-      success: "#38A169", // Green for success states
-      danger: "#E53E3E", // Red for errors (unchanged)
+      main: "#F97316", // Vibrant orange as primary
+      secondary: "#FB923C", // Softer orange for secondary elements
+      success: "#10B981", // Bright green for success
+      danger: "#EF4444", // Vivid red for errors
       light: "#FFFFFF", // White for backgrounds
-      dark: "#1A202C", // Dark background for dark mode (unchanged)
-      darkSlate: "#2D3748", // Darker gray for contrast
-      dim: "#A0AEC0", // Muted gray for secondary text (unchanged)
+      dark: "#111827", // Darker, sharper gray for dark mode
+      darkSlate: "#1F2A44", // Deep slate for high contrast
+      dim: "#6B7280", // Neutral gray for secondary text
     },
+  },
+  fonts: {
+    heading: '"Inter", sans-serif',
+    body: '"Inter", sans-serif',
+    mono: '"Fira Code", monospace', // Modern monospace for code
   },
   components: {
     Heading: {
       baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.100" : "gray.900",
+        color: props.colorMode === "dark" ? "gray.50" : "gray.900",
+        fontWeight: "extrabold", // Bolder for modern look
+        letterSpacing: "-0.02em",
       }),
     },
     Text: {
       baseStyle: (props) => ({
-        color: props.colorMode === "dark" ? "gray.200" : "gray.700", // Darker text for light mode readability
+        color: props.colorMode === "dark" ? "gray.100" : "gray.800",
+        fontWeight: "medium",
       }),
     },
     Code: {
       baseStyle: (props) => ({
-        bg: props.colorMode === "dark" ? "gray.700" : "gray.100", // Light background for light mode
-        color: props.colorMode === "dark" ? "gray.100" : "gray.800", // Dark text in light mode
+        bg: props.colorMode === "dark" ? "gray.800" : "gray.50",
+        color: props.colorMode === "dark" ? "gray.50" : "gray.900",
         fontSize: "sm",
         p: 3,
-        borderRadius: "md",
+        borderRadius: "lg", // Softer, modern radius
+        boxShadow: props.colorMode === "dark" ? "inset 0 1px 2px rgba(0,0,0,0.2)" : "inset 0 1px 2px rgba(0,0,0,0.1)",
       }),
     },
     Button: {
       baseStyle: {
-        fontWeight: "bold",
-        borderRadius: "md",
+        fontWeight: "semibold",
+        borderRadius: "lg", // Larger radius for modern feel
+        px: 6, // More padding for better click area
+        py: 3,
+        transition: "all 0.3s ease",
       },
       variants: {
         primary: {
-          backgroundColor: "ui.main", // Teal accent
-          color: "ui.light", // White text
+          backgroundColor: "ui.main",
+          color: "ui.light",
           _hover: {
-            backgroundColor: "#234E52", // Darker teal on hover
+            backgroundColor: "#EA580C", // Darker, vibrant orange on hover
+            transform: "translateY(-2px)", // Subtle lift effect
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          },
+          _active: {
+            transform: "translateY(0)",
           },
           _disabled: {
             backgroundColor: "ui.main",
-            opacity: 0.6,
+            opacity: 0.4,
           },
         },
         danger: {
-          backgroundColor: "ui.danger", // Red (unchanged)
-          color: "ui.light", // White text
+          backgroundColor: "ui.danger",
+          color: "ui.light",
           _hover: {
-            backgroundColor: "#E32727", // Darker red (unchanged)
+            backgroundColor: "#DC2626",
+            transform: "translateY(-2px)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+          },
+          _active: {
+            transform: "translateY(0)",
           },
         },
       },
@@ -84,15 +106,21 @@ const theme = extendTheme({
         subtle: {
           tab: {
             color: "ui.dim",
+            fontWeight: "semibold",
             _selected: {
-              color: "ui.main", // Teal for selected tab
+              color: "ui.main",
               fontWeight: "bold",
-              borderBottomColor: "ui.main", // Teal underline
-              borderBottomWidth: "2px",
+              borderBottomColor: "ui.main",
+              borderBottomWidth: "3px", // Thicker for emphasis
             },
             _hover: {
-              color: "ui.secondary", // Light teal on hover
+              color: "ui.secondary",
+              bg: "gray.50",
             },
+          },
+          tablist: {
+            borderBottom: "1px solid",
+            borderColor: "gray.200",
           },
         },
       },
@@ -100,49 +128,50 @@ const theme = extendTheme({
     Toast: {
       baseStyle: {
         container: {
-          bg: "white", // Bright white background (unchanged)
-          color: "gray.100", // Dark text (unchanged)
-          borderRadius: "md",
-          boxShadow: "lg",
+          bg: "ui.light",
+          color: "gray.900",
+          borderRadius: "lg",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.15)", // Stronger shadow for depth
           padding: "16px",
           position: "absolute",
-          top: "20px",
-          transform: "translateX(-50%)", // Adjust for centering
-          minWidth: "300px",
+          top: "24px",
+          transform: "translateX(-50%)",
+          minWidth: "320px",
           maxWidth: "90%",
+          fontWeight: "medium",
         },
       },
       variants: {
         error: {
           container: {
-            bg: "orange.100", // Light red for error
-            color: "orange.900",
+            bg: "red.50",
+            color: "red.900",
             border: "1px solid",
-            borderColor: "orange.300",
+            borderColor: "red.200",
           },
         },
         success: {
           container: {
-            bg: "green.100", // Light green for success
+            bg: "green.50",
             color: "green.900",
             border: "1px solid",
-            borderColor: "green.300",
+            borderColor: "green.200",
           },
         },
         info: {
           container: {
-            bg: "orange.100", // Light blue for info
+            bg: "orange.50",
             color: "orange.900",
             border: "1px solid",
-            borderColor: "orange.300",
+            borderColor: "orange.200",
           },
         },
         warning: {
           container: {
-            bg: "yellow.100", // Light yellow for warning
+            bg: "yellow.50",
             color: "yellow.900",
             border: "1px solid",
-            borderColor: "yellow.300",
+            borderColor: "yellow.200",
           },
         },
       },
