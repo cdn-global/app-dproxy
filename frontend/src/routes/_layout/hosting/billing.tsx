@@ -415,7 +415,7 @@ function BillingPage() {
 
 const history = [
   {
-    month: "September", // September 2025
+    month: months[9],  // September 2025
     total: 299.0,
     invoiceId: "02A67775-0010",
     paymentDate: "September 18, 2025",
