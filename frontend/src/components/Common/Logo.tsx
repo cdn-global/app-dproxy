@@ -22,14 +22,14 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           boxShadow="lg"
           p={{ base: 1, md: 2 }}
         >
-          <Icon as={Layers} boxSize={{ base: '20px', md: '24px' }} strokeWidth={3} aria-hidden />
+          <Icon as={Layers} boxSize={{ base: '20px', md: '24px' }} aria-hidden />
         </Box>
 
         <Box lineHeight={1} color="gray.800" display={{ base: 'flex', md: 'flex' }} alignItems="center">
-          <Text as="span" fontWeight="600" fontSize={{ base: 'sm', md: 'sm' }} display={{ base: 'inline', md: 'inline' }} mr={{ base: 1, md: 1 }}>
+          <Text as="span" fontWeight="600" fontSize={{ base: 'sm', md: 'md' }} display={{ base: 'inline', md: 'inline' }} mr={{ base: 1, md: 1 }}>
             DATA
           </Text>
-          <Text as="span" fontWeight="800" fontSize={{ base: 'sm', md: 'sm' }} display={{ base: 'inline', md: 'inline' }} color="orange.500" letterSpacing="tighter">
+          <Text as="span" fontWeight="800" fontSize={{ base: 'sm', md: 'md' }} display={{ base: 'inline', md: 'inline' }} color="orange.500" letterSpacing="tighter">
             PROXY
           </Text>
         </Box>
