@@ -87,13 +87,13 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
 
   const hoverStyles: CSSProperties = {
     color: hoverColor,
-    background: 'gray.100',
+    background: 'whiteAlpha.100',
     textDecoration: 'none',
   };
 
   const activeStyles: CSSProperties = {
     color: activeTextColor,
-    background: 'orange.100',
+    background: 'whiteAlpha.200',
   };
 
   return (
@@ -122,6 +122,8 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
           minW="320px"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          bg="ui.light"
+          color="ui.dark"
         >
           {subItems?.map((subItem) => (
             <MenuItem
@@ -137,7 +139,7 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
             >
               <Flex align="flex-start" w="100%">
                 <VStack align="flex-start" spacing={0}>
-                  <Text fontWeight="600" color="gray.800">{subItem.title}</Text>
+                  <Text fontWeight="600" color="ui.dark">{subItem.title}</Text>
                   <Text fontSize="sm" color="ui.dim" whiteSpace="normal">{subItem.description}</Text>
                 </VStack>
               </Flex>
@@ -151,10 +153,10 @@ const NavGroupDropdown = ({ item, activeTextColor, hoverColor, textColor }: NavG
 
 const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
   const queryClient = useQueryClient();
-  const textColor = 'gray.800';
-  const disabledColor = 'gray.300';
-  const hoverColor = 'orange.600';
-  const activeTextColor = 'orange.800';
+  const textColor = 'ui.light';
+  const disabledColor = 'whiteAlpha.600';
+  const hoverColor = 'ui.light';
+  const activeTextColor = 'ui.light';
   const currentUser = queryClient.getQueryData<UserPublic>(['currentUser']);
   const { logout } = useAuth();
 
@@ -200,17 +202,17 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
 
   const hoverStyles: CSSProperties = {
     color: hoverColor,
-    background: 'gray.100',
+    background: 'whiteAlpha.100',
     textDecoration: 'none',
   };
 
   const activeStyles: CSSProperties = {
     color: activeTextColor,
-    background: 'orange.100',
+    background: 'whiteAlpha.200',
   };
 
   const disabledHoverStyles: CSSProperties = {
-    background: 'gray.100',
+    background: 'whiteAlpha.050',
   };
 
   const renderNavItems = (items: NavItem[]) =>
@@ -238,7 +240,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
               py={2}
               color={textColor}
               align="center"
-              _hover={{ color: hoverColor, background: 'gray.100' }}
+              _hover={{ color: hoverColor, background: 'whiteAlpha.100' }}
               borderRadius="md"
               transition="all 0.2s"
             >
@@ -299,14 +301,14 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
       const isLink = !!path;
       if (isLink) {
         return (
-          <Flex
+            <Flex
             key={title}
             as={RouterLink}
             to={path}
             px={4}
             py={2}
-            color={textColor}
-            _hover={hoverStyles}
+              color={textColor}
+              _hover={hoverStyles}
             activeProps={{ style: activeStyles }}
             align="center"
             onClick={onClose}
@@ -315,7 +317,7 @@ const NavItems = ({ onClose, isMobile = false }: NavItemsProps) => {
             transition="all 0.2s"
             aria-label={title}
           >
-            {icon && <Icon as={icon} mr={2} boxSize={5} />}
+            {icon && <Icon as={icon} mr={2} boxSize={5} color={textColor as any} />}
             <Text fontWeight="500">{title}</Text>
           </Flex>
         );
@@ -367,7 +369,8 @@ const TopNav = () => {
 
   return (
     <Box
-      bg={colorMode === 'light' ? 'gray.50' : 'gray.800'}
+      bg="ui.main"
+      color="ui.light"
       px={4}
       py={2}
       position="sticky"
@@ -376,12 +379,13 @@ const TopNav = () => {
       boxShadow="sm"
       w="100%"
       borderBottomWidth="1px"
-      borderBottomColor={colorMode === 'light' ? 'gray.300' : 'gray.600'}
+      borderBottomColor="ui.secondary"
     >
       <Flex align="center" maxW="1200px" mx="auto" w="100%" justify="space-between">
         <Logo
           href="/"
           width={{ base: '80px', md: '110px' }}
+          color="ui.light"
         />
         <Flex align="center" gap={4}>
           <Box display={{ base: 'none', md: 'block' }}>
@@ -395,6 +399,7 @@ const TopNav = () => {
             variant="ghost"
             size="lg"
             ref={btnRef}
+            color="ui.light"
           />
         </Flex>
       </Flex>
