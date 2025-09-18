@@ -52,6 +52,8 @@ import {
 } from "@chakra-ui/react";
 import { CopyIcon, ChevronDownIcon, EditIcon, DeleteIcon, AddIcon, RepeatIcon } from "@chakra-ui/icons";
 import type { UserPublic } from "../../../client";
+import { useTheme } from "@chakra-ui/react";
+import { vpsTableStyles } from "../../../theme";
 
 // --- API Configuration & Types (No changes) ---
 const API_BASE_URL = "https://api.thedataproxy.com/v2";
@@ -259,48 +261,38 @@ const UserAgentTable = ({
   handleOpenDeleteAlert: (id: string) => void;
   isPlaceholderData: boolean;
 }) => {
-  if (agents.length === 0) {
-    return (
-      <Flex justify="center" align="center" p={10}>
-        <Text color="gray.500">No user agents to display in this category on this page.</Text>
-      </Flex>
-    );
-  }
-
+  const theme = useTheme();
   return (
     <TableContainer>
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>
-            <Th color="black">User Agent String</Th>
-            {/* START: UPDATED HEADERS */}
-            <Th color="black">Device</Th>
-            <Th color="black">OS</Th>
-            <Th color="black">Browser</Th>
-            {/* END: UPDATED HEADERS */}
-            <Th color="black" isNumeric>Actions</Th>
+            <Th {...(vpsTableStyles.header as any)}>User Agent String</Th>
+            <Th {...(vpsTableStyles.header as any)}>Device</Th>
+            <Th {...(vpsTableStyles.header as any)}>OS</Th>
+            <Th {...(vpsTableStyles.header as any)}>Browser</Th>
+            <Th {...(vpsTableStyles.header as any)} isNumeric>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
           {agents.map((agent) => (
             <Tr key={agent.id} opacity={isPlaceholderData ? 0.5 : 1}>
-              <Td maxW="500px" whiteSpace="normal" wordBreak="break-all">{agent.user_agent}</Td>
-              {/* START: UPDATED CELLS */}
-              <Td>
-                {agent.device ? (
-                  <Badge colorScheme={
-                    agent.device.toLowerCase() === 'desktop' ? 'green' : 
-                    agent.device.toLowerCase() === 'mobile' ? 'orange' : 'gray'
-                  }>
-                    {agent.device}
-                  </Badge>
-                ) : (
-                  '-'
-                )}
-              </Td>
-              <Td>{agent.os || '-'}</Td>
-              <Td>{agent.browser || '-'}</Td>
-              {/* END: UPDATED CELLS */}
+              <Td {...(vpsTableStyles.cell(theme) as any)} maxW="500px" whiteSpace="normal" wordBreak="break-all">{agent.user_agent}</Td>
+              <Td {...(vpsTableStyles.cell(theme) as any)}>
+                 {agent.device ? (
+                   <Badge colorScheme={
+                     agent.device.toLowerCase() === 'desktop' ? 'green' : 
+                     agent.device.toLowerCase() === 'mobile' ? 'orange' : 'gray'
+                   }>
+                     {agent.device}
+                   </Badge>
+                 ) : (
+                   '-'
+                 )}
+               </Td>
+              <Td {...(vpsTableStyles.cell(theme) as any)}>{agent.os || '-'}</Td>
+              <Td {...(vpsTableStyles.cell(theme) as any)}>{agent.browser || '-'}</Td>
+               {/* END: UPDATED CELLS */}
               <Td isNumeric>
                 <HStack spacing={1} justify="flex-end">
                   <CopyCell textToCopy={agent.user_agent} />
