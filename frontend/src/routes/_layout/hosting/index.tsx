@@ -203,11 +203,11 @@ function HostingIndexPage() {
         <Table variant="simple" size="md" colorScheme="gray">
           <Thead bg="ui.main">
             <Tr>
-              <Th {...vpsTableStyles.header}>Server Name</Th>
-              <Th {...vpsTableStyles.header}>IP</Th>
-              <Th {...vpsTableStyles.header}>Username</Th>
-              <Th {...vpsTableStyles.header}>Password</Th>
-              <Th isNumeric {...vpsTableStyles.header}>Actions</Th>
+              <Th {...(vpsTableStyles.header as any)}>Server Name</Th>
+              <Th {...(vpsTableStyles.header as any)}>IP</Th>
+              <Th {...(vpsTableStyles.header as any)}>Username</Th>
+              <Th {...(vpsTableStyles.header as any)}>Password</Th>
+              <Th isNumeric {...(vpsTableStyles.header as any)}>Actions</Th>
             </Tr>
           </Thead>
           <Tbody>

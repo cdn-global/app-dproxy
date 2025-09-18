@@ -35,6 +35,7 @@ import {
 } from "@chakra-ui/react";
 import { FaCreditCard, FaCheckCircle } from "react-icons/fa";
 import { useState } from "react";
+import { vpsTableStyles } from "../../../theme";
 
 interface Server {
   name: string;
@@ -851,25 +852,25 @@ const history = [
               <Table variant="simple" size="md">
                 <Thead bg="orange.100">
                   <Tr>
-                    <Th {...vpsTableStyles.header}>Month</Th>
-                    <Th {...vpsTableStyles.header}>Invoice Number</Th>
-                    <Th {...vpsTableStyles.header}>Status</Th>
-                    <Th {...vpsTableStyles.header}>Payment Date</Th>
-                    <Th {...vpsTableStyles.header}>Payment Method</Th>
-                    <Th {...vpsTableStyles.header}>Description</Th>
-                    <Th {...vpsTableStyles.header}></Th>
+                    <Th {...(vpsTableStyles.header as any)}>Month</Th>
+                    <Th {...(vpsTableStyles.header as any)}>Invoice Number</Th>
+                    <Th {...(vpsTableStyles.header as any)}>Status</Th>
+                    <Th {...(vpsTableStyles.header as any)}>Payment Date</Th>
+                    <Th {...(vpsTableStyles.header as any)}>Payment Method</Th>
+                    <Th {...(vpsTableStyles.header as any)}>Description</Th>
+                    <Th {...(vpsTableStyles.header as any)}></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {history.map(({ month, total, invoiceId, paymentDate, paymentMethod, description, status }) => (
                     <Tr key={invoiceId}>
-                      <Td {...vpsTableStyles.cell(theme)}>{month.name}</Td>
-                      <Td {...vpsTableStyles.cell(theme)}>{invoiceId.slice(0, 12)}...</Td>
-                      <Td {...vpsTableStyles.status(theme, status)}>{status}</Td>
-                      <Td {...vpsTableStyles.cell(theme)}>{paymentDate || "Pending"}</Td>
-                      <Td {...vpsTableStyles.cell(theme)}>{paymentMethod}</Td>
-                      <Td {...vpsTableStyles.cell(theme)}>{description}</Td>
-                      <Td {...vpsTableStyles.cell(theme)}>
+                      <Td {...(vpsTableStyles.cell(theme) as any)}>{month.name}</Td>
+                      <Td {...(vpsTableStyles.cell(theme) as any)}>{invoiceId.slice(0, 12)}...</Td>
+                      <Td {...(vpsTableStyles.status(theme, status) as any)}>{status}</Td>
+                      <Td {...(vpsTableStyles.cell(theme) as any)}>{paymentDate || "Pending"}</Td>
+                      <Td {...(vpsTableStyles.cell(theme) as any)}>{paymentMethod}</Td>
+                      <Td {...(vpsTableStyles.cell(theme) as any)}>{description}</Td>
+                      <Td {...(vpsTableStyles.cell(theme) as any)}>
                         <Flex justify="center" gap={2}>
                           <Button
                             size="sm"
