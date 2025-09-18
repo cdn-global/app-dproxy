@@ -180,7 +180,7 @@ function HostingIndexPage() {
   const theme = useTheme();
 
   return (
-    <Container maxW="full" py={9}>
+    <Container maxW="container.xl" py={9}>
       <Flex align="center" py={6}>
         <Flex direction="column">
           <Text fontSize="3xl" color="ui.dark">VPS Access</Text>
@@ -203,7 +203,7 @@ function HostingIndexPage() {
         <Table variant="simple" size="md" colorScheme="gray">
           <Thead bg="ui.main">
             <Tr>
-              <Th {...(vpsTableStyles.header as any)}>Server Name</Th>
+              <Th minW="220px" {...(vpsTableStyles.header as any)}>Server Name</Th>
               <Th {...(vpsTableStyles.header as any)}>IP</Th>
               <Th {...(vpsTableStyles.header as any)}>Username</Th>
               <Th {...(vpsTableStyles.header as any)}>Password</Th>
@@ -213,7 +213,7 @@ function HostingIndexPage() {
           <Tbody>
             {servers.map((server) => (
               <Tr key={server.name}>
-                <Td {...vpsTableStyles.cell(theme)}>{server.name}</Td>
+                <Td minW="220px" {...vpsTableStyles.cell(theme)}>{server.name}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>{server.ip}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>{server.username}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>****</Td>
