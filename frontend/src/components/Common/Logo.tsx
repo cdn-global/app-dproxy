@@ -24,11 +24,11 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           </Box>
         </Box>
 
-        <Box lineHeight={1} color="gray.800">
-          <Text as="span" fontWeight="500" fontSize={{ base: 'xs', md: 'sm' }} display="block">
+        <Box lineHeight={1} color="gray.800" display={{ base: 'block', md: 'flex' }} alignItems="baseline">
+          <Text as="span" fontWeight="500" fontSize={{ base: 'xs', md: 'sm' }} display={{ base: 'block', md: 'inline' }} mr={{ base: 0, md: 2 }}>
             DATA
           </Text>
-          <Text as="span" fontWeight="700" fontSize={{ base: 'sm', md: 'md' }} display="block" color="orange.500" letterSpacing="wide">
+          <Text as="span" fontWeight="700" fontSize={{ base: 'sm', md: 'md' }} display={{ base: 'block', md: 'inline' }} color="orange.500" letterSpacing="wide">
             PROXY
           </Text>
         </Box>
