@@ -200,14 +200,14 @@ function HostingIndexPage() {
       </Flex>
 
       <Box borderWidth="1px" borderRadius="lg" overflow="hidden" bg="ui.light">
-        <Table variant="simple" size="md" colorScheme="gray" borderWidth="1px" borderColor="gray.200">
+        <Table variant="simple" size="md" colorScheme="gray" borderWidth="1px" borderColor="gray.300">
           <Thead bg="ui.main">
             <Tr>
-              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Server Name</Th>
-              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">IP</Th>
-              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Username</Th>
-              <Th {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Password</Th>
-              <Th isNumeric {...vpsTableStyles.header} borderBottomWidth="1px" borderColor="gray.300">Actions</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Server Name</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">IP</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Username</Th>
+              <Th {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Password</Th>
+              <Th isNumeric {...vpsTableStyles.header} borderBottomWidth="2px" borderColor="gray.400">Actions</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -218,7 +218,7 @@ function HostingIndexPage() {
                 <Td {...vpsTableStyles.cell(theme)}>{server.username}</Td>
                 <Td {...vpsTableStyles.cell(theme)}>****</Td>
                 <Td isNumeric>
-                  <HStack spacing={2} justify="flex-end">
+                  <HStack spacing={2} justify="flex-end" borderWidth="1px" borderColor="gray.300" borderRadius="md" p={1}>
                     <CopyCell textToCopy={server.username} label="Username" />
                     <CopyCell textToCopy={server.password} label="Password" />
                     <Button
