@@ -21,6 +21,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           color="white"
           boxShadow="lg"
           p={{ base: 1, md: 2 }}
+          pr={0}
 
         >
           <Icon as={Layers} boxSize={{ base: '20px', md: '24px' }} aria-hidden />
