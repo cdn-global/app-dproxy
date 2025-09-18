@@ -20,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           p={{ base: 3, md: 4 }}
         >
           <Box position="relative" aria-hidden>
-            <Layers size={useBreakpointValue({ base: 20, md: 32 })} strokeWidth={3.2} />
+            <Layers size={useBreakpointValue({ base: 18, md: 26 })} strokeWidth={3.2} />
           </Box>
         </Box>
 
