@@ -10,37 +10,37 @@ const theme = extendTheme({
   styles: {
     global: () => ({
       "html, body": {
-        fontFamily: '"Poppins", sans-serif', // Bold, modern font
+        fontFamily: '"Poppins", sans-serif',
         lineHeight: "1.5",
-        bg: "gray.50", // Clean, light background for contrast
+        bg: "gray.50",
         color: "gray.900",
-        transition: "all 0.3s ease-in-out", // Smoother, more noticeable transitions
+        transition: "all 0.3s ease-in-out",
       },
     }),
   },
   colors: {
     ui: {
-      main: "#FF6200", // Vivid, bold orange for primary accents
-      secondary: "#FF8F00", // Warm amber for secondary elements
-      success: "#00CC88", // Bright teal-green for success states
-      danger: "#FF2D2D", // Intense red for errors
-      light: "#F8FAFC", // Off-white for crisp backgrounds
-      dark: "#0F172A", // Deep slate for dark mode
-      darkSlate: "#1E293B", // Richer slate for contrast
-      dim: "#64748B", // Cool gray for secondary text
+      main: "#C2410C", // Darker, richer orange for primary
+      secondary: "#EA580C", // Slightly lighter but still bold for secondary
+      success: "#00CC88",
+      danger: "#FF2D2D",
+      light: "#F8FAFC",
+      dark: "#0F172A",
+      darkSlate: "#1E293B",
+      dim: "#64748B",
     },
   },
   fonts: {
-    heading: '"Poppins", sans-serif', // Bold, geometric font for headings
+    heading: '"Poppins", sans-serif',
     body: '"Poppins", sans-serif',
-    mono: '"JetBrains Mono", monospace', // Sleek, modern monospace for code
+    mono: '"JetBrains Mono", monospace',
   },
   components: {
     Heading: {
       baseStyle: (props) => ({
         color: props.colorMode === "dark" ? "gray.50" : "ui.dark",
-        fontWeight: "black", // Ultra-bold for impact
-        letterSpacing: "-0.03em", // Tightened for modern feel
+        fontWeight: "black",
+        letterSpacing: "-0.03em",
       }),
       sizes: {
         xl: { fontSize: "4xl", lineHeight: "1.2" },
@@ -60,7 +60,7 @@ const theme = extendTheme({
         color: props.colorMode === "dark" ? "gray.50" : "ui.dark",
         fontSize: "sm",
         p: 4,
-        borderRadius: "xl", // More rounded for a modern edge
+        borderRadius: "xl",
         boxShadow: props.colorMode === "dark" ? "0 4px 10px rgba(0,0,0,0.3)" : "0 2px 8px rgba(0,0,0,0.1)",
         border: "1px solid",
         borderColor: props.colorMode === "dark" ? "ui.secondary" : "ui.main",
@@ -69,34 +69,35 @@ const theme = extendTheme({
     Button: {
       baseStyle: {
         fontWeight: "bold",
-        borderRadius: "xl", // Larger, modern radius
-        px: 8, // Generous padding for prominence
-        py: 4,
+        borderRadius: "0", // Square, rigid corners
+        px: 6, // Reduced padding for a tighter, rigid feel
+        py: 3,
         transition: "all 0.2s ease-in-out",
-        _focus: { boxShadow: "0 0 0 3px rgba(255, 98, 0, 0.4)" }, // Orange focus ring
+        _focus: { boxShadow: "0 0 0 3px rgba(194, 65, 12, 0.4)" }, // Darker orange focus ring
+        background: "ui.main !important", // Force background visibility
       },
       variants: {
         primary: {
-          background: "linear-gradient(135deg, ui.main, ui.secondary)", // Gradient for vibrancy
+          background: "ui.main !important", // Explicit background to prevent overrides
           color: "ui.light",
           _hover: {
-            background: "linear-gradient(135deg, #E55B00, #E57800)", // Darker gradient on hover
-            transform: "translateY(-3px)", // Pronounced lift effect
-            boxShadow: "0 6px 16px rgba(255, 98, 0, 0.3)",
+            background: "#A3340A !important", // Darker orange on hover
+            transform: "translateY(-2px)",
+            boxShadow: "0 4px 12px rgba(194, 65, 12, 0.4)",
           },
           _active: { transform: "translateY(0)" },
           _disabled: {
-            background: "ui.main",
+            background: "ui.main !important",
             opacity: 0.3,
           },
         },
         danger: {
-          background: "ui.danger",
+          background: "ui.danger !important",
           color: "ui.light",
           _hover: {
-            background: "#E51A1A",
-            transform: "translateY(-3px)",
-            boxShadow: "0 6px 16px rgba(255, 45, 45, 0.3)",
+            background: "#E51A1A !important",
+            transform: "translateY(-2px)",
+            boxShadow: "0 4px 12px rgba(255, 45, 45, 0.3)",
           },
           _active: { transform: "translateY(0)" },
         },
@@ -111,13 +112,13 @@ const theme = extendTheme({
           tab: {
             color: "ui.dim",
             fontWeight: "bold",
-            fontSize: "lg", // Larger for emphasis
+            fontSize: "lg",
             py: 3,
             _selected: {
               color: "ui.main",
               fontWeight: "black",
               borderBottomColor: "ui.main",
-              borderBottomWidth: "4px", // Thicker, bolder underline
+              borderBottomWidth: "4px",
               bg: "ui.light",
               boxShadow: "0 2px 8px rgba(255, 98, 0, 0.2)",
             },
@@ -139,8 +140,8 @@ const theme = extendTheme({
         container: {
           bg: "ui.light",
           color: "ui.dark",
-          borderRadius: "xl", // Softer, modern corners
-          boxShadow: "0 8px 24px rgba(0,0,0,0.2)", // Dramatic shadow for depth
+          borderRadius: "xl",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
           padding: "20px",
           position: "absolute",
           top: "30px",
@@ -149,7 +150,7 @@ const theme = extendTheme({
           maxWidth: "95%",
           fontWeight: "semibold",
           border: "1px solid",
-          borderColor: "ui.main", // Orange accent border
+          borderColor: "ui.main",
         },
       },
       variants: {
