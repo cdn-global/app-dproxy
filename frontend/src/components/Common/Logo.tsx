@@ -12,10 +12,10 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           display="inline-flex"
           alignItems="center"
           justifyContent="center"
-          w={{ base: '48px', md: '42px' }}
-          h={{ base: '48px', md: '42px' }}
-          minW={{ base: '48px', md: '42px' }}
-          minH={{ base: '48px', md: '42px' }}
+          w={{ base: '42px', md: '42px' }}
+          h={{ base: '42px', md: '42px' }}
+          minW={{ base: '42px', md: '42px' }}
+          minH={{ base: '42px', md: '42px' }}
           borderRadius="lg"
           bgGradient="linear(to-br, orange.500, orange.200)"
           color="white"
