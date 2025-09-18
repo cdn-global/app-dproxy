@@ -7,7 +7,7 @@ interface LogoProps extends LinkProps {}
 const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
   return (
     <Link href={href} _hover={{ textDecoration: 'none' }} {...rest}>
-      <HStack spacing={3} align="center">
+      <HStack spacing={1} align="center">
         <Box
           display="inline-flex"
           alignItems="center"
