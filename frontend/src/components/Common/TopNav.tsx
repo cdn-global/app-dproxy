@@ -47,7 +47,13 @@ interface NavItemsProps {
   isMobile?: boolean;
 }
 
-const navStructure: NavItem[] = [ {
+const navStructure: NavItem[] = [{
+  
+        title: 'SERP API',
+        path: '/web-scraping-tools/serp-api',
+        description: 'Structured data extraction with our powerful rotating proxy network.',
+      }, {
+
         title: 'HTTPs API',
         path: '/web-scraping-tools/https-api',
         description: 'Access any webpage with our powerful rotating proxy network.',
