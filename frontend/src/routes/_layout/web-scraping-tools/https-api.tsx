@@ -225,7 +225,7 @@ const GetStartedTab = () => {
       </Tabs>
 
       <Box mt={8}>
-        <Box p={4} borderWidth="1px" borderRadius="md" bg="orange.50" borderColor="orange.200">
+        <Box p={4} borderWidth="1px" borderRadius="md" bg="ui.light" borderColor="ui.main">
             <Heading size="md" mb={2} color="gray.800">Need Help?</Heading>
             <Text fontSize="md" color="ui.dim">
               Check our detailed{" "}
@@ -331,7 +331,7 @@ const HttpsProxyApiPage = () => {
                 ))}
               </TabList>
 
-              <TabPanels bg="gray.50" pt={4} borderRadius="0 0 md md">
+              <TabPanels bg="ui.light" pt={4} borderRadius="0 0 md md">
                 <TabPanel><GetStartedTab /></TabPanel>
                 <TabPanel>
                   <ApiKeyModule token={token} />
