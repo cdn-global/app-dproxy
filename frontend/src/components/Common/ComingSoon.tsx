@@ -19,7 +19,7 @@ const ComingSoon: React.FC = () => {
       >
         <Text 
           fontSize={{ base: "sm", md: "md" }} 
-          color="gray.600" 
+          color="ui.dim" 
           textAlign="center"
         >
           Account is not linked to a valid subscription

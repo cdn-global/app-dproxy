@@ -339,7 +339,7 @@ const PlaygroundGSerp: React.FC = () => {
       {/* Dynamic Code Snippets */}
       <Box mb={8}>
         <Heading as="h2" size="md" fontWeight="semibold" mb={4} color="gray.700">Your Request Code</Heading>
-        <Text fontSize="md" color="gray.600" mb={6}>The code below updates automatically as you change parameters in the Live Test section.</Text>
+  <Text fontSize="md" color="ui.dim" mb={6}>The code below updates automatically as you change parameters in the Live Test section.</Text>
         <Box position="relative">
           <Tooltip label="Copy Code" placement="left">
             <IconButton
@@ -358,9 +358,9 @@ const PlaygroundGSerp: React.FC = () => {
           </Tooltip>
           <Tabs variant="enclosed" colorScheme="orange" onChange={(index) => setActiveTabIndex(index)}>
             <TabList>
-              {codeTabs.map((tab) => (<Tab key={tab.id} fontWeight="semibold" fontSize="md" color="gray.400" _selected={{ bg: "gray.800", color: "orange.400" }}>{tab.label}</Tab>))}
+              {codeTabs.map((tab) => (<Tab key={tab.id} fontWeight="semibold" fontSize="md" color="ui.dim" _selected={{ bg: "ui.codeBg", color: "orange.400" }}>{tab.label}</Tab>))}
             </TabList>
-            <TabPanels bg="gray.800" borderRadius="0 0 md md">
+            <TabPanels bg="ui.codeBg" borderRadius="0 0 md md">
               {codeTabs.map((tab) => (<TabPanel key={tab.id} p={0}><CodeBlock code={tab.code} language={tab.language} maxHeight="none" /></TabPanel>))}
             </TabPanels>
           </Tabs>
@@ -368,10 +368,10 @@ const PlaygroundGSerp: React.FC = () => {
       </Box>
         
       {/* Need Help Section */}
-      <Box pt={8} mt={8} borderTopWidth="1px" borderColor="gray.200">
+  <Box pt={8} mt={8} borderTopWidth="1px" borderColor="ui.border">
         <Box p={4} borderWidth="1px" borderRadius="md" bg="orange.50" borderColor="orange.200">
-          <Heading size="md" mb={2} color="gray.800">Need Help?</Heading>
-          <Text fontSize="md" color="gray.700">Check our detailed{" "}<Link color="orange.600" fontWeight="bold" href="/documentation/serp-api" isExternal>API Documentation</Link>{" "}for more examples. For further assistance, contact our{" "}<Link color="orange.600" fontWeight="bold" href="/support" isExternal>Support Center</Link>.</Text>
+          <Heading size="md" mb={2} color="ui.dark">Need Help?</Heading>
+          <Text fontSize="md" color="ui.dim">Check our detailed{" "}<Link color="orange.600" fontWeight="bold" href="/documentation/serp-api" isExternal>API Documentation</Link>{" "}for more examples. For further assistance, contact our{" "}<Link color="orange.600" fontWeight="bold" href="/support" isExternal>Support Center</Link>.</Text>
         </Box>
       </Box>
       

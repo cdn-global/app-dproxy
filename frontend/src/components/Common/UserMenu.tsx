@@ -155,7 +155,7 @@ const UserMenu = () => {
             <MenuItem
               as={Link}
               to="/settings"
-              icon={<FiUser fontSize="18px" color="gray.600" />}
+              icon={<FiUser fontSize="18px" color="ui.dim" />}
               _hover={{ bg: "orange.100", color: "orange.500" }}
               data-testid="settings-menu-item"
             >
@@ -166,7 +166,7 @@ const UserMenu = () => {
               <MenuItem
                 as={Link}
                 to="/proxies/pricing"
-                icon={<FiCreditCard fontSize="18px" color="gray.600" />}
+                icon={<FiCreditCard fontSize="18px" color="ui.dim" />}
                 _hover={{ bg: "orange.100", color: "orange.500" }}
                 data-testid="subscription-menu-item"
               >

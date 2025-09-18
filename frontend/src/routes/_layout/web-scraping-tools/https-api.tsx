@@ -77,7 +77,7 @@ const fetchProxyApiAccess = (token: string): Promise<ProxyApiAccess> =>
 
 
 // --- CodeBlock Component (from serp-api) ---
-const CodeBlock = ({ code, language, bg = "gray.800", ...rest }: { code: string; language: string; bg?: string; [key: string]: any }) => {
+const CodeBlock = ({ code, language, bg = "ui.codeBg", ...rest }: { code: string; language: string; bg?: string; [key: string]: any }) => {
   const { onCopy } = useClipboard(code.trim());
   const toast = useToast();
 
@@ -218,7 +218,7 @@ const GetStartedTab = () => {
         <TabPanels>
           {codeTabs.map((tab) => (
             <TabPanel key={tab.id} p={0}>
-              <CodeBlock code={tab.code} language={tab.language} bg="gray.800" />
+              <CodeBlock code={tab.code} language={tab.language} bg="ui.codeBg" />
             </TabPanel>
           ))}
         </TabPanels>
@@ -315,7 +315,7 @@ const HttpsProxyApiPage = () => {
                     bg="ui.light"
                     fontWeight="semibold"
                     fontSize="lg"
-                    color="gray.400"
+                    color="ui.dim"
                     _selected={{
                       bg: "gray.50",
                       color: "orange.600",

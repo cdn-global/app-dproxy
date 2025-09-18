@@ -23,6 +23,8 @@ const theme = extendTheme({
       main: "#FF6B00", // Bright, vibrant orange for buttons, header, footer
       secondary: "#F97316", // Vibrant orange for hover
       surface: "#FFE5D0",
+      codeBg: "#1F2937",
+      border: "#E6E6E6",
       success: "#00CC88",
       danger: "#FF2D2D",
       light: "#FFFFFF", // Pure white for text/icon contrast

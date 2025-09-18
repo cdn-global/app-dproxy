@@ -409,7 +409,7 @@ function UserAgentsPage() {
       <Container maxW="full" py={9}>
     <Flex align="center" justify="space-between" py={6}>
       <Text fontSize="3xl" color="ui.dark">User Agents</Text>
-            <Text fontSize="lg" color="gray.600">A dynamic list of user agents for web scraping</Text>
+            <Text fontSize="lg" color="ui.dim">A dynamic list of user agents for web scraping</Text>
         </Flex>
 
         <Tabs isLazy variant="enclosed-colored" colorScheme="orange" onChange={(index) => setTabIndex(index)}>
@@ -425,7 +425,7 @@ function UserAgentsPage() {
                       bg="ui.light"
                       fontWeight="semibold"
                       fontSize="lg"
-                      color="gray.400"
+                      color="ui.dim"
                       _selected={{
                         bg: "gray.50",
                         color: "orange.600",
@@ -523,7 +523,7 @@ function UserAgentsPage() {
                 isPlaceholderData={isPlaceholderData}
             />
             <Flex justify="space-between" p={4} align="center" borderTopWidth="1px" bg="gray.50">
-                <Text fontSize="sm" color="gray.600">
+                <Text fontSize="sm" color="ui.dim">
                     Showing <strong>{displayedAgents.length}</strong> results on this page
                 </Text>
                 <HStack>

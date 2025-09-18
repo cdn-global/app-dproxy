@@ -334,18 +334,18 @@ const HomePage = () => {
                   <VStack align="start" spacing={3}>
                     <Heading size="xs">VPS Status</Heading>
                     <Flex alignItems="baseline">
-                      <Text fontSize="sm" color="gray.600" mr={2}>Total vCPUs:</Text>
+                      <Text fontSize="sm" color="ui.dim" mr={2}>Total vCPUs:</Text>
                       <Text fontSize="3xl" fontWeight="bold">{totalVCPUs}</Text>
                     </Flex>
                     <Flex alignItems="baseline">
-                      <Text fontSize="sm" color="gray.600" mr={2}>Total RAM:</Text>
+                      <Text fontSize="sm" color="ui.dim" mr={2}>Total RAM:</Text>
                       <Text fontSize="3xl" fontWeight="bold">{totalRAM} GB</Text>
                     </Flex>
                     <Flex alignItems="baseline">
-                      <Text fontSize="sm" color="gray.600" mr={2}>Total Storage:</Text>
+                      <Text fontSize="sm" color="ui.dim" mr={2}>Total Storage:</Text>
                       <Text fontSize="3xl" fontWeight="bold">{totalStorage} GB</Text>
                     </Flex>
-                    <Text fontSize="sm" color="gray.600">
+                    <Text fontSize="sm" color="ui.dim">
                       Note: Detailed VPS settings available in the <Link as={RouterLink} to="/hosting" color="red.500">VPS Dashboard</Link>.
                     </Text>
                   </VStack>
@@ -356,11 +356,11 @@ const HomePage = () => {
                   <VStack align="start" spacing={3}>
                     <Heading size="xs">HTTPs API Usage</Heading>
                     <Flex alignItems="baseline">
-                      <Text fontSize="sm" color="gray.600" mr={2}>Total Requests:</Text>
+                      <Text fontSize="sm" color="ui.dim" mr={2}>Total Requests:</Text>
                       <Text fontSize="3xl" fontWeight="bold">{totalRequests.toLocaleString()}</Text>
                     </Flex>
                     <Flex alignItems="baseline">
-                      <Text fontSize="sm" color="gray.600" mr={2}>Data Transferred:</Text>
+                      <Text fontSize="sm" color="ui.dim" mr={2}>Data Transferred:</Text>
                       <Text fontSize="3xl" fontWeight="bold">{totalDataGB} GB</Text>
                     </Flex>
                   </VStack>

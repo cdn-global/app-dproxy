@@ -294,7 +294,7 @@ fetch(url, {
             </Alert>
           )}
           {responseTime !== null && (
-            <Text fontSize="sm" color="gray.600">
+            <Text fontSize="sm" color="ui.dim">
               Response Time: {responseTime} ms
             </Text>
           )}

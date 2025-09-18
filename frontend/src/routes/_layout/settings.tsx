@@ -82,7 +82,7 @@ function UserSettings() {
               bg="ui.light"
               fontWeight="semibold"
               fontSize="lg"
-              color="gray.400"
+              color="ui.dim"
               _selected={{
                 bg: "gray.50",
                 color: "orange.600",

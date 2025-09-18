@@ -125,7 +125,7 @@ const fetchApiKeys = (token: string): Promise<ApiKey[]> =>
   );
 
 // --- CodeBlock Component ---
-const CodeBlock = ({ code, language, bg = "gray.800", ...rest }: { code: string; language: string; bg?: string; [key: string]: any }) => {
+const CodeBlock = ({ code, language, bg = "ui.codeBg", ...rest }: { code: string; language: string; bg?: string; [key: string]: any }) => {
   const { onCopy } = useClipboard(code.trim());
   const toast = useToast();
 
@@ -270,7 +270,7 @@ const GetStartedTab = () => {
         <TabPanels>
           {codeTabs.map((tab) => (
             <TabPanel key={tab.id} p={0}>
-              <CodeBlock code={tab.code} language={tab.language} bg="gray.800" />
+              <CodeBlock code={tab.code} language={tab.language} bg="ui.codeBg" />
             </TabPanel>
           ))}
         </TabPanels>
@@ -331,7 +331,7 @@ const SerpApiPage = () => {
           <Container maxW="full" py={9}>
         <Flex align="center" justify="space-between" py={6}>
           <Text fontSize="3xl" color="ui.dark" >SERP API</Text>
-                 <Text fontSize="lg" color="gray.600">Search Engine Results Page</Text>
+                 <Text fontSize="lg" color="ui.dim">Search Engine Results Page</Text>
            </Flex>
 
         {isLoading ? (
@@ -366,7 +366,7 @@ const SerpApiPage = () => {
                     fontSize="lg"
                     fontWeight="semibold"
                     bg="ui.light"
-                    color="gray.400"
+                    color="ui.dim"
                     _selected={{
                       bg: "gray.50",
                       color: "orange.600",
