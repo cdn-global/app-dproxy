@@ -26,7 +26,7 @@ const Footer = () => {
                     <Link
                         href="https://theDATAPROXY.com"
                         isExternal
-                        color="ui.light"
+                        color="ui.dim"
                         _hover={{ color: "ui.secondary" }}
                     >
                         <Text
