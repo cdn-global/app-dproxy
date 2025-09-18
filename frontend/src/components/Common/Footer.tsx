@@ -24,7 +24,7 @@ const Footer = () => {
                 {/* Company Info */}
                 <VStack spacing={2} align={{ base: "center", md: "start" }}>
                     <Text color="ui.dim" fontSize="xs" maxW="200px">
-                        Enterprise proxy and scraping solutions for web data.
+                        Proxy and scraping solutions for web data.
                     </Text>
                 </VStack>
 
