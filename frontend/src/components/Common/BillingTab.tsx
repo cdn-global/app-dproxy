@@ -90,10 +90,7 @@ const BillingTab = () => {
         >
           Access Billing Portal
         </Button>
-        <Alert status="info" borderRadius="md" boxShadow="md">
-          <AlertIcon />
-          Ensure your payment details are up to date.
-        </Alert>
+        
       </VStack>
     </Box>
   );
