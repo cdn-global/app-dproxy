@@ -20,9 +20,7 @@ const Logo: React.FC<LogoProps> = ({ href = '/', ...rest }) => {
           bgGradient="linear(to-br, orange.500, orange.200)"
           color="white"
           boxShadow="lg"
-          p={{ base: 1, md: 2 }}
-          pr={0}
-
+          p={{ base: 2, md: 2 }}
         >
           <Icon as={Layers} boxSize={{ base: '20px', md: '24px' }} aria-hidden />
         </Box>
