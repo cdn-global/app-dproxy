@@ -369,7 +369,7 @@ const PlaygroundGSerp: React.FC = () => {
         
       {/* Need Help Section */}
   <Box pt={8} mt={8} borderTopWidth="1px" borderColor="ui.border">
-        <Box p={4} borderWidth="1px" borderRadius="md" bg="orange.50" borderColor="orange.200">
+  <Box p={4} borderWidth="1px" borderRadius="md" bg="ui.light" borderColor="ui.main">
           <Heading size="md" mb={2} color="ui.dark">Need Help?</Heading>
           <Text fontSize="md" color="ui.dim">Check our detailed{" "}<Link color="orange.600" fontWeight="bold" href="/documentation/serp-api" isExternal>API Documentation</Link>{" "}for more examples. For further assistance, contact our{" "}<Link color="orange.600" fontWeight="bold" href="/support" isExternal>Support Center</Link>.</Text>
         </Box>

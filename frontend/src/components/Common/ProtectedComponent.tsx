@@ -168,7 +168,7 @@ const ProtectedComponent: React.FC<{ children: React.ReactNode }> = ({
         align="center"
         w="full"
         p={4}
-        bg="orange.50"
+        bg="ui.light"
         borderRadius="md"
       >
         <Text color="gray.800">Your tools have been deactivated.</Text>
