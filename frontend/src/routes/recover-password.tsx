@@ -98,7 +98,7 @@ function RecoverPassword() {
         {/* Left Column - Text Section */}
         <Box
           flex={{ md: 1 }}
-          bg="gray.50"
+          bg="ui.light"
           p={{ base: 6, md: 10 }}
           display="flex"
           flexDirection="column"

@@ -315,7 +315,7 @@ const ApiKeyModule: React.FC<ApiKeyProps> = ({ token }) => {
           ) : (
             <Table variant="simple">
               
-              <Thead bg="gray.50">
+              <Thead bg="ui.light">
                 <Tr>
                   <Th color="ui.dark">Key Preview</Th>
                   <Th color="ui.dark">Created At</Th>

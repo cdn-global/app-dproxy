@@ -317,10 +317,10 @@ const HttpsProxyApiPage = () => {
                     fontSize="lg"
                     color="ui.dim"
                     _selected={{
-                      bg: "gray.50",
+                      bg: "ui.surface",
                       color: "orange.600",
                       borderColor: "inherit",
-                      borderBottomColor: "gray.50",
+                      borderBottomColor: "ui.surface",
                       borderTopWidth: "2px",
                       borderTopColor: "orange.400",
                       marginTop: "-1px",

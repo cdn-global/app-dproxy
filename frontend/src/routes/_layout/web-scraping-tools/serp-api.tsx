@@ -261,7 +261,7 @@ const GetStartedTab = () => {
               fontWeight="semibold"
               fontSize="lg"
               color="gray.400"
-              _selected={{ bg: "gray.800", color: "orange.400", borderColor: "inherit", borderBottomColor: "gray.800" }}
+                _selected={{ bg: "ui.surface", color: "orange.600", borderColor: "inherit", borderBottomColor: "ui.surface" }}
             >
               {tab.label}
             </Tab>
@@ -383,7 +383,7 @@ const SerpApiPage = () => {
               </TabList>
               
               <TabPanels bg="ui.light" pt={4} borderRadius="0 0 md md">
-                <TabPanel><GetStartedTab /></TabPanel>
+          <TabPanel><GetStartedTab /></TabPanel>
                 <TabPanel>
                   <ApiKeyModule token={token} />
                 </TabPanel>
