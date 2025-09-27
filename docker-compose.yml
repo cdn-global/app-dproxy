@@ -1,6 +1,25 @@
 version: "3.8"
 
 services:
+  traefik:
+    image: traefik:3.0
+    restart: always
+    networks:
+      - traefik-public
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8090:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.services.traefik.loadbalancer.server.port=8080
+
   adminer:
     image: adminer
     restart: always
@@ -57,6 +76,8 @@ services:
       retries: 5
     build:
       context: ./backend
+    volumes:
+      - ./rds-ca-cert.pem:/app/rds-ca-cert.pem:ro  # Add if SSL is required
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik-public
