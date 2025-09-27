@@ -24,7 +24,7 @@ services:
 
   adminer:
     image: adminer
-    restart: always
+    restart: no
     networks:
       - traefik-public
       - default
